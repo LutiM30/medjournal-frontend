@@ -11,7 +11,7 @@ import {
   PasswordRules,
 } from '@/lib/Rules';
 import FormInput from '@/components/ui/Elements/FormInput';
-import { FULL_WIDTH_BTN_HV_EFCT_CLASS } from '@/lib/constants';
+import { FULL_WIDTH_BTN_HV_EFCT_CLASS, SIGNUP_TXT } from '@/lib/constants';
 import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
 
 import {
@@ -113,7 +113,7 @@ const Signup = () => {
     },
     {
       name: 'email',
-      rules: LastNameRules,
+      rules: EmailRules,
       type: 'email',
       label: 'Enter Email',
       placeholder: 'tylerdurdenfc@gmail.com',
@@ -153,7 +153,7 @@ const Signup = () => {
           Welcome to {projectConstants.PROJECT_NAME}
         </h2>
         <p className='text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300'>
-          Sign Up to {projectConstants.PROJECT_NAME}
+          {SIGNUP_TXT} to {projectConstants.PROJECT_NAME}
         </p>
         <form className='my-8' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4'>
@@ -205,7 +205,7 @@ const Signup = () => {
           />
 
           <button className={FULL_WIDTH_BTN_HV_EFCT_CLASS} type='submit'>
-            Sign up &rarr;
+            {SIGNUP_TXT} &rarr;
             <BottomGradient />
           </button>
         </form>

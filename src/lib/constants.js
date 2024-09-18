@@ -7,3 +7,6 @@ export const AUTH_INVALID_ROUTES = ['login', 'signup'];
 export const DOCTOR_ROUTES = ['/doc/profile', '/doc/notes', '/doc/patients'];
 export const PATIENT_ROUTES = ['/pat/profile', '/pat/notes', '/pat/doctors'];
 export const ADMIN_ROUTES = ['/admin/users', '/admin/roles', '/admin/settings'];
+export const INVALID_CREDS = 'auth/invalid-credential';
+export const SIGNUP_TXT = 'Sign Up';
+export const SIGNIN_TXT = 'Sign In';
