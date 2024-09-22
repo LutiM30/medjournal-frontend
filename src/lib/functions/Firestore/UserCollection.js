@@ -5,6 +5,9 @@ import { setDoc } from '@firebase/firestore';
 import { collections } from './collections';
 
 import { messages, USER_ROLES_OPTIONS } from '@/lib/utils';
+import { DOCTOR_ROLE, PATIENT_ROLE } from '@/lib/constants';
+import { AddDoctor } from './DoctorCollection';
+import { AddPatient } from './PatientCollection';
 
 export const AddUser = async (data) => {
   if (data.userRole in USER_ROLES_OPTIONS?.map((role) => role?.value)) {
@@ -17,8 +20,23 @@ export const AddUser = async (data) => {
     };
 
     try {
-      await setDoc(doc(db, collections.USERS, data.uid), toUserCollection);
-      await setDoc(doc(db, data.userRole, data.uid), data);
+      const addedUser = await setDoc(
+        doc(db, collections.USERS, data.uid),
+        toUserCollection
+      );
+
+      // Add to respective collection
+      switch (toUserCollection.userRole) {
+        case DOCTOR_ROLE:
+          await AddDoctor(data);
+          break;
+
+        case PATIENT_ROLE:
+          await AddPatient(data);
+          break;
+      }
+
+      return addedUser;
     } catch (error) {
       console.log(error);
       throw error;

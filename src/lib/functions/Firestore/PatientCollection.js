@@ -1,12 +1,12 @@
 import { db } from '@/lib/firebase';
-import { DOCTOR_ROLE } from '@/lib/constants';
+import { PATIENT_ROLE } from '@/lib/constants';
 import removeEmailFromData from '../removeEmailFromData';
 import { collections } from './collections';
 import { messages } from '@/lib/utils';
 import { setDoc, doc } from '@firebase/firestore';
 
-export const AddDoctor = async (data) => {
-  if (data.userRole !== DOCTOR_ROLE) {
+export const AddPatient = async (data) => {
+  if (data.userRole !== PATIENT_ROLE) {
     throw messages.InvalidUserRole;
   } else {
     const toCollection = removeEmailFromData(data);
@@ -15,7 +15,7 @@ export const AddDoctor = async (data) => {
 
     try {
       return await setDoc(
-        doc(db, collections.DOCTORS, toCollection.uid),
+        doc(db, collections.PATIENTS, toCollection.uid),
         toCollection
       );
     } catch (error) {

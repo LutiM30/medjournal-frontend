@@ -22,8 +22,8 @@ export const VALID_EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,10}$/i;
 export const VALID_PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&])[A-Za-z\d!@#$%&]{8,}$/;
 
-export const LOGIN_BTN_TEXT_COLOR = ['Signin', 'via-blue-500'];
-export const LOGOUT_BTN_TEXT_COLOR = ['Signout', 'via-red-500'];
+export const LOGIN_BTN_TEXT_COLOR = ['Sign In', 'via-blue-500'];
+export const LOGOUT_BTN_TEXT_COLOR = ['Sign Out', 'via-red-500'];
 
 export const isUser = (user) => user?.uid || user?.email;
 

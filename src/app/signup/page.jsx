@@ -9,6 +9,7 @@ import {
   FirstNameRules,
   LastNameRules,
   PasswordRules,
+  EmailRules,
 } from '@/lib/Rules';
 import FormInput from '@/components/ui/Elements/FormInput';
 import { FULL_WIDTH_BTN_HV_EFCT_CLASS, SIGNUP_TXT } from '@/lib/constants';
@@ -69,6 +70,7 @@ const Signup = () => {
 
       delete sendDataToCollection.password;
       delete sendDataToCollection.confirmpassword;
+
       sendDataToCollection.uid = user.user.uid;
 
       const userAddRes = await AddUser(sendDataToCollection);
