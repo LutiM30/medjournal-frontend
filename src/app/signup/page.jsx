@@ -1,35 +1,40 @@
-'use client';
-import React from 'react';
-import BottomGradient from '@/components/ui/Effects/BottomGradient';
-import { projectConstants, USER_ROLES_OPTIONS } from '@/lib/utils';
-import { Controller, useForm } from 'react-hook-form';
+"use client";
+import React from "react";
+import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
 
+import BottomGradientBtn from "@/components/ui/Elements/Buttons/BottomGradientBtn.jsx";
+import { projectConstants, USER_ROLES_OPTIONS } from "@/lib/utils";
 import {
   ConfirmPasswordRules,
   FirstNameRules,
   LastNameRules,
   PasswordRules,
   EmailRules,
-} from '@/lib/Rules';
-import FormInput from '@/components/ui/Elements/FormInput';
-import { FULL_WIDTH_BTN_HV_EFCT_CLASS, SIGNUP_TXT } from '@/lib/constants';
-import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
-
+} from "@/lib/Rules";
+import FormInput from "@/components/ui/Elements/FormInput";
+import {
+  FULL_WIDTH_BTN_HV_EFCT_CLASS_TXT_LEFT,
+  FULL_WIDTH_BTN_HV_EFCT_CLASS,
+  SIGNIN_LINK,
+  SIGNUP_TXT,
+} from "@/lib/constants";
+import useFirebaseAuth from "@/lib/hooks/useFirebaseAuth";
+import Divider from "@/components/ui/Divider";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import LabelInputContainer from '@/components/ui/LabelInputContainer';
-import ErrorMessage from '@/components/ui/Elements/ErrorMesage';
-import { Label } from '@/components/ui/Elements/label';
-import { generateFirebaseAuthErrorMessage } from '@/lib/functions/generateErrorMessage';
-import { useRouter } from 'next/navigation';
-import { AddUser } from '@/lib/functions/Firestore/UserCollection';
-
-import dayjs from 'dayjs';
+} from "@/components/ui/select";
+import LabelInputContainer from "@/components/ui/LabelInputContainer";
+import ErrorMessage from "@/components/ui/Elements/ErrorMesage";
+import { Label } from "@/components/ui/Elements/label";
+import { generateFirebaseAuthErrorMessage } from "@/lib/functions/generateErrorMessage";
+import { AddUser } from "@/lib/functions/Firestore/UserCollection";
+import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 
 const Signup = () => {
   const { signUp } = useFirebaseAuth();
@@ -44,11 +49,11 @@ const Signup = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      confirmpassword: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmpassword: "",
       userRole: USER_ROLES_OPTIONS[0].value,
     },
   });
@@ -78,7 +83,7 @@ const Signup = () => {
 
       console.log({ sendDataToCollection });
 
-      router.push('/');
+      router.push("/");
     } catch (error) {
       let errorMsg = generateFirebaseAuthErrorMessage(error);
 
@@ -89,58 +94,58 @@ const Signup = () => {
       if (error?.code && found) {
         setError(
           found,
-          { type: 'manual', message: `${errorMsg || error?.code}` },
+          { type: "manual", message: `${errorMsg || error?.code}` },
           { shouldFocus: true }
         );
       }
 
-      console.error('ERROR in onSubmit Line 82: ', error);
+      console.error("ERROR in onSubmit Line 82: ", error);
     }
   };
 
   const formInputs = [
     {
-      name: 'firstName',
+      name: "firstName",
       rules: FirstNameRules,
-      type: 'text',
-      label: 'First Name',
-      placeholder: 'Tyler',
+      type: "text",
+      label: "First Name",
+      placeholder: "Tyler",
     },
     {
-      name: 'lastName',
+      name: "lastName",
       rules: LastNameRules,
-      type: 'text',
-      label: 'Last Name',
-      placeholder: 'Durden',
+      type: "text",
+      label: "Last Name",
+      placeholder: "Durden",
     },
     {
-      name: 'email',
+      name: "email",
       rules: EmailRules,
-      type: 'email',
-      label: 'Enter Email',
-      placeholder: 'tylerdurdenfc@gmail.com',
-      className: 'mb-4',
+      type: "email",
+      label: "Enter Email",
+      placeholder: "tylerdurdenfc@gmail.com",
+      className: "mb-4",
     },
     {
-      name: 'password',
+      name: "password",
       rules: PasswordRules,
-      type: 'password',
-      label: 'Setup a New Password',
-      placeholder: 'p@$$w0rd',
-      className: 'mb-4',
+      type: "password",
+      label: "Setup a New Password",
+      placeholder: "p@$$w0rd",
+      className: "mb-4",
     },
     {
-      name: 'confirmpassword',
+      name: "confirmpassword",
       rules: ConfirmPasswordRules(watch),
-      type: 'password',
-      label: 'Repeat The Same Password',
-      placeholder: 'R3p3at p@$$w0rd',
-      className: 'mb-4',
+      type: "password",
+      label: "Repeat The Same Password",
+      placeholder: "R3p3at p@$$w0rd",
+      className: "mb-4",
     },
   ];
 
   formInputs.forEach((input) => {
-    input.errorMsg = errors[input.name]?.message || '';
+    input.errorMsg = errors[input.name]?.message || "";
   });
 
   const names = [formInputs[0].name, formInputs[1].name];
@@ -150,15 +155,15 @@ const Signup = () => {
 
   return (
     <>
-      <div className='max-w-md w-full mx-auto rounded-1 md:rounded-2xl  p-4 md:p-8 shadow-input bg-white dark:bg-black m-20'>
-        <h2 className='font-bold text-xl text-neutral-800 dark:text-neutral-200'>
+      <div className="max-w-md w-full mx-auto rounded-1 md:rounded-2xl  p-4 md:p-8 shadow-input bg-white dark:bg-black m-20">
+        <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
           Welcome to {projectConstants.PROJECT_NAME}
         </h2>
-        <p className='text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300'>
+        <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
           {SIGNUP_TXT} to {projectConstants.PROJECT_NAME}
         </p>
-        <form className='my-8' onSubmit={handleSubmit(onSubmit)}>
-          <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4'>
+        <form className="my-8" onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
             {formInputs.map((input, key) =>
               divCondition(input) ? (
                 <FormInput {...input} register={register} key={key} />
@@ -176,17 +181,17 @@ const Signup = () => {
           )}
           <Controller
             control={control}
-            name='userRole'
+            name="userRole"
             render={({ field }) => {
               return (
-                <LabelInputContainer className={''}>
-                  <Label htmlFor={'userRole'}>Select User Role</Label>
+                <LabelInputContainer className={""}>
+                  <Label htmlFor={"userRole"}>Select User Role</Label>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder='Select User Role' />
+                      <SelectValue placeholder="Select User Role" />
                     </SelectTrigger>
 
                     <SelectContent>
@@ -198,18 +203,34 @@ const Signup = () => {
                     </SelectContent>
                   </Select>
 
-                  {errors['userRole'] && (
-                    <ErrorMessage msg={errors['userRole']} />
+                  {errors["userRole"] && (
+                    <ErrorMessage msg={errors["userRole"]} />
                   )}
                 </LabelInputContainer>
               );
             }}
           />
 
-          <button className={FULL_WIDTH_BTN_HV_EFCT_CLASS} type='submit'>
-            {SIGNUP_TXT} &rarr;
-            <BottomGradient />
-          </button>
+          <BottomGradientBtn
+            className={FULL_WIDTH_BTN_HV_EFCT_CLASS}
+            label={<>{SIGNUP_TXT} &rarr;</>}
+            type="submit"
+          />
+
+          <Divider />
+          <BottomGradientBtn
+            onClick={() => router.push("/signin")}
+            className={FULL_WIDTH_BTN_HV_EFCT_CLASS_TXT_LEFT}
+            label={
+              <>
+                <span className="text-neutral-700 dark:text-neutral-300 text-sm">
+                  {SIGNIN_LINK}
+                </span>
+                <ArrowTopRightIcon className="text-neutral-700 dark:text-neutral-300" />
+              </>
+            }
+            type="button"
+          />
         </form>
       </div>
     </>

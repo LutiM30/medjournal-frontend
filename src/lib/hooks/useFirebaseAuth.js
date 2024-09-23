@@ -3,6 +3,7 @@ import {
   signInWithEmailAndPassword as _signInWithEmailAndPassword,
   createUserWithEmailAndPassword as _createUserWithEmailAndPassword,
   signOut as _signOut,
+  sendPasswordResetEmail as _sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useEffect } from 'react';
@@ -12,7 +13,6 @@ import { useSetAtom } from 'jotai';
 
 const formatAuthUser = (user) => ({
   uid: user?.uid || '',
-  email: user?.email || '',
 });
 
 export default function useFirebaseAuth() {
@@ -28,6 +28,7 @@ export default function useFirebaseAuth() {
     setLoading(true);
 
     const formattedUser = formatAuthUser(authState);
+    const { uid } = formatAuthUser;
 
     setAuthUser(formattedUser);
 
@@ -44,6 +45,14 @@ export default function useFirebaseAuth() {
 
   const signUp = ({ email, password }) =>
     _createUserWithEmailAndPassword(auth, email, password);
+  const sendPasswordResetEmail = async ({ email }) => {
+    try {
+      return await _sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.log('useFirebaseAuth error on line 52: ', error);
+      throw error;
+    }
+  };
 
   const signOut = async () => {
     await _signOut(auth);
@@ -61,5 +70,6 @@ export default function useFirebaseAuth() {
     signIn,
     signUp,
     signOut,
+    sendPasswordResetEmail,
   };
 }
