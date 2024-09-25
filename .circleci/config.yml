@@ -23,6 +23,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
+            - ./.next/cache
           key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
       - run:
           command: pnpm run build
@@ -47,10 +48,13 @@ workflows:
   build-and-deploy:
     jobs:
       - build-node:
+          context: firebase
           filters:
             branches:
               only: main
       # - deploy:
+      #     context: firebase
+          
       #     requires:
       #       - build-node
       #     filters:
