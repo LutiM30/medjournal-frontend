@@ -1,0 +1,62 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5
+
+jobs:
+  build-node:
+    executor: node/default
+    steps:
+      - checkout
+      - run: node --version
+      - run:
+          name: Install pnpm
+          command: |
+            sudo npm install -g pnpm
+            pnpm --version
+      - restore_cache:
+          keys:
+            - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+      - run:
+          name: Install Dependencies
+          command: pnpm install
+      - save_cache:
+          paths:
+            - node_modules
+            - ./.next/cache
+          key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+      - run:
+          command: pnpm run build
+          name: Build server
+      - run:
+          command: pnpm run start
+          name: Start server
+          background: true
+      - run:
+          command: sleep 5 && curl -I localhost:3000
+          name: Verify server is running
+
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          name: deploy
+          command: '#e.g. ./deploy.sh'
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - build-node:
+          context: firebase
+          filters:
+            branches:
+              only: main
+      # - deploy:
+      #     context: firebase
+          
+      #     requires:
+      #       - build-node
+      #     filters:
+      #       branches:
+      #         only: main
