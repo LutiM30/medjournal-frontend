@@ -6,7 +6,7 @@ const DoctorProfile = () => {
         <div className="container">
             {/* Header */}
             <header className="header">
-                <div className="logo">Logo</div>
+                <div className="logo">MedApp</div>
                 <nav className="nav-links">
                     <a href="#">Home</a>
                     <a href="#">Doctors</a>
@@ -31,7 +31,7 @@ const DoctorProfile = () => {
                 {/* Main Content Area */}
                 <main className="main-content">
                     {/* Profile Card */}
-                    <div className="profile-card">
+                    <div className="profile-card card">
                         <img src="profile_image_url" alt="Doctor" className="profile-image" />
                         <h2>Dr. Przemysław Czaja</h2>
                         <p>Specialty: Cardiology</p>
@@ -39,7 +39,7 @@ const DoctorProfile = () => {
                     </div>
 
                     {/* Overview Section */}
-                    <section className="overview">
+                    <section className="overview card">
                         <h3>Overview</h3>
                         <p>
                             Orthopedist. He treats injuries and chronic musculoskeletal ailments.
@@ -49,17 +49,17 @@ const DoctorProfile = () => {
                     </section>
 
                     {/* Services Section */}
-                    <section className="services">
+                    <section className="services card">
                         <h3>Services and Price List</h3>
                         <ul>
-                            <li>Orthopedic Consultation - $220</li>
-                            <li>Delivery Blocks - $220</li>
-                            <li>Ultrasound Injection - $220</li>
+                            <li>Orthopedic Consultation - <span>$220</span></li>
+                            <li>Delivery Blocks - <span>$220</span></li>
+                            <li>Ultrasound Injection - <span>$220</span></li>
                         </ul>
                     </section>
 
                     {/* Reviews Section */}
-                    <section className="reviews">
+                    <section className="reviews card">
                         <h3>Reviews</h3>
                         <ul>
                             <li>Review 1: Excellent service!</li>
@@ -69,7 +69,7 @@ const DoctorProfile = () => {
                     </section>
 
                     {/* Availability Section */}
-                    <section className="availability">
+                    <section className="availability card">
                         <h3>Availability</h3>
                         <p>Check available time slots for appointments.</p>
                         {/* Here, you could add a calendar component */}
@@ -77,8 +77,8 @@ const DoctorProfile = () => {
 
                     {/* Action Buttons */}
                     <div className="action-buttons">
-                        <button>Send Message</button>
-                        <button>Make Appointment</button>
+                        <button className="button">Send Message</button>
+                        <button className="button primary">Make Appointment</button>
                     </div>
                 </main>
             </div>
