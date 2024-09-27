@@ -18,6 +18,8 @@ import useFirebaseAuth from "@/lib/hooks/useFirebaseAuth";
 import { generateFirebaseAuthErrorMessage } from "@/lib/functions/generateErrorMessage";
 import BottomGradientBtn from "@/components/ui/Elements/Buttons/BottomGradientBtn.jsx";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
+import { DOCTOR_ROLE, PATIENT_ROLE } from "@/lib/constants";
+import { getUserFromFirestore } from "@/lib/functions/getUserFromFirestore";
 
 const SignIn = () => {
   const { signIn } = useFirebaseAuth();
@@ -44,8 +46,16 @@ const SignIn = () => {
     };
     try {
       const user = await signIn(sendDataToFirebase);
-
-      router.push("/");
+      console.log("User signed in successfully:", user);
+      const userDoc = await getUserFromFirestore(user.user.uid);
+      console.log("User role from Firestore:", userDoc);
+      if (userDoc?.userRole === DOCTOR_ROLE) {
+        router.push("/doctor"); 
+      } else if (userDoc?.userRole === PATIENT_ROLE) {
+        router.push("/pat"); 
+      } else {
+        router.push("/"); 
+      }
     } catch (error) {
       let errorMsg = generateFirebaseAuthErrorMessage(error);
 
@@ -74,7 +84,6 @@ const SignIn = () => {
         );
       }
 
-      console.error("ERROR in onSubmit Line 82: ", error);
     }
   };
 
