@@ -1,7 +1,13 @@
 import React from "react";
+import DoctorProfile from "../DoctorProfile";
 
-const page = () => {
-  return <div>Doctors Page</div>;
+const Home = () => {
+  return (
+    <div>
+      <h1>Doctor's Profile</h1>
+      <DoctorProfile />
+    </div>
+  );
 };
 
-export default page;
+export default Home;
