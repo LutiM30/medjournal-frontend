@@ -50,7 +50,7 @@ const SignIn = () => {
       const userDoc = await getUserFromFirestore(user.user.uid);
       console.log("User role from Firestore:", userDoc);
       if (userDoc?.userRole === DOCTOR_ROLE) {
-        router.push("/doctor"); 
+        router.push("/doc"); 
       } else if (userDoc?.userRole === PATIENT_ROLE) {
         router.push("/pat"); 
       } else {

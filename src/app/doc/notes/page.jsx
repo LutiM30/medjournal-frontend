@@ -1,7 +1,7 @@
 import React from 'react';
 
 const page = () => {
-  return <div>LIST PAGE</div>;
+  return <div>Notes</div>;
 };
 
 export default page;
