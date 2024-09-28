@@ -1,17 +1,16 @@
-// Header.js
-import React from 'react';
-
 const Header = () => {
   return (
-    <header className="flex justify-between p-4 bg-blue-600 text-white">
-      <div className="logo">MedApp</div>
-      <nav className="nav-links">
-        <a href="#" className="mx-2">Home</a>
-        <a href="#" className="mx-2">Doctors</a>
-        <a href="#" className="mx-2">Appointments</a>
-        <a href="#" className="mx-2">Medical Notes</a>
-        <a href="#" className="mx-2">Contact</a>
-      </nav>
+    <header className="bg-primary text-white p-4 shadow-lg">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="logo text-xl font-bold">MedApp</div>
+        <nav className="nav-links">
+          <a href="#" className="px-4 hover:underline">Home</a>
+          <a href="#" className="px-4 hover:underline">Doctors</a>
+          <a href="#" className="px-4 hover:underline">Appointments</a>
+          <a href="#" className="px-4 hover:underline">Medical Notes</a>
+          <a href="#" className="px-4 hover:underline">Contact</a>
+        </nav>
+      </div>
     </header>
   );
 };

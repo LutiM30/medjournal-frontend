@@ -1,15 +1,12 @@
-// Sidebar.js
-import React from 'react';
-
 const Sidebar = () => {
     return (
-        <aside className="w-64 p-4 bg-gray-200">
-            <h3 className="text-lg font-semibold">Dashboard</h3>
-            <ul className="list-none">
-                <li className="py-1 cursor-pointer">Profile</li>
-                <li className="py-1 cursor-pointer">Appointments</li>
-                <li className="py-1 cursor-pointer">Patient</li>
-                <li className="py-1 cursor-pointer">Settings</li>
+        <aside className="w-64 bg-gray-200 p-4 shadow-md">
+            <h3 className="font-bold text-lg mb-2">Dashboard</h3>
+            <ul>
+                <li className="mb-2"><a href="#" className="text-blue-600">Profile</a></li>
+                <li className="mb-2"><a href="#" className="text-blue-600">Appointments</a></li>
+                <li className="mb-2"><a href="#" className="text-blue-600">Patient</a></li>
+                <li className="mb-2"><a href="#" className="text-blue-600">Settings</a></li>
             </ul>
         </aside>
     );

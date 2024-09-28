@@ -1,15 +1,14 @@
-// ProfileCard.js
-import React from 'react';
 import Image from 'next/image';
+import doctorImage from './images/doc1.jpg';
 
 const ProfileCard = () => {
     return (
-        <div className="flex items-center p-4 bg-white shadow-md rounded-md mb-4">
-            <Image src='/images/doc1.jpg' width={100} height={100} alt="Doctor Profile" className="rounded-full" />
-            <div className="ml-4">
-                <h2 className="text-xl">Dr. Przemysław Czaja</h2>
-                <p>Specialty: Cardiology</p>
-                <p>Rating: ★★★★☆</p>
+        <div className="profile-card card p-4 mb-4 bg-white shadow-md rounded-md">
+            <Image src={doctorImage} width={200} height={200} alt="Doctor Profile" className="profile-image rounded-full mb-4" />
+            <div className="text-center">
+                <h2 className="text-xl font-bold">Dr. Przemysław Czaja</h2>
+                <p className="text-gray-600">Specialty: Cardiology</p>
+                <p className="text-yellow-500">Rating: ★★★★☆</p>
             </div>
         </div>
     );
