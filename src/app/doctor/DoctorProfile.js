@@ -19,10 +19,11 @@ const DoctorProfile = () => {
                     <Overview />
                     <Services />
                     <Reviews />
-                    <div className="text-center">
+                    <div className="text-center flex justify-center space-x-4">
                         <Button>Send Message</Button>
                         <Button variant="primary">Make Appointment</Button>
                     </div>
+
                 </main>
             </div>
             <Footer />

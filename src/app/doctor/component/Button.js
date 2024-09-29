@@ -1,7 +1,6 @@
-// Button.js
 import React from 'react';
 
-const Button = ({ children, onClick, type = "button", variant = "primary" }) => {
+const Button = ({ children, onClick, type = "button", variant = "primary", className = "" }) => {
     const baseClasses = "px-4 py-2 rounded-md font-semibold text-white";
     const variants = {
         primary: "bg-blue-600 hover:bg-blue-700",
@@ -11,7 +10,11 @@ const Button = ({ children, onClick, type = "button", variant = "primary" }) => 
     };
 
     return (
-        <button type={type} className={`${baseClasses} ${variants[variant]}`} onClick={onClick}>
+        <button
+            type={type}
+            className={`${baseClasses} ${variants[variant]} ${className}`}
+            onClick={onClick}
+        >
             {children}
         </button>
     );

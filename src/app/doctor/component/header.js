@@ -1,6 +1,6 @@
 const Header = () => {
   return (
-    <header className="bg-primary text-white p-4 shadow-lg">
+    <header className="bg-blue-600 text-white p-4 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
         <div className="logo text-xl font-bold">MedApp</div>
         <nav className="nav-links">
