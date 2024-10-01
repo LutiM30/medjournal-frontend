@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { userAtom } from '../atoms/userAtom';
 import { loadingAtom } from '../atoms/atoms';
 import { useSetAtom } from 'jotai';
+import { getUserFromFirestore } from '@/lib/functions/getUserFromFirestore';
 
 const formatAuthUser = (user) => ({
   uid: user?.uid || '',
@@ -28,9 +29,9 @@ export default function useFirebaseAuth() {
     setLoading(true);
 
     const formattedUser = formatAuthUser(authState);
-    const { uid } = formatAuthUser;
+    const userDoc = await getUserFromFirestore(authState.uid);
 
-    setAuthUser(formattedUser);
+    setAuthUser({ ...formattedUser, userRole: userDoc?.userRole });
 
     setLoading(false);
   };

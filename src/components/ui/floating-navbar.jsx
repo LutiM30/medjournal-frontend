@@ -11,7 +11,9 @@ import Link from "next/link";
 import { ModeToggle } from "@/components/ui/modeToggler";
 import AuthNavBarButton from "@/components/ui/AuthNavBarButton";
 import useFirebaseAuth from "@/lib/hooks/useFirebaseAuth";
-import { IconHome } from "@tabler/icons-react";
+import { IconHome, IconUser } from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
+import { userAtom } from "@/lib/atoms/userAtom";
 
 const navItems = [
   {
@@ -28,7 +30,8 @@ const navItems = [
 
 export const FloatingNav = ({ className }) => {
   const { scrollY } = useScroll();
-  useFirebaseAuth();
+  const { signOut } = useFirebaseAuth();
+  const user = useAtomValue(userAtom);
 
   const [visible, setVisible] = useState(true);
 
@@ -68,6 +71,56 @@ export const FloatingNav = ({ className }) => {
       window.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
+
+  const navItems = [
+    {
+      name: "Home",
+      link: "/",
+      icon: <IconHome className="h-4 w-4 text-neutral-500 dark:text-white" />,
+    },
+    {
+      name: "About Us",
+      link: "/about",
+      icon: <IconHome className="h-4 w-4 text-neutral-500 dark:text-white" />,
+    },
+    ...(user?.userRole === "patients"
+      ? [
+        {
+          name: "My Profile",
+          link: "/pat",
+          icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
+        },
+        {
+          name: "Notes",
+          link: "/pat/notes",
+          icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
+        },
+        {
+          name: "Doctors List",
+          link: "/pat/doctors",
+          icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
+        },
+      ]
+      : user?.userRole === "doctors"
+        ? [
+          {
+            name: "My Profile",
+            link: "/doc",
+            icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
+          },
+          {
+            name: "Notes",
+            link: "/doc/notes",
+            icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
+          },
+          {
+            name: "Patients List",
+            link: "/doc/patients",
+            icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
+          },
+        ]
+        : []),
+  ];
 
   return (
     <AnimatePresence mode="wait">
