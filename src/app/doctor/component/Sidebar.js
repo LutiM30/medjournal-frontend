@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import doctorImage from './images/doc1.jpg';
+import { Card } from '@/components/ui/card';
 
 const ProfileCard = () => {
     return (
@@ -21,6 +22,8 @@ const ProfileCard = () => {
             </div>
         </div>
     );
+
 };
+
 
 export default ProfileCard;
