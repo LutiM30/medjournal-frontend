@@ -1,5 +1,5 @@
 import React from "react";
-import FloatingNav from "../../../components/ui/floating-navbar";
+
 import Footer from './component/Footer';
 import Sidebar from './component/Sidebar';
 import Overview from './component/Overview';
@@ -11,10 +11,10 @@ const DoctorProfilePage = () => {
     return (
         <div className="relative">
             {/* Navigation */}
-            <FloatingNav className="fixed top-0 z-50" />
+            {/* <FloatingNav className="fixed top-0 z-50" /> */}
 
             {/* Doctor Profile */}
-            <div className="flex flex-col h-screen pt-16">
+            <div className="flex flex-col h-screen pt-20">
                 <div className="flex flex-grow">
                     <Sidebar />
                     <main className="flex-grow p-4">
