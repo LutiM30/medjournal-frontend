@@ -1,9 +1,10 @@
+// src/components/LifestyleInfo.jsx
 import React from "react";
 
 const LifestyleInfo = () => {
   return (
-    <div className="mb-6 p-4 border rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Lifestyle Information</h2>
+    <div className="mb-6 p-4 border border-green-400 rounded-lg shadow-lg bg-green-50"> {/* Added background and border */}
+      <h2 className="text-xl font-semibold mb-4 text-green-600">Lifestyle Information</h2>
       <div>
         <label className="font-medium">Smoking Status:</label>
         <p>Non-Smoker</p>
