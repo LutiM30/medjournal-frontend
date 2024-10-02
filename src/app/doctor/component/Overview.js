@@ -1,5 +1,3 @@
-import { Card, Heading, Text, Grid, Stack, Separator, Link } from 'shadcn/ui';
-
 const Overview = () => {
     const doctorProfile = {
         practiceAddress: {
@@ -28,105 +26,106 @@ const Overview = () => {
     };
 
     return (
-        <Card className="p-6 mb-6 shadow-lg rounded-lg">
-            <Heading size="lg" className="mb-4">Doctor Profile</Heading>
+        <div className="max-w-4xl mx-auto p-6 mb-6 shadow-lg rounded-lg bg-white">
+            <h2 className="text-2xl font-semibold mb-4">Doctor Profile</h2>
 
             {/* Address Section */}
-            <Stack gap="2">
-                <Text className="font-semibold">Practice Address:</Text>
-                <Text>{doctorProfile.practiceAddress.street1}</Text>
-                {doctorProfile.practiceAddress.street2 && <Text>{doctorProfile.practiceAddress.street2}</Text>}
-                <Text>{`${doctorProfile.practiceAddress.city}, ${doctorProfile.practiceAddress.province}, ${doctorProfile.practiceAddress.postalCode}`}</Text>
-            </Stack>
+            <div className="mb-4">
+                <h3 className="font-semibold">Practice Address:</h3>
+                <p>{doctorProfile.practiceAddress.street1}</p>
+                {doctorProfile.practiceAddress.street2 && (
+                    <p>{doctorProfile.practiceAddress.street2}</p>
+                )}
+                <p>{`${doctorProfile.practiceAddress.city}, ${doctorProfile.practiceAddress.province}, ${doctorProfile.practiceAddress.postalCode}`}</p>
+            </div>
 
-            <Separator className="my-4" />
+            <hr className="my-4" />
 
             {/* Experience, Role, and Affiliations */}
-            <Grid className="grid grid-cols-2 gap-4">
-                <Stack gap="2">
-                    <Text className="font-semibold">Years of Experience:</Text>
-                    <Text>{doctorProfile.yearsOfExperience} years</Text>
-                </Stack>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <h3 className="font-semibold">Years of Experience:</h3>
+                    <p>{doctorProfile.yearsOfExperience} years</p>
+                </div>
+                <div>
+                    <h3 className="font-semibold">Current Role:</h3>
+                    <p>{doctorProfile.currentRole}</p>
+                </div>
+                <div>
+                    <h3 className="font-semibold">Hospital Affiliations:</h3>
+                    <p>{doctorProfile.hospitalAffiliations.join(", ")}</p>
+                </div>
+                <div>
+                    <h3 className="font-semibold">Clinic Name:</h3>
+                    <p>{doctorProfile.clinicName}</p>
+                </div>
+            </div>
 
-                <Stack gap="2">
-                    <Text className="font-semibold">Current Role:</Text>
-                    <Text>{doctorProfile.currentRole}</Text>
-                </Stack>
-
-                <Stack gap="2">
-                    <Text className="font-semibold">Hospital Affiliations:</Text>
-                    <Text>{doctorProfile.hospitalAffiliations.join(", ")}</Text>
-                </Stack>
-
-                <Stack gap="2">
-                    <Text className="font-semibold">Clinic Name:</Text>
-                    <Text>{doctorProfile.clinicName}</Text>
-                </Stack>
-            </Grid>
-
-            <Separator className="my-4" />
+            <hr className="my-4" />
 
             {/* Contact Information */}
-            <Stack gap="2">
-                <Text className="font-semibold">Office Phone:</Text>
-                <Text>{doctorProfile.officePhoneNumber}</Text>
+            <div className="mb-4">
+                <h3 className="font-semibold">Office Phone:</h3>
+                <p>{doctorProfile.officePhoneNumber}</p>
 
-                <Text className="font-semibold">Office Email:</Text>
-                <Text>{doctorProfile.officeEmail}</Text>
-            </Stack>
+                <h3 className="font-semibold">Office Email:</h3>
+                <p>{doctorProfile.officeEmail}</p>
+            </div>
 
-            <Separator className="my-4" />
+            <hr className="my-4" />
 
             {/* Websites */}
-            <Stack gap="2">
-                <Text className="font-semibold">Websites:</Text>
+            <div className="mb-4">
+                <h3 className="font-semibold">Websites:</h3>
                 {doctorProfile.websites.map((site, index) => (
-                    <Link key={index} href={site.website} target="_blank" className="text-blue-600">
+                    <a
+                        key={index}
+                        href={site.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                    >
                         {site.type}: {site.website}
-                    </Link>
+                    </a>
                 ))}
-            </Stack>
+            </div>
 
-            <Separator className="my-4" />
+            <hr className="my-4" />
 
             {/* Specialty and Subspecialties */}
-            <Grid className="grid grid-cols-2 gap-4">
-                <Stack gap="2">
-                    <Text className="font-semibold">Primary Specialty:</Text>
-                    <Text>{doctorProfile.primarySpecialty}</Text>
-                </Stack>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <h3 className="font-semibold">Primary Specialty:</h3>
+                    <p>{doctorProfile.primarySpecialty}</p>
+                </div>
+                <div>
+                    <h3 className="font-semibold">Subspecialties:</h3>
+                    <p>{doctorProfile.subspecialties.join(", ")}</p>
+                </div>
+            </div>
 
-                <Stack gap="2">
-                    <Text className="font-semibold">Subspecialties:</Text>
-                    <Text>{doctorProfile.subspecialties.join(", ")}</Text>
-                </Stack>
-            </Grid>
-
-            <Separator className="my-4" />
+            <hr className="my-4" />
 
             {/* Procedures, Age Groups, Patient Groups, and Technologies */}
-            <Grid className="grid grid-cols-2 gap-4">
-                <Stack gap="2">
-                    <Text className="font-semibold">Procedures Offered:</Text>
-                    <Text>{doctorProfile.procedures.join(", ")}</Text>
-                </Stack>
-
-                <Stack gap="2">
-                    <Text className="font-semibold">Age Groups Treated:</Text>
-                    <Text>{doctorProfile.ageGroupsTreated.join(", ")}</Text>
-                </Stack>
-
-                <Stack gap="2">
-                    <Text className="font-semibold">Specialized Patient Groups:</Text>
-                    <Text>{doctorProfile.specificPatientGroups.join(", ")}</Text>
-                </Stack>
-
-                <Stack gap="2">
-                    <Text className="font-semibold">Medical Technologies/Techniques:</Text>
-                    <Text>{doctorProfile.technologiesProficient.join(", ")}</Text>
-                </Stack>
-            </Grid>
-        </Card>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 className="font-semibold">Procedures Offered:</h3>
+                    <p>{doctorProfile.procedures.join(", ")}</p>
+                </div>
+                <div>
+                    <h3 className="font-semibold">Age Groups Treated:</h3>
+                    <p>{doctorProfile.ageGroupsTreated.join(", ")}</p>
+                </div>
+                <div>
+                    <h3 className="font-semibold">Specialized Patient Groups:</h3>
+                    <p>{doctorProfile.specificPatientGroups.join(", ")}</p>
+                </div>
+                <div>
+                    <h3 className="font-semibold">Medical Technologies/Techniques:</h3>
+                    <p>{doctorProfile.technologiesProficient.join(", ")}</p>
+                </div>
+            </div>
+        </div>
     );
 };
 
