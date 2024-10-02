@@ -1,7 +1,8 @@
+"use client";
 import React from 'react';
-
-const page = () => {
+import withRoleProtection from '@/lib/hooks/withRoleProtection';
+const DoctorPage = () => {
   return <div>Doctors Page</div>;
 };
 
-export default page;
+export default withRoleProtection(DoctorPage, "doctors");
