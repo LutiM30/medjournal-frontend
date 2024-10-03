@@ -7,6 +7,9 @@ export function cn(...inputs) {
 }
 export const projectConstants = {
   PROJECT_NAME: 'MedJournal',
+  TEAM_NAME: 'Group 3',
+  TEAM_MEMBERS: ['Mitul', 'Dhruvin', 'Aartiben', 'Riten'],
+  GITHUB_REPO_URL: 'https://github.com/LutiM30/medjournal-frontend',
 };
 
 export const CURRENT_YEAR = () => new Date()?.getFullYear();
