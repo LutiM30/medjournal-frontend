@@ -3,14 +3,10 @@ import React from "react";
 import PersonalInfo from "./component/PersonalInfo"; // Adjust import path if necessary
 import MedicalHistory from "./component/MedicalHistory"; // Adjust import path if necessary
 import LifestyleInfo from "./component/LifestyleInfo"; // Adjust import path if necessary
-import bgImage from "./component/images/bg.jpg"; // Import the background image
 
 const PatientProfile = () => {
   return (
-    <div
-      className="flex flex-col h-screen pt-20 relative bg-cover bg-center"
-      style={{ backgroundImage: `url(${bgImage.src})` }} // Use the imported image
-    >
+    <div className="flex flex-col h-screen pt-16 relative bg-cover bg-center">
       <div className="flex flex-grow bg-white bg-opacity-80">
         {/* White background with opacity for readability */}
         <main className="flex-grow p-4">

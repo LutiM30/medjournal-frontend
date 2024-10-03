@@ -8,13 +8,14 @@ const PersonalInfo = () => {
         <div className="mb-6 p-6 border border-gray-300 rounded-lg shadow-lg flex items-center transition-transform duration-300 hover:shadow-xl bg-white">
             {/* Profile Image */}
             <div className="mr-4">
-                <Image
-                    src={patimage} // Path to the image in the public directory
-                    alt="Patient Profile Picture"
-                    width={250} // Specify the width
-                    height={250} // Specify the height
-                    className="rounded-full border-2 border-gray-300" // Add rounded corners and border
-                />
+                <div className="w-32 h-32 relative rounded-full overflow-hidden border-2 border-gray-300">
+                    <Image
+                        src={patimage}
+                        alt="Patient Profile Picture"
+                        layout="fill" // Make image fill the container
+                        objectFit="cover" // Ensure the image covers the entire container
+                    />
+                </div>
             </div>
             <div>
                 <h2 className="text-2xl font-semibold mb-4 text-gray-800 flex items-center">
