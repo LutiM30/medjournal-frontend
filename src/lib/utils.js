@@ -1,11 +1,10 @@
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-import { DOCTOR_ROLE, PATIENT_ROLE } from './constants';
+import { clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+import { PATIENT_ROLE, DOCTOR_ROLE } from "./constants";
 
 export function cn(...inputs) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
-
 export const projectConstants = {
   PROJECT_NAME: 'MedJournal',
 };

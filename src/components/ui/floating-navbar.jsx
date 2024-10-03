@@ -87,7 +87,7 @@ export const FloatingNav = ({ className }) => {
       ? [
         {
           name: "My Profile",
-          link: "/pat",
+          link: "/pat/profile",
           icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
         },
         {
@@ -105,7 +105,7 @@ export const FloatingNav = ({ className }) => {
         ? [
           {
             name: "My Profile",
-            link: "/doc",
+            link: "/doc/profile",
             icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
           },
           {
