@@ -78,7 +78,14 @@ export const FloatingNav = ({ className }) => {
         }}
         animate={{
           y: visible ? 0 : -100,
+          opacity: visible ? 0.8 : 0,
+        }}
+        whileHover={{
           opacity: visible ? 1 : 0,
+          transition: {
+            duration: 1,
+            ease: [0.2, 1.01, 0.5, 0.71]
+          }
         }}
         transition={{
           duration: 0.2,
@@ -103,6 +110,6 @@ export const FloatingNav = ({ className }) => {
         <AuthNavBarButton />
         <ModeToggle />
       </motion.div>
-    </AnimatePresence>
+    </AnimatePresence >
   );
 };
