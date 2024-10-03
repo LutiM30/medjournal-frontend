@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Footer from './component/Footer';
 import Sidebar from './component/Sidebar';
 import Overview from './component/Overview';
 import Services from './component/Services';
