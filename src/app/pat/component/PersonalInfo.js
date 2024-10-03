@@ -1,11 +1,11 @@
-// src/components/PersonalInfo.jsx
 import React from "react";
 import Image from "next/image"; // Import Next.js Image component
 import patimage from './images/pat.jpg';
+import { FaUser, FaBirthdayCake, FaVenus } from 'react-icons/fa'; // Import icons
 
 const PersonalInfo = () => {
     return (
-        <div className="mb-6 p-4 border rounded-lg shadow-md flex items-center">
+        <div className="mb-6 p-6 border border-gray-300 rounded-lg shadow-lg flex items-center transition-transform duration-300 hover:shadow-xl bg-white">
             {/* Profile Image */}
             <div className="mr-4">
                 <Image
@@ -13,27 +13,42 @@ const PersonalInfo = () => {
                     alt="Patient Profile Picture"
                     width={250} // Specify the width
                     height={250} // Specify the height
-                    className="rounded-full" // Add rounded corners
+                    className="rounded-full border-2 border-gray-300" // Add rounded corners and border
                 />
             </div>
             <div>
-                <h2 className="text-xl font-semibold mb-2">Personal Information</h2>
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="font-medium">Name:</label>
-                        <p>Kumari</p>
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800 flex items-center">
+                    <FaUser className="text-gray-600 mr-2" />
+                    Personal Information
+                </h2>
+                <div className="grid grid-cols-2 gap-6">
+                    <div className="flex items-center">
+                        <FaUser className="text-gray-600 mr-2" />
+                        <div>
+                            <label className="font-medium">Name:</label>
+                            <p className="text-gray-700">Kumari</p>
+                        </div>
                     </div>
-                    <div>
-                        <label className="font-medium">Age:</label>
-                        <p>34</p>
+                    <div className="flex items-center">
+                        <FaBirthdayCake className="text-gray-600 mr-2" />
+                        <div>
+                            <label className="font-medium">Age:</label>
+                            <p className="text-gray-700">34</p>
+                        </div>
                     </div>
-                    <div>
-                        <label className="font-medium">Date of Birth:</label>
-                        <p>1990-04-15</p>
+                    <div className="flex items-center">
+                        <FaBirthdayCake className="text-gray-600 mr-2" />
+                        <div>
+                            <label className="font-medium">Date of Birth:</label>
+                            <p className="text-gray-700">1990-04-15</p>
+                        </div>
                     </div>
-                    <div>
-                        <label className="font-medium">Gender:</label>
-                        <p>Female</p>
+                    <div className="flex items-center">
+                        <FaVenus className="text-gray-600 mr-2" />
+                        <div>
+                            <label className="font-medium">Gender:</label>
+                            <p className="text-gray-700">Female</p>
+                        </div>
                     </div>
                 </div>
             </div>

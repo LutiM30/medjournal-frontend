@@ -1,53 +1,46 @@
 import Image from 'next/image';
-import reviewerImage1 from './images/reviewer1.jpg';
-import reviewerImage2 from './images/reviewer2.jpg';
-import reviewerImage3 from './images/reviewer3.jpg';
-import reviewerImage4 from './images/reviewer4.jpg';
+import doctorImage from './images/doc1.jpg';
 
-const reviewsData = [
+const appointmentsData = [
     {
         id: 1,
-        name: "Jane Doe",
-        image: reviewerImage1,
-        review: "Excellent service!",
+        appointmentTime: "Monday, Oct 9, 2024 - 10:00 AM",
     },
     {
         id: 2,
-        name: "John Smith",
-        image: reviewerImage2,
-        review: "Very knowledgeable doctor.",
+        appointmentTime: "Wednesday, Oct 11, 2024 - 2:00 PM",
     },
     {
         id: 3,
-        name: "Emma Johnson",
-        image: reviewerImage3,
-        review: "Highly recommend!",
-    },
-    {
-        id: 4,
-        name: "Robert Brown",
-        image: reviewerImage4,
-        review: "Great experience.",
+        appointmentTime: "Friday, Oct 13, 2024 - 9:00 AM",
     },
 ];
 
-const Reviews = () => {
+const UpcomingAppointments = () => {
     return (
-        <div className="max-w-4xl mx-auto p-6 mb-6 bg-white border-l-4 border-green-500 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold mb-4 text-blue-600">Patient Reviews</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {reviewsData.map(review => (
-                    <div key={review.id} className="flex items-start p-4 bg-gray-100 rounded-lg shadow-md">
-                        <Image src={review.image} alt={review.name} width={50} height={50} className="rounded-full mr-4" />
-                        <div>
-                            <h3 className="font-semibold text-purple-600">{review.name}</h3>
-                            <p>{review.review}</p>
-                        </div>
-                    </div>
-                ))}
+        <div className="max-w-4xl mx-auto p-6 mb-6 bg-white border-l-4 border-blue-500 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold mb-4 text-green-600">Upcoming Appointments for Dr. John Czaja</h2>
+            <div className="flex items-start p-4 bg-gray-100 rounded-lg shadow-md">
+                <Image
+                    src={doctorImage}
+                    alt="Dr. John Czaja"
+                    width={100}
+                    height={100}
+                    className="rounded-full mr-4"
+                />
+                <div>
+                    <h3 className="font-semibold text-purple-600">Appointments:</h3>
+                    <ul className="list-disc list-inside">
+                        {appointmentsData.map((appointment) => (
+                            <li key={appointment.id} className="text-gray-800">
+                                {appointment.appointmentTime}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </div>
     );
 };
 
-export default Reviews;
+export default UpcomingAppointments;

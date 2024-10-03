@@ -1,22 +1,11 @@
 const Overview = () => {
     const doctorProfile = {
-        practiceAddress: {
-            street1: "123 Main St",
-            street2: "",
-            city: "Toronto",
-            province: "ON",
-            postalCode: "M1K 1A1"
-        },
+
         yearsOfExperience: 15,
         currentRole: "Consultant",
         hospitalAffiliations: ["General Hospital", "St. Michael's Hospital"],
         clinicName: "Downtown Health Clinic",
-        officePhoneNumber: "(416) 123-4567",
-        officeEmail: "contact@downtownclinic.com",
-        websites: [
-            { type: "Personal Website", website: "https://drjohnczaja.com" },
-            { type: "Appointment Booking", website: "https://bookdrjohn.com" }
-        ],
+
         primarySpecialty: "Cardiology",
         subspecialties: ["Interventional Cardiology", "Heart Failure"],
         procedures: ["Angioplasty", "Cardiac Catheterization"],
@@ -29,15 +18,7 @@ const Overview = () => {
         <div className="max-w-4xl mx-auto p-6 mb-6 shadow-lg rounded-lg bg-white border-l-4 border-blue-500"> {/* Colorful border */}
             <h2 className="text-2xl font-semibold mb-4 text-blue-600">Doctor Profile</h2> {/* Heading color */}
 
-            {/* Address Section */}
-            <div className="mb-4">
-                <h3 className="font-semibold text-purple-600">Practice Address:</h3>
-                <p>{doctorProfile.practiceAddress.street1}</p>
-                {doctorProfile.practiceAddress.street2 && (
-                    <p>{doctorProfile.practiceAddress.street2}</p>
-                )}
-                <p>{`${doctorProfile.practiceAddress.city}, ${doctorProfile.practiceAddress.province}, ${doctorProfile.practiceAddress.postalCode}`}</p>
-            </div>
+
 
             <hr className="my-4" />
 
@@ -59,35 +40,6 @@ const Overview = () => {
                     <h3 className="font-semibold text-purple-600">Clinic Name:</h3>
                     <p>{doctorProfile.clinicName}</p>
                 </div>
-            </div>
-
-            <hr className="my-4" />
-
-            {/* Contact Information */}
-            <div className="mb-4">
-                <h3 className="font-semibold text-purple-600">Office Phone:</h3>
-                <p>{doctorProfile.officePhoneNumber}</p>
-
-                <h3 className="font-semibold text-purple-600">Office Email:</h3>
-                <p>{doctorProfile.officeEmail}</p>
-            </div>
-
-            <hr className="my-4" />
-
-            {/* Websites */}
-            <div className="mb-4">
-                <h3 className="font-semibold text-purple-600">Websites:</h3>
-                {doctorProfile.websites.map((site, index) => (
-                    <a
-                        key={index}
-                        href={site.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                    >
-                        {site.type}: {site.website}
-                    </a>
-                ))}
             </div>
 
             <hr className="my-4" />

@@ -1,11 +1,22 @@
+import { FaStethoscope, FaBaby, FaSyringe } from 'react-icons/fa';
+
 const Services = () => {
     return (
-        <section className="services card p-4 mb-4 bg-white shadow-md rounded-md">
-            <h3 className="text-lg font-bold">Services and Price List</h3>
-            <ul className="mt-2">
-                <li>Orthopedic Consultation - <span className="font-bold">$220</span></li>
-                <li>Delivery Blocks - <span className="font-bold">$220</span></li>
-                <li>Ultrasound Injection - <span className="font-bold">$220</span></li>
+        <section className="services card p-6 mb-4 bg-white shadow-lg rounded-md transition-transform duration-300 hover:shadow-xl">
+            <h3 className="text-2xl font-bold text-purple-600 mb-4 border-b-2 border-blue-500 pb-2">Services and Price List</h3>
+            <ul className="mt-2 space-y-4">
+                <li className="flex items-center">
+                    <FaStethoscope className="text-blue-500 mr-2" />
+                    <span>Orthopedic Consultation - <span className="font-bold text-green-600">$220</span></span>
+                </li>
+                <li className="flex items-center">
+                    <FaBaby className="text-blue-500 mr-2" />
+                    <span>Delivery Blocks - <span className="font-bold text-green-600">$220</span></span>
+                </li>
+                <li className="flex items-center">
+                    <FaSyringe className="text-blue-500 mr-2" />
+                    <span>Ultrasound Injection - <span className="font-bold text-green-600">$220</span></span>
+                </li>
             </ul>
         </section>
     );
