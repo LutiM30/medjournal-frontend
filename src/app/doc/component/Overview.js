@@ -5,7 +5,6 @@ const Overview = () => {
         currentRole: "Consultant",
         hospitalAffiliations: ["General Hospital", "St. Michael's Hospital"],
         clinicName: "Downtown Health Clinic",
-
         primarySpecialty: "Cardiology",
         subspecialties: ["Interventional Cardiology", "Heart Failure"],
         procedures: ["Angioplasty", "Cardiac Catheterization"],
