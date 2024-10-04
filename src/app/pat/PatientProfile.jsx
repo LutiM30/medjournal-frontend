@@ -3,6 +3,7 @@ import React from "react";
 import PersonalInfo from "./component/PersonalInfo"; // Adjust import path if necessary
 import MedicalHistory from "./component/MedicalHistory"; // Adjust import path if necessary
 import LifestyleInfo from "./component/LifestyleInfo"; // Adjust import path if necessary
+import { Footer } from "@/components/ui/Footer"; // Use named import and correct casing
 
 const PatientProfile = () => {
   return (
@@ -21,6 +22,7 @@ const PatientProfile = () => {
               </div>
             </div>
           </div>
+          <Footer /> Added Footer
         </main>
       </div>
     </div>

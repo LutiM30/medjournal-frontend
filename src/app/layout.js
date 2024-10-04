@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
             <>
               <FloatingNav className={cn("")} />
               {children}
-              <Footer />
+              {/* <Footer /> */}
             </>
           </Provider>
         </ThemeProvider>
