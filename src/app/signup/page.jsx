@@ -3,7 +3,6 @@ import React from "react";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
-
 import BottomGradientBtn from "@/components/ui/Elements/Buttons/BottomGradientBtn.jsx";
 import { projectConstants, USER_ROLES_OPTIONS } from "@/lib/utils";
 import {
@@ -36,6 +35,9 @@ import { generateFirebaseAuthErrorMessage } from "@/lib/functions/generateErrorM
 import { AddUser } from "@/lib/functions/Firestore/UserCollection";
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 
+import { DOCTOR_ROLE, PATIENT_ROLE } from "@/lib/constants";
+import { getUserFromFirestore } from "@/lib/functions/getUserFromFirestore";
+
 const Signup = () => {
   const { signUp } = useFirebaseAuth();
   const router = useRouter();
@@ -65,7 +67,7 @@ const Signup = () => {
     };
     try {
       const user = await signUp(sendDataToFirebase);
-
+      console.log("User signed up successfully:", user);
       const sendDataToCollection = {
         ...data,
         createdAt: today?.toDate(),
@@ -79,11 +81,18 @@ const Signup = () => {
       sendDataToCollection.uid = user.user.uid;
 
       const userAddRes = await AddUser(sendDataToCollection);
-      console.log(userAddRes);
+      console.log("User added to Firestore:", userAddRes);
 
-      console.log({ sendDataToCollection });
+      const userDoc = await getUserFromFirestore(user.user.uid);
+      console.log("User role from Firestore:", userDoc);
+      if (userDoc?.userRole === DOCTOR_ROLE) {
+        router.push("/doc/profile");
+      } else if (userDoc?.userRole === PATIENT_ROLE) {
+        router.push("/pat/profile"); 
+      } else {
+        router.push("/"); 
+      }
 
-      router.push("/");
     } catch (error) {
       let errorMsg = generateFirebaseAuthErrorMessage(error);
 
@@ -102,6 +111,8 @@ const Signup = () => {
       console.error("ERROR in onSubmit Line 82: ", error);
     }
   };
+
+
 
   const formInputs = [
     {

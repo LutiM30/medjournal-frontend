@@ -6,8 +6,8 @@ export const FULL_WIDTH_BTN_HV_EFCT_CLASS =
 export const PATIENT_ROLE = "patients";
 export const DOCTOR_ROLE = "doctors";
 export const AUTH_INVALID_ROUTES = ["signin", "signup"];
-export const DOCTOR_ROUTES = ["/doc/profile", "/doc/notes", "/doc/patients"];
-export const PATIENT_ROUTES = ["/pat/profile", "/pat/notes", "/pat/doctors"];
+export const DOCTOR_ROUTES = ["/doctor/profile", "/doctor/notes", "/doctor/patients"];
+export const PATIENT_ROUTES = ["/patient/profile", "/patient/notes", "/patient/doctors"];
 export const ADMIN_ROUTES = ["/admin/users", "/admin/roles", "/admin/settings"];
 export const INVALID_CREDS = "auth/invalid-credential";
 export const SIGNUP_TXT = "Sign Up";
@@ -17,4 +17,3 @@ export const SIGNIN_LINK = "Already have an account ?";
 export const FORGOT_PASSWORD =
   "Forgot your password? request the reset link now!";
 
-  
