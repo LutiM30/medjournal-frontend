@@ -8,7 +8,7 @@ import { Footer } from "@/components/ui/Footer"; // Use named import and correct
 const PatientProfile = () => {
   return (
     <div className="flex flex-col h-screen pt-16 relative bg-cover bg-center">
-      <div className="flex flex-grow bg-white bg-opacity-80">
+      <div className="flex flex-grow bg-white dark:bg-slate-900 bg-opacity-80">
         {/* White background with opacity for readability */}
         <main className="flex-grow p-4">
           <div className="mt-8">
@@ -22,7 +22,7 @@ const PatientProfile = () => {
               </div>
             </div>
           </div>
-          <Footer /> Added Footer
+          <Footer />
         </main>
       </div>
     </div>

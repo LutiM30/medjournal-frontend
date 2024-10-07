@@ -14,7 +14,7 @@ const Overview = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-6 mb-6 shadow-lg rounded-lg bg-white border-l-4 border-blue-500"> {/* Colorful border */}
+        <div className="max-w-4xl mx-auto p-6 mb-6 shadow-lg rounded-lg bg-white dark:bg-slate-900 border-l-4 border-blue-500"> {/* Colorful border */}
             <h2 className="text-2xl font-semibold mb-4 text-blue-600">Doctor Profile</h2> {/* Heading color */}
             <hr className="my-4" />
 
