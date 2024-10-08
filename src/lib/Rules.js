@@ -61,7 +61,7 @@ export const LastNameRules = {
 export const userRoleRules = {
   required: messages.lastName,
   validate: (val) => {
-    if (!(val in USER_ROLES_OPTIONS?.map((role) => role?.value))) {
+    if (!USER_ROLES_OPTIONS?.map((role) => role?.value)?.includes(val)) {
       return 'Invalid selection of Role';
     }
   },

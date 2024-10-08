@@ -19,7 +19,7 @@ export const AddPatient = async (data) => {
         toCollection
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   }

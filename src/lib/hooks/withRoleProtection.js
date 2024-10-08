@@ -1,23 +1,23 @@
-"use client"; 
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { userAtom } from "@/lib/atoms/userAtom";
-import { useAtomValue } from "jotai";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { userAtom } from '@/lib/atoms/userAtom';
+import { useAtomValue } from 'jotai';
 
 const withRoleProtection = (WrappedComponent, allowedRole) => {
-    return function ProtectedComponent() {
-        const user = useAtomValue(userAtom);
-        const router = useRouter();
+  return function ProtectedComponent() {
+    const user = useAtomValue(userAtom);
+    const router = useRouter();
 
-        useEffect(() => {
-            if (user?.userRole !== allowedRole) {
-                router.push("/404"); 
-            }
-        }, [user, router]);
+    useEffect(() => {
+      if (user?.userRole !== allowedRole) {
+        router.push('/');
+      }
+    }, [user, router]);
 
-        return <WrappedComponent />;
-    };
+    return <WrappedComponent />;
+  };
 };
 
 export default withRoleProtection;

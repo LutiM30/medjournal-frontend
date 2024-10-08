@@ -10,16 +10,18 @@ import { useEffect } from 'react';
 import { userAtom } from '../atoms/userAtom';
 import { loadingAtom } from '../atoms/atoms';
 import { useSetAtom } from 'jotai';
-import { getUserFromFirestore } from '@/lib/functions/getUserFromFirestore';
+import { useRouter } from 'next/navigation';
+import { getUserFromFirestore } from '../functions/getUserFromFirestore';
 
 const formatAuthUser = (user) => ({
   uid: user?.uid || '',
+  token: user?.accessToken || '',
 });
 
 export default function useFirebaseAuth() {
   const setAuthUser = useSetAtom(userAtom);
   const setLoading = useSetAtom(loadingAtom);
-
+  const router = useRouter();
   const authStateChanged = async (authState) => {
     if (!authState) {
       setLoading(false);
@@ -28,10 +30,15 @@ export default function useFirebaseAuth() {
 
     setLoading(true);
 
+    const tokenResult = await authState.getIdTokenResult();
     const formattedUser = formatAuthUser(authState);
-    const userDoc = await getUserFromFirestore(authState.uid);
+    const userDoc = await getUserFromFirestore(formattedUser.uid);
 
-    setAuthUser({ ...formattedUser, userRole: userDoc?.userRole });
+    setAuthUser({
+      ...formattedUser,
+      userRole: tokenResult?.claims?.role || userDoc?.userRole || null,
+      isAdmin: tokenResult?.claims?.admin || false,
+    });
 
     setLoading(false);
   };
@@ -50,17 +57,19 @@ export default function useFirebaseAuth() {
     try {
       return await _sendPasswordResetEmail(auth, email);
     } catch (error) {
-      console.log('useFirebaseAuth error on line 52: ', error);
+      console.error('useFirebaseAuth error on line 52: ', error);
       throw error;
     }
   };
 
   const signOut = async () => {
     await _signOut(auth);
+    router.push('/');
     clear();
   };
 
-  const onAuthStateChanged = (cb) => _onAuthStateChanged(auth, cb);
+  const onAuthStateChanged = (currentUser) =>
+    _onAuthStateChanged(auth, currentUser);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(authStateChanged);

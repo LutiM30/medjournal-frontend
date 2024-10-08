@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Provider } from 'jotai';
 import { Footer } from '@/components/ui/footer';
+import { Toaster } from '@/components/ui/sonner';
 import { projectConstants } from '@/lib/utils';
 
 const geistSans = localFont({
@@ -36,6 +37,7 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster />
           <Provider>
             <>
               <FloatingNav className={cn('')} />

@@ -10,7 +10,9 @@ import { AddDoctor } from './DoctorCollection';
 import { AddPatient } from './PatientCollection';
 
 export const AddUser = async (data) => {
-  if (data.userRole in USER_ROLES_OPTIONS?.map((role) => role?.value)) {
+  if (
+    !USER_ROLES_OPTIONS?.map((role) => role?.value)?.includes(data.userRole)
+  ) {
     throw messages.InvalidUserRole;
   } else {
     const toUserCollection = {
@@ -38,7 +40,7 @@ export const AddUser = async (data) => {
 
       return addedUser;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   }

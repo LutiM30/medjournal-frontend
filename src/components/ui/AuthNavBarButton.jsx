@@ -40,7 +40,6 @@ const AuthNavBarButton = () => {
         const found = AUTH_INVALID_ROUTES?.find((route) =>
           route?.includes(pathName)
         );
-        console.log({ found });
 
         if (found) router.push('/');
       }
