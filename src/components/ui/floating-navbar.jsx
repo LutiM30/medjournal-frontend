@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { ModeToggle } from '@/components/ui/modeToggler';
 import AuthNavBarButton from '@/components/ui/AuthNavBarButton';
 import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
-import { IconHome, IconUser } from '@tabler/icons-react';
+import { IconHome, IconUser, IconWorld } from '@tabler/icons-react';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
 import Logo from '../Logo';
@@ -68,56 +68,56 @@ export const FloatingNav = ({ className }) => {
     {
       name: 'About Us',
       link: '/about',
-      icon: <IconHome className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: <IconWorld className='h-4 w-4 text-neutral-500 dark:text-white' />,
     },
     ...(user?.userRole === 'patients'
       ? [
+        {
+          name: 'My Profile',
+          link: '/pat/profile',
+          icon: (
+            <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
+          ),
+        },
+        {
+          name: 'Notes',
+          link: '/pat/notes',
+          icon: (
+            <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
+          ),
+        },
+        {
+          name: 'Doctors List',
+          link: '/pat/doctors',
+          icon: (
+            <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
+          ),
+        },
+      ]
+      : user?.userRole === 'doctors'
+        ? [
           {
             name: 'My Profile',
-            link: '/pat/profile',
+            link: '/doc/profile',
             icon: (
               <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
             ),
           },
           {
             name: 'Notes',
-            link: '/pat/notes',
+            link: '/doc/notes',
             icon: (
               <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
             ),
           },
           {
-            name: 'Doctors List',
-            link: '/pat/doctors',
+            name: 'Patients List',
+            link: '/doc/patients',
             icon: (
               <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
             ),
           },
         ]
-      : user?.userRole === 'doctors'
-        ? [
-            {
-              name: 'My Profile',
-              link: '/doc/profile',
-              icon: (
-                <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-              ),
-            },
-            {
-              name: 'Notes',
-              link: '/doc/notes',
-              icon: (
-                <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-              ),
-            },
-            {
-              name: 'Patients List',
-              link: '/doc/patients',
-              icon: (
-                <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-              ),
-            },
-          ]
         : []),
   ];
 

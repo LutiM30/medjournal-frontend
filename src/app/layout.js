@@ -2,6 +2,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { FloatingNav } from '@/components/ui/floating-navbar';
 import { cn } from '@/lib/utils';
+import Head from 'next/head';
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { Provider } from 'jotai';
@@ -27,6 +28,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>
+      <head>
+        <link rel='icon' href='/images/MedJournal_Logo.png' type='image/png' />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -40,7 +44,7 @@ export default function RootLayout({ children }) {
             <>
               <FloatingNav className={cn('')} />
               {children}
-              {/* <Footer /> */}
+              <Footer />
             </>
           </Provider>
         </ThemeProvider>
