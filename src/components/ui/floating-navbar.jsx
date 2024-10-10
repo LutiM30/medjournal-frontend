@@ -1,20 +1,20 @@
-'use client';
-import React, { useEffect, useState, useCallback } from 'react';
+"use client";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   motion,
   AnimatePresence,
   useScroll,
   useMotionValueEvent,
-} from 'framer-motion';
-import { cn, messages } from '@/lib/utils';
-import Link from 'next/link';
-import { ModeToggle } from '@/components/ui/modeToggler';
-import AuthNavBarButton from '@/components/ui/AuthNavBarButton';
-import { IconHome } from '@tabler/icons-react';
+} from "framer-motion";
+import { cn, messages } from "@/lib/utils";
+import Link from "next/link";
+import { ModeToggle } from "@/components/ui/modeToggler";
+import AuthNavBarButton from "@/components/ui/AuthNavBarButton";
+import { IconHome } from "@tabler/icons-react";
 
-import { useAtomValue } from 'jotai';
-import { userAtom } from '@/lib/atoms/userAtom';
-import Logo from '../Logo';
+import { useAtomValue } from "jotai";
+import { userAtom } from "@/lib/atoms/userAtom";
+import Logo from "../Logo";
 
 import {
   ADMIN_ROLE,
@@ -27,12 +27,12 @@ import {
   PATIENT_ROUTES,
   UNAUTH_INVALID_ROUTES,
   USER_ROLES_ROUTES,
-} from '@/lib/constants';
-import { usePathname, useRouter } from 'next/navigation';
+} from "@/lib/constants";
+import { usePathname, useRouter } from "next/navigation";
 
-import { toast } from 'sonner';
-import { auth } from '@/lib/firebase';
-import { isLoadingAtom } from '@/lib/atoms/atoms';
+import { toast } from "sonner";
+import { auth } from "@/lib/firebase";
+import { isLoadingAtom } from "@/lib/atoms/atoms";
 
 export const FloatingNav = ({ className }) => {
   const { scrollY } = useScroll();
@@ -44,7 +44,7 @@ export const FloatingNav = ({ className }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
-    if (!isLoading && pathName !== '/') {
+    if (!isLoading && pathName !== "/") {
       let isValidRoute = false;
 
       if (user?.uid && user?.token) {
@@ -72,7 +72,7 @@ export const FloatingNav = ({ className }) => {
 
       if (!isValidRoute) {
         toast.error(messages.INVALID_ACCESS);
-        router.push('/');
+        router.push("/404");
       }
     }
   }, [user, pathName, isLoading]);
@@ -92,41 +92,41 @@ export const FloatingNav = ({ className }) => {
     setLastScrollY(currentScrollY);
   }, [scrollY, lastScrollY]);
 
-  useMotionValueEvent(scrollY, 'change', handleScroll);
+  useMotionValueEvent(scrollY, "change", handleScroll);
 
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (
-        event.key === 'n' &&
-        event.target.tagName !== 'INPUT' &&
-        event.target.tagName !== 'TEXTAREA'
+        event.key === "n" &&
+        event.target.tagName !== "INPUT" &&
+        event.target.tagName !== "TEXTAREA"
       ) {
         setVisible(true);
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
 
   const navItems = [
     {
-      name: 'Home',
-      link: '/',
-      icon: <IconHome className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      name: "Home",
+      link: "/",
+      icon: <IconHome className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
     {
-      name: 'About Us',
-      link: '/about',
-      icon: <IconHome className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      name: "About Us",
+      link: "/about",
+      icon: <IconHome className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
     ...(USER_ROLES_ROUTES[user?.role] || []),
   ];
 
   return (
-    <AnimatePresence mode='wait'>
+    <AnimatePresence mode="wait">
       <motion.div
         initial={{
           opacity: 1,
@@ -147,35 +147,35 @@ export const FloatingNav = ({ className }) => {
           duration: 0.2,
         }}
         className={cn(
-          'flex fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-primary-foreground bg-primary-foreground  shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] px-4 py-2 items-center justify-between w-[70%]',
+          "flex fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-primary-foreground bg-primary-foreground  shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] px-4 py-2 items-center justify-between w-[70%]",
           className
         )}
       >
         {/* Left Side - Logo */}
-        <div className='flex-shrink-0'>
-          <div className='text-xl font-bold'>
+        <div className="flex-shrink-0">
+          <div className="text-xl font-bold">
             <Logo />
           </div>
         </div>
 
         {/* Middle - Navigation Links */}
-        <div className='flex items-center justify-center space-x-4'>
+        <div className="flex items-center justify-center space-x-4">
           {navItems.map((navItem, idx) => (
             <Link
               key={`link-${idx}`}
               href={navItem.link}
               className={cn(
-                'relative font-bold text-lg dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500'
+                "relative font-bold text-lg dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
               )}
             >
-              <span className='block sm:hidden'>{navItem.icon}</span>
-              <span className='hidden sm:block text-sm'>{navItem.name}</span>
+              <span className="block sm:hidden">{navItem.icon}</span>
+              <span className="hidden sm:block text-sm">{navItem.name}</span>
             </Link>
           ))}
         </div>
 
         {/* Right Side - Auth Button and Mode Toggle */}
-        <div className='flex items-center space-x-2'>
+        <div className="flex items-center space-x-2">
           <AuthNavBarButton />
           <ModeToggle />
         </div>
