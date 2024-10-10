@@ -14,8 +14,8 @@ export default () => {
   const router = useRouter();
   const user = useAtomValue(userAtom);
 
-  return (userRole) => {
-    switch (user?.userRole || userRole) {
+  return () => {
+    switch (user?.role) {
       case DOCTOR_ROLE:
         return router.push(DOCTOR_ROUTES[0]); // doc/profile
 

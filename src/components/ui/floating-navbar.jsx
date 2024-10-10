@@ -6,24 +6,76 @@ import {
   useScroll,
   useMotionValueEvent,
 } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { cn, messages } from '@/lib/utils';
 import Link from 'next/link';
 import { ModeToggle } from '@/components/ui/modeToggler';
 import AuthNavBarButton from '@/components/ui/AuthNavBarButton';
-import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
-import { IconHome, IconUser } from '@tabler/icons-react';
+import { IconHome } from '@tabler/icons-react';
+
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
 import Logo from '../Logo';
 
+import {
+  ADMIN_ROLE,
+  ADMIN_ROUTES,
+  AUTH_INVALID_ROUTES,
+  AUTH_PUBLIC_ROUTES,
+  DOCTOR_ROLE,
+  DOCTOR_ROUTES,
+  PATIENT_ROLE,
+  PATIENT_ROUTES,
+  UNAUTH_INVALID_ROUTES,
+  USER_ROLES_ROUTES,
+} from '@/lib/constants';
+import { usePathname, useRouter } from 'next/navigation';
+
+import { toast } from 'sonner';
+import { auth } from '@/lib/firebase';
+import { isLoadingAtom } from '@/lib/atoms/atoms';
+
 export const FloatingNav = ({ className }) => {
   const { scrollY } = useScroll();
-  const { signOut } = useFirebaseAuth();
   const user = useAtomValue(userAtom);
-
+  const pathName = usePathname();
+  const router = useRouter();
+  const isLoading = useAtomValue(isLoadingAtom);
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  useEffect(() => {
+    if (!isLoading && pathName !== '/') {
+      let isValidRoute = false;
+
+      if (user?.uid && user?.token) {
+        switch (user?.role) {
+          case DOCTOR_ROLE:
+            isValidRoute = DOCTOR_ROUTES?.includes(pathName);
+            break;
+          case PATIENT_ROLE:
+            isValidRoute = PATIENT_ROUTES?.includes(pathName);
+            break;
+          case ADMIN_ROLE:
+            isValidRoute = user.isAdmin && ADMIN_ROUTES?.includes(pathName);
+            break;
+        }
+
+        if (AUTH_PUBLIC_ROUTES?.includes(pathName)) {
+          isValidRoute = true;
+        }
+        if (AUTH_INVALID_ROUTES?.includes(pathName)) {
+          isValidRoute = false;
+        }
+      } else {
+        isValidRoute = !UNAUTH_INVALID_ROUTES?.includes(pathName);
+      }
+
+      if (!isValidRoute) {
+        toast.error(messages.INVALID_ACCESS);
+        router.push('/');
+      }
+    }
+  }, [user, pathName, isLoading]);
   useEffect(() => setVisible(true), []);
 
   const handleScroll = useCallback(() => {
@@ -70,55 +122,7 @@ export const FloatingNav = ({ className }) => {
       link: '/about',
       icon: <IconHome className='h-4 w-4 text-neutral-500 dark:text-white' />,
     },
-    ...(user?.userRole === 'patients'
-      ? [
-          {
-            name: 'My Profile',
-            link: '/pat/profile',
-            icon: (
-              <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-            ),
-          },
-          {
-            name: 'Notes',
-            link: '/pat/notes',
-            icon: (
-              <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-            ),
-          },
-          {
-            name: 'Doctors List',
-            link: '/pat/doctors',
-            icon: (
-              <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-            ),
-          },
-        ]
-      : user?.userRole === 'doctors'
-        ? [
-            {
-              name: 'My Profile',
-              link: '/doc/profile',
-              icon: (
-                <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-              ),
-            },
-            {
-              name: 'Notes',
-              link: '/doc/notes',
-              icon: (
-                <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-              ),
-            },
-            {
-              name: 'Patients List',
-              link: '/doc/patients',
-              icon: (
-                <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-              ),
-            },
-          ]
-        : []),
+    ...(USER_ROLES_ROUTES[user?.role] || []),
   ];
 
   return (
@@ -143,7 +147,7 @@ export const FloatingNav = ({ className }) => {
           duration: 0.2,
         }}
         className={cn(
-          'flex fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-black bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] px-4 py-2 items-center justify-between w-[70%]',
+          'flex fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-primary-foreground bg-primary-foreground  shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] px-4 py-2 items-center justify-between w-[70%]',
           className
         )}
       >

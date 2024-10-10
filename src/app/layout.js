@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <Toaster />
+          <Toaster position='bottom-center' />
           <Provider>
             <>
               <FloatingNav className={cn('')} />

@@ -1,5 +1,5 @@
 export const CREATE_USER_ROLE = {
-  url: 'create-user-role',
+  url: 'create-user',
   method: 'post',
   isMultipart: false,
   showToast: true,

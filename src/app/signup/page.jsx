@@ -34,19 +34,22 @@ import {
   SIGNIN_LINK,
   SIGNUP_TXT,
 } from '@/lib/constants';
-import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
+import useFirebaseAuth, { formatAuthUser } from '@/lib/hooks/useFirebaseAuth';
 import useProfileRedirect from '@/lib/hooks/useProfileRedirect';
 import { generateFirebaseAuthErrorMessage } from '@/lib/functions/generateErrorMessage';
-import { AddUser } from '@/lib/functions/Firestore/UserCollection';
+
 import { api } from '@/lib/apis/api';
 import { CREATE_USER_ROLE } from '@/lib/apis/apiUrls';
+import { auth } from '@/lib/firebase';
+import { useSetAtom } from 'jotai';
+import { userAtom } from '@/lib/atoms/userAtom';
 
 const Signup = () => {
   const { signUp } = useFirebaseAuth();
   const router = useRouter();
   const redirectTo = useProfileRedirect();
   const today = dayjs();
-
+  const setAuthUser = useSetAtom(userAtom);
   const {
     register,
     handleSubmit,
@@ -61,37 +64,24 @@ const Signup = () => {
       email: '',
       password: '',
       confirmpassword: '',
-      userRole: USER_ROLES_OPTIONS[0].value,
+      role: USER_ROLES_OPTIONS[0].value,
     },
   });
 
   const onSubmit = async (data) => {
     try {
-      // signup and signin using firebase
-      const user = await signUp({ email: data.email, password: data.password });
-
       const userData = {
-        ...data,
-        createdAt: today.toDate(),
-        isProfileComplete: false,
-        uid: user.user.uid,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        role: data.role,
+        email: data.email,
+        password: data.password,
       };
-      if (
-        !String(userData.email).includes(process.env.NEXT_PUBLIC_ADMIN_EMAIL)
-      ) {
-        delete userData.email;
-        delete userData.password;
-        delete userData.confirmpassword;
-        await AddUser(userData);
-      }
 
-      const tokenResult = await user.user.getIdTokenResult();
+      const response = await signUp({ ...userData });
 
-      await api(CREATE_USER_ROLE, { role: userData.userRole }, null, {
-        authToken: tokenResult.token,
-      });
       toast.success('Signed up successfully');
-      redirectTo(userData.userRole);
+      redirectTo();
     } catch (error) {
       handleSubmissionError(error);
     }
@@ -178,10 +168,10 @@ const Signup = () => {
         ))}
         <Controller
           control={control}
-          name='userRole'
+          name='role'
           render={({ field }) => (
             <LabelInputContainer>
-              <Label htmlFor='userRole'>Select User Role</Label>
+              <Label htmlFor='role'>Select User Role</Label>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <SelectTrigger>
                   <SelectValue placeholder='Select User Role' />
@@ -194,9 +184,7 @@ const Signup = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {errors.userRole && (
-                <ErrorMessage msg={errors.userRole.message} />
-              )}
+              {errors.role && <ErrorMessage msg={errors.role.message} />}
             </LabelInputContainer>
           )}
         />

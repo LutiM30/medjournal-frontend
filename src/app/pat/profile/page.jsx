@@ -1,7 +1,8 @@
-"use client";
-import React from "react";
-import PatientProfile from "../PatientProfile";
-import withRoleProtection from "@/lib/hooks/withRoleProtection";
+'use client';
+import React from 'react';
+import PatientProfile from '../PatientProfile';
+import withRoleProtection from '@/lib/hooks/withRoleProtection';
+import { PATIENT_ROLE } from '@/lib/constants';
 
 const Page = () => {
   return (
@@ -11,4 +12,4 @@ const Page = () => {
   );
 };
 
-export default withRoleProtection(Page, "patients");
+export default withRoleProtection(Page, PATIENT_ROLE);

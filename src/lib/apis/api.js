@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { isEmpty } from 'radash';
 import { FILE_MAX_LIMIT, MAX_FIVE_MB_SERVER } from '../utils';
 
-const USER_API = process.env.NEXT_PUBLIC_API_URL + 'api/users/';
+const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/users/`;
 
 /**
  * Extracts a display message from the error object or message string
@@ -86,15 +86,13 @@ export const api = async (endpoint, data, id = null, params = null) => {
   };
 
   const authToken = params?.authToken || null;
-  delete params.authToken;
+  delete params?.authToken;
 
   if (token || authToken) {
     headers.authorization = `Bearer ${token || authToken}`;
-  } else {
-    toast.warning('No Auth Token');
   }
 
-  const requestUrl = `http://${USER_API}${url}${id || ''}${
+  const requestUrl = `${BASE_URL}/${url}${id ? `/${id}` : ''}${
     params ? `?${queryString.stringify(params)}` : ''
   }`;
 
@@ -116,8 +114,7 @@ export const api = async (endpoint, data, id = null, params = null) => {
 
     return response;
   } catch (error) {
-    console.error('113 --- ', error);
-
+    console.error('API call error:', error);
     return handleErrorResponse(error.response, ignoreError);
   }
 };

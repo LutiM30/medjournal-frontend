@@ -21,7 +21,7 @@ import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
 import { generateFirebaseAuthErrorMessage } from '@/lib/functions/generateErrorMessage';
 import BottomGradientBtn from '@/components/ui/Elements/Buttons/BottomGradientBtn.jsx';
 import { ArrowTopRightIcon } from '@radix-ui/react-icons';
-import { getUserFromFirestore } from '@/lib/functions/getUserFromFirestore';
+
 import useProfileRedirect from '@/lib/hooks/useProfileRedirect';
 import { toast } from 'sonner';
 import { api } from '@/lib/apis/api';
@@ -54,26 +54,8 @@ const SignIn = () => {
 
     try {
       const user = await signIn(sendDataToFirebase);
-      const userDoc = await getUserFromFirestore(user.user.uid);
-      const tokenResult = await user.user.getIdTokenResult();
-
-      if (
-        !tokenResult?.claims?.role ||
-        ![PATIENT_ROLE, DOCTOR_ROLE, ADMIN_ROLE]?.includes(
-          tokenResult?.claims?.role
-        )
-      ) {
-        try {
-          await api(CREATE_USER_ROLE, { role: userDoc.userRole }, null, {
-            authToken: tokenResult.token,
-          });
-        } catch (error) {
-          throw error;
-        }
-      }
-
-      toast.success('Signed in successfully');
-      redirectTo(userDoc?.userRole);
+      toast.success(`Welcome back ${user.user.displayName}`);
+      redirectTo();
     } catch (error) {
       handleSubmissionError(error);
     }
