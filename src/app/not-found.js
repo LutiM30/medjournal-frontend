@@ -7,7 +7,6 @@ import Image from 'next/image';
 
 const NotFound = () => {
   return (
-    
     <>
       <div className='h-screen rounded-md  bg-neutral-900 flex flex-col items-center justify-center relative w-screen'>
         <h2 className='relative flex-col md:flex-col z-10 text-3xl md:text-5xl md:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium bg-clip-text text-transparent bg-slate-50 flex items-center gap-2 md:gap-8'>
