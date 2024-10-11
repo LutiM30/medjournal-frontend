@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <head>
-        <link rel='icon' href='/images/MedJournal_Logo.png' type='image/png' />
+        <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
