@@ -5,30 +5,30 @@ import {
   signOut as _signOut,
   sendPasswordResetEmail as _sendPasswordResetEmail,
   signInWithCustomToken,
-} from 'firebase/auth';
-import { auth } from '../firebase';
-import { useEffect } from 'react';
-import { userAtom } from '../atoms/userAtom';
-import { isLoadingAtom } from '../atoms/atoms';
-import { useSetAtom } from 'jotai';
-import { useRouter } from 'next/navigation';
-import getProfileData from '../functions/Firestore/getProfileData';
-import dayjs from 'dayjs';
-import { toast } from 'sonner';
-import { api } from '../apis/api';
-import { CREATE_USER_ROLE } from '../apis/apiUrls';
+} from "firebase/auth";
+import { auth } from "../firebase";
+import { useEffect } from "react";
+import { userAtom } from "../atoms/userAtom";
+import { isLoadingAtom } from "../atoms/atoms";
+import { useSetAtom } from "jotai";
+import { useRouter } from "next/navigation";
+import getProfileData from "../functions/Firestore/getProfileData";
+import dayjs from "dayjs";
+import { toast } from "sonner";
+import { api } from "../apis/api";
+import { CREATE_USER_ROLE } from "../apis/apiUrls";
 
 export const formatAuthUser = async (user) => {
   const tokenResult = await user.getIdTokenResult(true);
 
   const authUserObj = {
-    uid: user.uid || '',
-    token: user.accessToken || '',
-    displayName: user.displayName || '',
-    role: '',
-    isAdmin: '',
-    createdAt: dayjs(user?.metadata?.creationTime).toDate() || '',
-    token: user?.accessToken || '',
+    uid: user.uid || "",
+    token: user.accessToken || "",
+    displayName: user.displayName || "",
+    role: "",
+    isAdmin: "",
+    createdAt: dayjs(user?.metadata?.creationTime).toDate() || "",
+    token: user?.accessToken || "",
   };
 
   if (authUserObj.uid) {
@@ -42,6 +42,7 @@ export const formatAuthUser = async (user) => {
       );
 
       const profileData = profileDoc?.data();
+      console.log({ profileData });
       const createdAt = profileData?.createdAt?.toDate();
 
       const profile = { ...profileData, createdAt };
@@ -55,8 +56,8 @@ export const formatAuthUser = async (user) => {
 
 const formatProfile = (profile) => ({
   createdAt: profile.createdAt,
-  patients_id: profile.patients_id || '',
-  doctors_id: profile.doctors_id || '',
+  patients_id: profile.patients_id || "",
+  doctors_id: profile.doctors_id || "",
   isProfileComplete: profile.isProfileComplete,
 });
 
@@ -71,6 +72,7 @@ export default function useFirebaseAuth() {
     }
 
     setLoading(true);
+    console.log({ authState });
 
     await auth.currentUser.getIdTokenResult(true);
     const formattedUser = await formatAuthUser(authState);
@@ -100,25 +102,25 @@ export default function useFirebaseAuth() {
       if (response.data.token) {
         return await signInWithCustomToken(auth, response.data.token);
       } else {
-        throw new Error('Oops, Something went wrong try again later');
+        throw new Error("Oops, Something went wrong try again later");
       }
     } catch (error) {
       console.error();
-      toast.error('Oops, Something went wrong try again later');
+      toast.error("Oops, Something went wrong try again later");
     }
   };
   const sendPasswordResetEmail = async ({ email }) => {
     try {
       return await _sendPasswordResetEmail(auth, email);
     } catch (error) {
-      console.error('useFirebaseAuth error on line 52: ', error);
+      console.error("useFirebaseAuth error on line 52: ", error);
       throw error;
     }
   };
 
   const signOut = async () => {
     await _signOut(auth);
-    router.push('/');
+    router.push("/");
     clear();
   };
 
