@@ -19,7 +19,7 @@ export const AUTH_INVALID_ROUTES = ['signin', 'signup'];
 
 export const DOCTOR_ROUTES = ['/doc/profile', '/doc/notes', '/doc/patients'];
 export const PATIENT_ROUTES = ['/pat/profile', '/pat/notes', '/pat/doctors'];
-export const ADMIN_ROUTES = ['/admin/users', '/admin/roles', '/admin/settings','/admin/appointments'];
+export const ADMIN_ROUTES = ['/admin/users', '/admin/roles', '/admin/settings', '/admin/appointments'];
 
 export const UNAUTH_INVALID_ROUTES = [
   ...DOCTOR_ROUTES,
@@ -48,7 +48,7 @@ export const USER_ROLES_ROUTES = {
       icon: <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />,
     },
     {
-      name: 'Doctors List',
+      name: 'Doctors',
       link: '/pat/doctors',
       icon: <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />,
     },

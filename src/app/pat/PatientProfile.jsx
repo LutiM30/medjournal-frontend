@@ -1,4 +1,3 @@
-// src/app/pat/PatientProfile.jsx
 import React from 'react';
 import PersonalInfo from './component/PersonalInfo'; // Adjust import path if necessary
 import MedicalHistory from './component/MedicalHistory'; // Adjust import path if necessary
