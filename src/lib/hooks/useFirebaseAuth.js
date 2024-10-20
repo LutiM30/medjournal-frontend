@@ -42,7 +42,6 @@ export const formatAuthUser = async (user) => {
       );
 
       const profileData = profileDoc?.data();
-      console.log({ profileData });
       const createdAt = profileData?.createdAt?.toDate();
 
       const profile = { ...profileData, createdAt };
@@ -72,7 +71,6 @@ export default function useFirebaseAuth() {
     }
 
     setLoading(true);
-    console.log({ authState });
 
     await auth.currentUser.getIdTokenResult(true);
     const formattedUser = await formatAuthUser(authState);
