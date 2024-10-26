@@ -17,20 +17,9 @@ export const AUTH_PUBLIC_ROUTES = ["/about", "password-reset", "/404"];
 
 export const AUTH_INVALID_ROUTES = ["signin", "signup"];
 
-<<<<<<< HEAD
 export const DOCTOR_ROUTES = ['/doc/profile', '/doc/notes', '/doc/patients'];
 export const PATIENT_ROUTES = ['/pat/profile', '/pat/notes', '/pat/doctors'];
 export const ADMIN_ROUTES = ['/admin/users', '/admin/roles', '/admin/settings', '/admin/appointments'];
-=======
-export const DOCTOR_ROUTES = ["/doc/profile", "/doc/notes", "/doc/patients"];
-export const PATIENT_ROUTES = ["/pat/profile", "/pat/notes", "/pat/doctors"];
-export const ADMIN_ROUTES = [
-  "/admin/users",
-  "/admin/roles",
-  "/admin/settings",
-  "/admin/appointments",
-];
->>>>>>> e3645e6a0455ada018070a4dbdb000113e1bfd18
 
 export const UNAUTH_INVALID_ROUTES = [
   ...DOCTOR_ROUTES,
@@ -59,15 +48,9 @@ export const USER_ROLES_ROUTES = {
       icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
     {
-<<<<<<< HEAD
-      name: 'Doctors',
-      link: '/pat/doctors',
-      icon: <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />,
-=======
       name: "Doctors List",
       link: "/pat/doctors",
       icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
->>>>>>> e3645e6a0455ada018070a4dbdb000113e1bfd18
     },
   ],
   [DOCTOR_ROLE]: [
@@ -117,8 +100,11 @@ export const DEFAULT_LOADING_STATES = [
   },
 ];
 
-export const GET_USER_NAME_ROLE = (userObj) => ({
-  role: userObj?.customClaims?.role,
-  admin: userObj?.customClaims?.admin,
-  displayName: userObj?.displayName,
-});
+export const GET_USER_NAME_ROLE = (userObj) => {
+  return ({
+    uid: userObj?.uid,
+    role: userObj?.customClaims?.role,
+    admin: userObj?.customClaims?.admin,
+    displayName: userObj?.displayName,
+  })
+};

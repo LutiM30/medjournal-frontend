@@ -4,6 +4,7 @@ import removeEmailFromData from '../removeEmailFromData';
 import { collections } from './collections';
 import { messages } from '@/lib/utils';
 import { setDoc, doc } from '@firebase/firestore';
+import { collection, getDocs } from "firebase/firestore";
 
 export const AddDoctor = async (data) => {
   if (data.role !== DOCTOR_ROLE) {
