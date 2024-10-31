@@ -120,6 +120,7 @@ export const FloatingNav = ({ className }) => {
         ]
         : []),
   ];
+  const navWidthClass = user?.uid ? 'w-[70%]' : 'w-[40%]';
 
   return (
     <AnimatePresence mode='wait'>
@@ -143,14 +144,25 @@ export const FloatingNav = ({ className }) => {
           duration: 0.2,
         }}
         className={cn(
-          `flex fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-black bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] px-4 py-2 items-center justify-between w-[${user?.uid ? 70 : 40}%]`,
+          `flex fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-black bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] px-4 py-2 items-center justify-between
+          ${navWidthClass}`,
           className
         )}
       >
         {/* Left Side - Logo */}
         <div className='flex-shrink-0'>
           <div className='text-xl font-bold'>
-            <Logo />
+            {/* <Logo /> */}
+            <>
+              <span className='block sm:hidden'>
+                <img
+                  src="/favicon.svg"
+                  // src="/favicon.svg dark:/favicon-dark.svg"
+                  alt="Logo"
+                  className="w-6 h-6 border-2 rounded-full"
+                /></span>
+              <span className='hidden sm:block text-sm'><Logo /></span>
+            </>
           </div>
         </div>
 
@@ -176,6 +188,6 @@ export const FloatingNav = ({ className }) => {
           <ModeToggle />
         </div>
       </motion.div>
-    </AnimatePresence>
+    </AnimatePresence >
   );
 };
