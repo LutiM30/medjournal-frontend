@@ -10,11 +10,28 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { ModeToggle } from '@/components/ui/modeToggler';
 import AuthNavBarButton from '@/components/ui/AuthNavBarButton';
-import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
+
 import { IconHome, IconUser, IconWorld } from '@tabler/icons-react';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
 import Logo from '../Logo';
+import {
+  ADMIN_ROLE,
+  ADMIN_ROUTES,
+  AUTH_INVALID_ROUTES,
+  AUTH_PUBLIC_ROUTES,
+  DOCTOR_ROLE,
+  DOCTOR_ROUTES,
+  PATIENT_ROLE,
+  PATIENT_ROUTES,
+  UNAUTH_INVALID_ROUTES,
+  USER_ROLES_ROUTES,
+} from "@/lib/constants";
+import { usePathname, useRouter } from "next/navigation";
+
+import { toast } from "sonner";
+import { auth } from "@/lib/firebase";
+import { isLoadingAtom } from "@/lib/atoms/atoms";
 
 export const FloatingNav = ({ className }) => {
   const { scrollY } = useScroll();
