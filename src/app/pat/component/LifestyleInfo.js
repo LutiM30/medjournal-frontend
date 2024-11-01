@@ -1,41 +1,59 @@
-import React from "react";
-import { FaSmoking, FaBeer, FaDumbbell, FaCarrot } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import { FaCarrot } from 'react-icons/fa';
 
-const LifestyleInfo = () => {
+const LifestyleInfo = ({ onChange }) => {
+  const [smokingStatus, setSmokingStatus] = useState('');
+  const [alcoholConsumption, setAlcoholConsumption] = useState('');
+  const [exerciseFrequency, setExerciseFrequency] = useState('');
+  const [dietPreference, setDietPreference] = useState(''); // New state for diet preference
+
+  // Effect to handle changes in input fields
+  useEffect(() => {
+    onChange({ smokingStatus, alcoholConsumption, exerciseFrequency, dietPreference });
+  }, [smokingStatus, alcoholConsumption, exerciseFrequency, dietPreference, onChange]);
+
   return (
-    <div className="mb-6 p-6 border border-green-400 rounded-lg shadow-lg bg-green-50 transition-transform duration-300 hover:shadow-xl">
+    <div className="mb-6 p-6 border border-green-400 rounded-lg shadow-lg bg-green-50">
       <h2 className="text-2xl font-semibold mb-4 text-green-600 flex items-center">
         <FaCarrot className="text-green-600 mr-2" />
         Lifestyle Information
       </h2>
       <div className="space-y-4">
-        <div className="flex items-center">
-          <FaSmoking className="text-green-600 mr-2" />
-          <div>
-            <label className="font-medium">Smoking Status:</label>
-            <p className="text-gray-700">Non-Smoker</p>
-          </div>
+        <div>
+          <label className="font-medium">Smoking Status:</label>
+          <input
+            type="text"
+            value={smokingStatus}
+            onChange={(e) => setSmokingStatus(e.target.value)}
+            className="border border-gray-300 p-2 w-full rounded"
+          />
         </div>
-        <div className="flex items-center">
-          <FaBeer className="text-green-600 mr-2" />
-          <div>
-            <label className="font-medium">Alcohol Consumption:</label>
-            <p className="text-gray-700">Occasional</p>
-          </div>
+        <div>
+          <label className="font-medium">Alcohol Consumption:</label>
+          <input
+            type="text"
+            value={alcoholConsumption}
+            onChange={(e) => setAlcoholConsumption(e.target.value)}
+            className="border border-gray-300 p-2 w-full rounded"
+          />
         </div>
-        <div className="flex items-center">
-          <FaDumbbell className="text-green-600 mr-2" />
-          <div>
-            <label className="font-medium">Exercise Habits:</label>
-            <p className="text-gray-700">3 times a week</p>
-          </div>
+        <div>
+          <label className="font-medium">Exercise Frequency:</label>
+          <input
+            type="text"
+            value={exerciseFrequency}
+            onChange={(e) => setExerciseFrequency(e.target.value)}
+            className="border border-gray-300 p-2 w-full rounded"
+          />
         </div>
-        <div className="flex items-center">
-          <FaCarrot className="text-green-600 mr-2" />
-          <div>
-            <label className="font-medium">Diet Restrictions/Preferences:</label>
-            <p className="text-gray-700">Vegetarian</p>
-          </div>
+        <div>
+          <label className="font-medium">Diet Preference:</label>
+          <input
+            type="text"
+            value={dietPreference}
+            onChange={(e) => setDietPreference(e.target.value)}
+            className="border border-gray-300 p-2 w-full rounded"
+          />
         </div>
       </div>
     </div>

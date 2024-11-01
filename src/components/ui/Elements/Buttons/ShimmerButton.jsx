@@ -16,10 +16,10 @@ const ShimmerButton = React.forwardRef(({ className, ...props }, ref) => {
     'focus:outline-none focus:ring-2 focus:ring-offset-2',
     'bg-[length:200%_100%]',
     'border-slate-800 text-slate-800',
-    'bg-[linear-gradient(110deg,#f5f5f5,45%,#ffffff,55%,#f5f5f5)]',
+    'bg-[linear-gradient(110deg,#f1f5f9,55%,#cbd5e1,60%,#f1f5f9)]',
     'focus:ring-slate-800 focus:ring-offset-white',
     'dark:border-white/[0.2] dark:text-white',
-    'dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)]',
+    'dark:bg-[linear-gradient(55deg,#020617,55%,#334155,60%,#020617)]',
     'dark:focus:ring-white dark:focus:ring-offset-gray-900',
     mounted && resolvedTheme === 'dark' ? 'dark' : '',
     className

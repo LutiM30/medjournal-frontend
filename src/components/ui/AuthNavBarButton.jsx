@@ -11,7 +11,7 @@ import { useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { loadingAtom } from '@/lib/atoms/atoms';
+import { isLoadingAtom } from '@/lib/atoms/atoms';
 import {
   isUser,
   LOGIN_BTN_TEXT_COLOR,
@@ -27,13 +27,13 @@ const AuthNavBarButton = () => {
   const { signOut } = useFirebaseAuth();
 
   const user = useAtomValue(userAtom);
-  const loading = useAtomValue(loadingAtom);
+  const isLoading = useAtomValue(isLoadingAtom);
 
   // [0] means Text, [1] means color
   const [authbuttontext, setAuthButtonText] = useState(LOGIN_BTN_TEXT_COLOR);
 
   useEffect(() => {
-    if (!loading) {
+    if (!isLoading) {
       if (!isUser(user)) {
         setAuthButtonText(LOGIN_BTN_TEXT_COLOR);
       } else {
@@ -41,12 +41,11 @@ const AuthNavBarButton = () => {
         const found = AUTH_INVALID_ROUTES?.find((route) =>
           route?.includes(pathName)
         );
-        console.log({ found });
 
         if (found) router.push('/');
       }
     }
-  }, [user, loading, pathName]);
+  }, [user, isLoading, pathName]);
 
   const handleAuthButton = async (path = '') => {
     if (isUser(user) && !path) {

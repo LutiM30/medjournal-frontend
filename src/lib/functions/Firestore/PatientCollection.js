@@ -6,12 +6,12 @@ import { messages } from '@/lib/utils';
 import { setDoc, doc } from '@firebase/firestore';
 
 export const AddPatient = async (data) => {
-  if (data.userRole !== PATIENT_ROLE) {
+  if (data.role !== PATIENT_ROLE) {
     throw messages.InvalidUserRole;
   } else {
     const toCollection = removeEmailFromData(data);
 
-    delete toCollection.userRole;
+    delete toCollection.role;
 
     try {
       return await setDoc(
@@ -19,7 +19,7 @@ export const AddPatient = async (data) => {
         toCollection
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   }

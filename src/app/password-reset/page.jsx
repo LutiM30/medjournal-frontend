@@ -40,22 +40,17 @@ const ForgotPassword = () => {
       email: data.email,
     };
     try {
-      const response = await sendPasswordResetEmail(sendDataToFirebase);
-
-      console.log({ response });
+      await sendPasswordResetEmail(sendDataToFirebase);
     } catch (error) {
       let errorMsg = generateFirebaseAuthErrorMessage(error);
 
       const found = formInputs
         .map((input) => input.name)
         ?.find((name) => error.code?.includes(name));
-      console.log(error?.code);
 
       const foundErrorMsg = formInputs
         .map((input) => input.name)
         ?.find((name) => errorMsg?.includes(name));
-
-      console.log({ foundErrorMsg, error, errorMsg });
 
       if ((error?.code && found) || (errorMsg && foundErrorMsg)) {
         setError(

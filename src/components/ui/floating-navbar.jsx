@@ -1,5 +1,5 @@
-'use client';
-import React, { useEffect, useState, useCallback } from 'react';
+"use client";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   motion,
   AnimatePresence,
@@ -18,12 +18,46 @@ import Logo from '../Logo';
 
 export const FloatingNav = ({ className }) => {
   const { scrollY } = useScroll();
-  const { signOut } = useFirebaseAuth();
   const user = useAtomValue(userAtom);
-
+  const pathName = usePathname();
+  const router = useRouter();
+  const isLoading = useAtomValue(isLoadingAtom);
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  useEffect(() => {
+    if (!isLoading && pathName !== "/") {
+      let isValidRoute = false;
+
+      if (user?.uid && user?.token) {
+        switch (user?.role) {
+          case DOCTOR_ROLE:
+            isValidRoute = DOCTOR_ROUTES?.includes(pathName);
+            break;
+          case PATIENT_ROLE:
+            isValidRoute = PATIENT_ROUTES?.includes(pathName);
+            break;
+          case ADMIN_ROLE:
+            isValidRoute = user.isAdmin && ADMIN_ROUTES?.includes(pathName);
+            break;
+        }
+
+        if (AUTH_PUBLIC_ROUTES?.includes(pathName)) {
+          isValidRoute = true;
+        }
+        if (AUTH_INVALID_ROUTES?.includes(pathName)) {
+          isValidRoute = false;
+        }
+      } else {
+        isValidRoute = !UNAUTH_INVALID_ROUTES?.includes(pathName);
+      }
+
+      if (!isValidRoute) {
+        toast.error(messages.INVALID_ACCESS);
+        router.push("/404");
+      }
+    }
+  }, [user, pathName, isLoading]);
   useEffect(() => setVisible(true), []);
 
   const handleScroll = useCallback(() => {
@@ -40,30 +74,30 @@ export const FloatingNav = ({ className }) => {
     setLastScrollY(currentScrollY);
   }, [scrollY, lastScrollY]);
 
-  useMotionValueEvent(scrollY, 'change', handleScroll);
+  useMotionValueEvent(scrollY, "change", handleScroll);
 
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (
-        event.key === 'n' &&
-        event.target.tagName !== 'INPUT' &&
-        event.target.tagName !== 'TEXTAREA'
+        event.key === "n" &&
+        event.target.tagName !== "INPUT" &&
+        event.target.tagName !== "TEXTAREA"
       ) {
         setVisible(true);
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
 
   const navItems = [
     {
-      name: 'Home',
-      link: '/',
-      icon: <IconHome className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      name: "Home",
+      link: "/",
+      icon: <IconHome className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
     {
       name: 'About Us',
@@ -123,7 +157,7 @@ export const FloatingNav = ({ className }) => {
   const navWidthClass = user?.uid ? 'w-[70%]' : 'w-[40%]';
 
   return (
-    <AnimatePresence mode='wait'>
+    <AnimatePresence mode="wait">
       <motion.div
         initial={{
           opacity: 1,
@@ -167,23 +201,23 @@ export const FloatingNav = ({ className }) => {
         </div>
 
         {/* Middle - Navigation Links */}
-        <div className='flex items-center justify-center space-x-4'>
+        <div className="flex items-center justify-center space-x-4">
           {navItems.map((navItem, idx) => (
             <Link
               key={`link-${idx}`}
               href={navItem.link}
               className={cn(
-                'relative font-bold text-lg dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500'
+                "relative font-bold text-lg dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
               )}
             >
-              <span className='block sm:hidden'>{navItem.icon}</span>
-              <span className='hidden sm:block text-sm'>{navItem.name}</span>
+              <span className="block sm:hidden">{navItem.icon}</span>
+              <span className="hidden sm:block text-sm">{navItem.name}</span>
             </Link>
           ))}
         </div>
 
         {/* Right Side - Auth Button and Mode Toggle */}
-        <div className='flex items-center space-x-2'>
+        <div className="flex items-center space-x-2">
           <AuthNavBarButton />
           <ModeToggle />
         </div>
