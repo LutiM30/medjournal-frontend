@@ -67,8 +67,12 @@ module.exports = {
           to: { height: '0' },
         },
         shimmer: {
-          '0%': { backgroundPosition: '0 0' },
-          '100%': { backgroundPosition: '-200% 0' },
+          from: {
+            backgroundPosition: '0 0',
+          },
+          to: {
+            backgroundPosition: '-200% 0',
+          },
         },
       },
       animation: {

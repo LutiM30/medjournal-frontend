@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
           <Provider>
             <>
               <FloatingNav className={cn('')} />
-              {children}
+              <>{children}</>
               {/* <Footer /> */}
             </>
           </Provider>
