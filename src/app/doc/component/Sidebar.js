@@ -71,7 +71,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="profile-card card p-6 mb-6 bg-gradient-to-r from-blue-50 to-blue-100 shadow-lg rounded-lg text-center transform transition-transform duration-300 hover:scale-105 hover:shadow-xl border-l-4 border-blue-500">
+    <div className="profile-card card p-6 ml-6 mb-6 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-slate-800 dark:to-slate-900 dark:shadow-lg rounded-lg text-center transform transition-transform duration-300 hover:scale-105 hover:shadow-xl border-l-4 border-blue-500 dark:bg-slate-900">
       {/* Profile Image Wrapper */}
       <div className="relative w-[200px] h-[200px] rounded-full overflow-hidden mx-auto mb-4 shadow-md transition-transform duration-300 hover:rotate-3">
         <Image
@@ -88,30 +88,30 @@ const Sidebar = () => {
       {isProfileComplete && !isEditing ? (
         <>
 
-          <p className="text-lg text-gray-600 mb-1">
-            Specialty: <span className="text-blue-500 font-semibold">{profile.specialty || 'General'}</span>
+          <p className="text-lg text-purple-600 mb-1">
+            Specialty: <span className="text-blue-500 font-semibold DARK:text-white">{profile.specialty || 'General'}</span>
           </p>
           <hr className="my-4 border-gray-300" />
 
           {/* Address Section */}
           <div className="mb-4 text-left">
-            <h3 className="font-semibold text-purple-600">Practice Address:</h3>
-            <p className="text-gray-700">{profile.address || '123 Abc St'}</p>
+            <h3 className="font-semibold text-purple-600 ">Practice Address:</h3>
+            <p className="text-gray-700 dark:text-white">{profile.address || '123 Abc St'}</p>
           </div>
 
           <div className="mb-4 text-left">
             <h3 className="font-semibold text-purple-600">City:</h3>
-            <p className="text-gray-700">{profile.city || 'Toronto'}</p>
+            <p className="text-gray-700   dark:text-white">{profile.city || 'Toronto'}</p>
           </div>
 
           <div className="mb-4 text-left">
             <h3 className="font-semibold text-purple-600">Province:</h3>
-            <p className="text-gray-700">{profile.province || 'Ontario'}</p>
+            <p className="text-gray-700 dark:text-white">{profile.province || 'Ontario'}</p>
           </div>
 
           <div className="mb-4 text-left">
             <h3 className="font-semibold text-purple-600">Office Phone:</h3>
-            <p className="text-gray-700">{profile.phonenumber || '555-555-5555'}</p>
+            <p className="text-gray-700   dark:text-white">{profile.phonenumber || '555-555-5555'}</p>
           </div>
 
           <button
