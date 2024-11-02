@@ -1,9 +1,9 @@
-import { clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { PATIENT_ROLE, DOCTOR_ROLE } from "./constants";
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import { PATIENT_ROLE, DOCTOR_ROLE } from './constants';
 
 export function cn(...inputs) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 export const projectConstants = {
   PROJECT_NAME: 'MedJournal',
@@ -11,6 +11,7 @@ export const projectConstants = {
   TEAM_MEMBERS: ['Mitul', 'Dhruvin', 'Aartiben', 'Riten'],
   GITHUB_REPO_URL: 'https://github.com/LutiM30/medjournal-frontend',
 };
+export const MAX_FIVE_MB_SERVER = 'E_EXCEEDS_UPLOAD_LIMIT';
 
 export const CURRENT_YEAR = () => new Date()?.getFullYear();
 export const INPUT_PASSWORD_MIN_LENGTH = 8;
@@ -35,6 +36,8 @@ export const USER_ROLES_OPTIONS = [
 ];
 
 export const messages = {
+  INVALID_ACCESS: "You don't have permission of this page.",
+
   email: 'Email is required',
   invalidEmail: 'Please enter correct email address',
 
@@ -54,6 +57,11 @@ export const messages = {
   confirmNewPassword: 'Confirm new password is required',
   passwordNotMatch: 'Password and confirm password must match',
 
-  userRole: 'User Role is required',
+  role: 'User Role is required',
   InvalidUserRole: 'Invalid selection of Role',
 };
+
+export const FILE_MAX_LIMIT = (MB) =>
+  `Max file upload limit exceeded (${MB}MB)`;
+export const ASTRONAUT_IMAGE =
+  'https://i.imgur.com/VurcHkh.png';
