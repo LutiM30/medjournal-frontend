@@ -1,11 +1,15 @@
-import React from 'react'
+'use client';
+import React from 'react';
+import PatientList from '../PatientList';
+import withRoleProtection from '@/lib/hooks/withRoleProtection';
+import { DOCTOR_ROLE } from '@/lib/constants';
 
-function page() {
+const Home = () => {
   return (
     <div>
-      Patient list
+      <PatientList />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default withRoleProtection(Home, DOCTOR_ROLE);
