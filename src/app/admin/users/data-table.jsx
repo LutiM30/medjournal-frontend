@@ -8,7 +8,6 @@ import {
   getSortedRowModel,
 } from '@tanstack/react-table';
 import columns from '@/app/admin/users/columns';
-import { cn } from '@/lib/utils';
 import {
   Table,
   TableHead,
@@ -30,6 +29,9 @@ const DataTable = ({
   handlePreviousPage,
   currentPage,
   hasNextPage = false,
+  setSearch,
+  search,
+  setCurrentPage,
 }) => {
   const [sorting, setSorting] = useState([]);
   const [rowSelection, setRowSelection] = useState({});
@@ -45,9 +47,11 @@ const DataTable = ({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
+    manualPagination: true,
+    rowCount: 10,
     state: {
       sorting,
       rowSelection,
@@ -73,8 +77,8 @@ const DataTable = ({
             : obj[`role`]
         );
 
-        placeholdersArr.push(getSearchStr(obj[`displayName`]));
-        placeholdersArr.push(roleStr);
+        placeholdersArr.push(getSearchStr(capitalize(obj[`displayName`])));
+        placeholdersArr.push(getSearchStr(roleStr));
       });
 
       setPlaceholders([...new Set(placeholdersArr)]);
@@ -84,88 +88,102 @@ const DataTable = ({
   const VanishInputProps = {
     placeholders,
     onChange: () => {},
-    onSubmit: (e) => console.log(e.target[0].value),
+    onSubmit: (e) => {
+      setSearch([...search, e.target[0].value]);
+      setCurrentPage(0);
+    },
+    search,
+    setSearch,
+    setCurrentPage,
   };
 
   return (
-    <div className='w-full max-w-screen-xl p-4 mx-auto my-8 bg-white shadow-lg md:p-8 dark:bg-black rounded-xl'>
+    <>
       <div className='flex items-center justify-between py-4'>
         <VanishInput {...VanishInputProps} />
       </div>
-      <div className='border rounded-md'>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
+      {data?.length ? (
+        <>
+          <div className='border rounded-md'>
+            <Table pagination={!search?.length}>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className='h-24 text-center'
+                    >
+                      No results.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className='h-24 text-center'
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className='flex items-center justify-between py-4'>
-        <div className='text-sm text-gray-500 dark:text-gray-400'>
-          Page {currentPage + 1}
-        </div>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <div className='flex items-center justify-between py-4'>
+            <div className='text-sm text-gray-500 dark:text-gray-400'>
+              Page {currentPage + 1}
+            </div>
 
-        <div className='flex space-x-2'>
-          <Button
-            variant='outline'
-            onClick={handlePreviousPage}
-            disabled={currentPage === 0 || loading}
-            className='px-4'
-          >
-            Previous
-          </Button>
+            <div className='flex space-x-2'>
+              <Button
+                variant='outline'
+                onClick={handlePreviousPage}
+                disabled={currentPage === 0 || loading}
+                className='px-4'
+              >
+                Previous
+              </Button>
 
-          <Button
-            variant='outline'
-            onClick={handleNextPage}
-            disabled={!hasNextPage || loading}
-            className='px-4'
-          >
-            Next
-          </Button>
+              <Button
+                variant='outline'
+                onClick={handleNextPage}
+                disabled={!hasNextPage || loading}
+                className='px-4'
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className='py-4 text-center'>
+          Unable to load users data. Please try again later.
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
