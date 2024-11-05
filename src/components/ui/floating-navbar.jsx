@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { ModeToggle } from '@/components/ui/modeToggler';
 import AuthNavBarButton from '@/components/ui/AuthNavBarButton';
 
-import { IconHome, IconUser, IconWorld } from '@tabler/icons-react';
+import { IconHome, IconNote, IconUser, IconWorld, IconStethoscope, IconEmergencyBed } from '@tabler/icons-react';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
 import Logo from '../Logo';
@@ -134,14 +134,14 @@ export const FloatingNav = ({ className }) => {
           name: 'Notes',
           link: '/pat/notes',
           icon: (
-            <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
+            <IconNote className='h-4 w-4 text-neutral-500 dark:text-white' />
           ),
         },
         {
           name: 'Doctors List',
           link: '/pat/doctors',
           icon: (
-            <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
+            <IconStethoscope className='h-4 w-4 text-neutral-500 dark:text-white' />
           ),
         },
       ]
@@ -158,20 +158,20 @@ export const FloatingNav = ({ className }) => {
             name: 'Notes',
             link: '/doc/notes',
             icon: (
-              <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
+              <IconNote className='h-4 w-4 text-neutral-500 dark:text-white' />
             ),
           },
           {
             name: 'Patients List',
             link: '/doc/patients',
             icon: (
-              <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
+              <IconEmergencyBed className='h-4 w-4 text-neutral-500 dark:text-white' />
             ),
           },
         ]
         : []),
   ];
-  const navWidthClass = user?.uid ? 'w-[70%]' : 'w-[40%]';
+  const navWidthClass = user?.uid ? 'w-[70%]' : 'w-[70%]';
 
   return (
     <AnimatePresence mode="wait">

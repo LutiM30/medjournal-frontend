@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { OurTeam } from "@/components/OurTeam";
+import { ValuesAndVision } from "@/components/ValuesAndVision";
 import { projectConstants } from "@/lib/utils";
 
 import { cn } from "@/lib/utils";
@@ -9,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Boxes } from "@/components/ui/background-boxes";
 import { LayoutGridDemo } from "@/components/layoutGrid";
 import { Footer } from "@/components/ui/footer";
+import { WhyWeBuild } from '@/components/WhyWeBuild';
 
 
 const About = () => {
@@ -43,23 +45,31 @@ const About = () => {
                     >
                         About Us
                     </h1>
-                    {/* <hr /> */}
-
-                    {/* row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-black dark:border-white/[0.2] bg-white border border-transparent justify-between flex flex-col space-y-4 [&>p:text-lg] md:col-span-1 grid for one column part 1 */}
-
-                    {/* row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-black dark:border-white/[0.2] bg-white border border-transparent justify-between flex flex-col space-y-4 [&>p:text-lg] md:col-span-2 grid for two columns part 2  */}
                     <p className="text-justify mx-5 mt-2 text-neutral-300 relative z-0 row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none justify-between flex flex-col space-y-4 [&>p:text-lg] md:col-span-1 w-[370px] md:w-[470px] lg:w-[570px]">
 
-
-                        {/* Framer motion is the best animation library ngl */}
                         "Our mission at Med Journal is to make healthcare records accessible and secure, allowing patients, doctors, and administrators to manage medical information with ease."
                     </p>
 
                 </div>
                 <OurTeam />
-                {/* <>
-                    <LayoutGridDemo />
-                </> */}
+                {/* Values and Vision Section */}
+                <div className="overflow-hidden h-full w-full relative z-50 flex flex-col justify-center items-center">
+                    <h1 className="font-bold text-xl md:text-4xl text-center bg-clip-text bg-gradient-to-b from-neutral-50 to-neutral-400 py-4">
+                        Our Values and Vision
+                    </h1>
+
+                    <ValuesAndVision />
+                </div>
+
+
+                {/* Why We Built Section */}
+                <div className="overflow-hidden h-full w-full relative z-50 flex flex-col justify-center items-center">
+                    <h1 className="font-bold text-xl md:text-4xl text-center bg-clip-text bg-gradient-to-b from-neutral-50 to-neutral-400 py-4">
+                        Why We Built Med Journal
+                    </h1>
+                    <WhyWeBuild />
+                </div>
+
             </div >
 
         </>

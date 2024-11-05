@@ -1,4 +1,4 @@
-"use client"; // Ensure this is present
+"use client";
 import { api } from "@/lib/apis/api";
 import { GET_USERS } from "@/lib/apis/apiUrls";
 import { isLoadingAtom } from "@/lib/atoms/atoms";

@@ -1,3 +1,4 @@
+'use client';
 // Homepage
 import { ImagesSliderHome } from '../components/ui/imageSlider';
 import { Features } from '@/components/Features';

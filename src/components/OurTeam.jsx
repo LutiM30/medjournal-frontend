@@ -10,7 +10,6 @@ import {
     IconTableColumn,
 } from "@tabler/icons-react";
 
-import { BentoGrid, BentoGridItem } from "./ui/bento-grid";
 import {
     SkeletonOne, SkeletonTwo, SkeletonThree, SkeletonFour,
     SkeletonFive
@@ -27,17 +26,7 @@ export function OurTeam() {
                 </h1>
             </div>
             <CardDemo />
-            <BentoGrid className="w-full h-full mx-auto md:auto-rows-[20rem]">
-                {items.map((item, i) => (
-                    <BentoGridItem
-                        key={i}
-                        title={item.title}
-                        description={item.description}
-                        header={item.header}
-                        className={cn("[&>p:text-lg]", item.className)}
-                        icon={item.icon} />
-                ))}
-            </BentoGrid>
+
         </>)
     );
 }

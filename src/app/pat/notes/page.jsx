@@ -57,7 +57,7 @@ const AppointmentPage = () => {
   return (
     <div className="p-6 bg-gradient-to-br from-purple-50 to-teal-100 min-h-screen pt-16">
       <h1 className="text-5xl font-bold text-gray-800 mb-8 text-center">
-       </h1>
+      </h1>
 
       {/* Search and Filter Section */}
       <div className="flex justify-between mb-8">
@@ -119,7 +119,7 @@ const AppointmentPage = () => {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {Array.isArray(upcomingAppointments) &&
-        upcomingAppointments.length > 0 ? (
+          upcomingAppointments.length > 0 ? (
           upcomingAppointments.map((appointment) => (
             <div
               key={appointment.id}
