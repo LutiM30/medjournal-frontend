@@ -1,9 +1,8 @@
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { IconLockAccess } from '@tabler/icons-react';
-import { IconCalendarPlus } from '@tabler/icons-react';
-import { IconCalendarTime } from '@tabler/icons-react';
-import { IconBrandReactNative } from '@tabler/icons-react';
+"use client"
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { IconLockAccess, IconCalendarPlus, IconCalendarTime, IconBrandReactNative } from "@tabler/icons-react";
+import { StopwatchIcon } from "@radix-ui/react-icons"
 export const SkeletonOne = () => {
   const variants = {
     initial: {
@@ -43,46 +42,49 @@ export const SkeletonOne = () => {
         <div className='h-6 w-6 rounded-full flex-shrink-0 '>
           {/* <img src="https://firebasestorage.googleapis.com/v0/b/capstone-bd303.appspot.com/o/Homepage%2Fappointment-request.png?alt=media&token=972859d5-7271-463e-bfd4-e57db9c932f6" alt="appointment-icon" padding="1" height="100" width="100" className="rounded-full w-7" /> */}
 
-          <IconCalendarPlus className='h-4 w-5 pl-1 dark:text-white text-white:white' />
+
+          <div
+            className="h-6 w-6 p-1 rounded-full flex-shrink-0 " >
+
+
+            <IconCalendarPlus className="h-4 w-5 pl-1 dark:text-white text-white:white" />
+
+          </div>
         </div>
-        <div className='w-full h-9 rounded-full '>
-          <p className='text-sm dark:text-white text-black'>
-            Book doctor’s appointment online.
+        <div className="w-full rounded-full " >
+
+          <p className="text-sm dark:text-white text-black">Book doctor’s appointment online.
           </p>
         </div>
-      </motion.div>
+      </motion.div >
       <motion.div
         variants={variantsSecond}
-        className='flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center space-x-2 w-3/4 ml-auto bg-white dark:bg-black'
-      >
-        <div className='w-full h-4 rounded-full'>
-          <p className='text-sm dark:text-white text-black'>Skip the wait</p>
-        </div>
+        className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center space-x-2 w-3/4 ml-auto bg-white dark:bg-black">
+        <div className="w-full h-4 rounded-full"><p className="text-sm dark:text-white text-black">Skip the wait</p></div>
         {/* and get care fast. */}
-        <div className='h-6 w-6 rounded-full bg-gradient-to-r from-gray-500 to-violet-500 flex-shrink-0'>
-          <img
-            src='https://firebasestorage.googleapis.com/v0/b/capstone-bd303.appspot.com/o/Homepage%2Fman%20waiting%20for%20someone%20to_5782113.png?alt=media&token=d4a46e0f-7d35-4f42-9e60-71bb7270a4bf'
-            alt='appointment-icon'
-            height='100'
-            width='100'
-            className='rounded-full w-10'
-          />
+        <div
+          className="h-6 w-6 p-1 rounded-fullflex-shrink-0" >
+
+          <StopwatchIcon className="h-4 w-5 pl-1 text-black dark:text-white rounded-full" />
+
         </div>
+
       </motion.div>
       <motion.div
         variants={variants}
-        className='flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center space-x-2 bg-white dark:bg-black'
-      >
-        <div className='h-6 w-6 rounded-full flex-shrink-0'>
-          <IconCalendarTime className='h-4 w-5 pl-1 dark:text-white text-white:white' />
+
+        className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2 items-center space-x-2 bg-white dark:bg-black">
+
+        <div
+          className="h-6 w-6 rounded-full flex-shrink-0" >
+
+          <IconCalendarTime className="h-4 w-5 pl-1 dark:text-white text-white:white" />
+
         </div>
-        <div className='w-full h-10 rounded-full'>
-          <p className='text-sm dark:text-white text-black'>
-            Easy scheduling, just a click away!
-          </p>
-        </div>
+        <div className="w-full rounded-full" >
+          <p className="text-sm dark:text-white text-black">Easy scheduling, just a click away!</p></div>
       </motion.div>
-    </motion.div>
+    </motion.div >
   );
 };
 export const SkeletonTwo = () => {
@@ -135,27 +137,6 @@ Track Treatments
       ))}
     </motion.div>
   );
-
-  // const arr = new Array(6).fill(0);
-  // return (
-  //     (<motion.div
-  //         initial="initial"
-  //         animate="animate"
-  //         whileHover="hover"
-  //         className="flex flex-1 w-full h-full min-h-[6rem] dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2">
-  //         {arr.map((_, i) => (
-  //             <motion.div
-  //                 key={"skelenton-two" + i}
-  //                 variants={variants}
-  //                 style={{
-  //                     maxWidth: Math.random() * (100 - 40) + 40 + "%",
-  //                 }}
-  //                 className="flex flex-row rounded-full border border-neutral-100 dark:border-white/[0.2] p-2  items-center space-x-2 bg-neutral-100 dark:bg-black w-full h-4">
-
-  //                 </motion.div>
-  //         ))}
-  //     </motion.div>)
-  // );
 };
 export const SkeletonThree = () => {
   const variants = {

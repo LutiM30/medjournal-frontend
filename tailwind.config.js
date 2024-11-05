@@ -79,8 +79,38 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         shimmer: 'shimmer 2s linear infinite',
+        move: 'move 5s linear infinite',
+      },
+      keyframes: {
+        move: {
+          '0%': { transform: 'translateX(-200px)' },
+          '100%': { transform: 'translateX(200px)' },
+        },
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), addVariablesForColors],
 };
+
+function addVariablesForColors({ addBase, theme }) {
+  const allColors = theme('colors');
+  const flattenedColors = flattenColors(allColors);
+  const newVars = Object.fromEntries(
+    Object.entries(flattenedColors).map(([key, val]) => [`--${key}`, val])
+  );
+
+  addBase({
+    ':root': newVars,
+  });
+}
+
+function flattenColors(colors, prefix = '') {
+  return Object.entries(colors).reduce((acc, [key, value]) => {
+    if (typeof value === 'string') {
+      acc[`${prefix}${key}`] = value;
+    } else {
+      Object.assign(acc, flattenColors(value, `${prefix}${key}-`));
+    }
+    return acc;
+  }, {});
+}

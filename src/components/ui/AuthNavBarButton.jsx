@@ -19,6 +19,7 @@ import {
 } from '@/lib/utils';
 import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
 import { AUTH_INVALID_ROUTES } from '@/lib/constants';
+import { IconUserPlus, IconUserShare } from '@tabler/icons-react';
 
 const AuthNavBarButton = () => {
   const router = useRouter();
@@ -75,15 +76,16 @@ const AuthNavBarButton = () => {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='w-55 mt-4'>
-          <DropdownMenuItem key={1} onClick={() => handleAuthButton('/signup')}>
-            Sign Up
-            <DropdownMenuShortcut>1</DropdownMenuShortcut>
-          </DropdownMenuItem>
-
           <DropdownMenuItem key={2} onClick={() => handleAuthButton('/signin')}>
             Sign In
-            <DropdownMenuShortcut>2</DropdownMenuShortcut>
+            <DropdownMenuShortcut><IconUserShare className='h-4 w-4 text-neutral-500 dark:text-white' /></DropdownMenuShortcut>
           </DropdownMenuItem>
+
+          <DropdownMenuItem key={1} onClick={() => handleAuthButton('/signup')}>
+            Sign Up
+            <DropdownMenuShortcut><IconUserPlus className='h-4 w-4 text-neutral-500 dark:text-white' /></DropdownMenuShortcut>
+          </DropdownMenuItem>
+
         </DropdownMenuContent>
       </DropdownMenu>
     );
