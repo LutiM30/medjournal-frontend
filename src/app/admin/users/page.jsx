@@ -2,7 +2,7 @@
 // users/page.jsx
 import React, { useEffect, useState } from 'react';
 import DataTable from './data-table';
-import { GET_ALL_USERS } from '@/lib/apis/apiUrls';
+import GET_ALL_USERS from '@/lib/apis/GET_ALL_USERS';
 import { api } from '@/lib/apis/api';
 import { useAtom, useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
@@ -14,7 +14,8 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageTokens, setPageTokens] = useState([]);
   const [hasNextPage, setHasNextPage] = useState(false);
-
+  const [trigger, setTrigger] = useState(false);
+  const toggle = () => setTrigger((trigger) => !trigger);
   const user = useAtomValue(userAtom);
   const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
 
@@ -38,7 +39,7 @@ const Users = () => {
 
       setUsersData();
     }
-  }, [user, currentPage, search]);
+  }, [user, currentPage, search, trigger]);
 
   const handleNextPage = () =>
     hasNextPage ? setCurrentPage((prev) => prev + 1) : null;
@@ -59,6 +60,7 @@ const Users = () => {
           setSearch={setSearch}
           search={search}
           setCurrentPage={setCurrentPage}
+          trigger={toggle}
         />
       </div>
     </div>
@@ -81,6 +83,10 @@ const getUsersData = async (page, search) => {
       search,
       page,
     });
+
+    if (response.data.error && response.data.message === 'Invalid Page') {
+      getUsersData(page - 1, search);
+    }
 
     return {
       users: response?.data?.users || [],

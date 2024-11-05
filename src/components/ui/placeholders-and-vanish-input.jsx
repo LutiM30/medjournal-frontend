@@ -339,7 +339,7 @@ export default function PlaceholdersAndVanishInput({
       {search.length ? (
         <div className='flex justify-center flex-wrap mt-2 min-h-[2rem]'>
           {search.map((term) => (
-            <TooltipProvider>
+            <TooltipProvider key={term}>
               <Tooltip onOpenChange={(changeOpen) => setCrossIcon(changeOpen)}>
                 <TooltipTrigger>
                   <Badge
@@ -349,23 +349,30 @@ export default function PlaceholdersAndVanishInput({
                       );
                       setCurrentPage(0);
                     }}
-                    className={cn('mx-1', 'text-sm')}
+                    className={cn(
+                      'mx-1',
+                      'text-sm',
+                      'relative inline-flex h-8 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50'
+                    )}
                     variant='outline'
                   >
-                    {term}{' '}
-                    {crossIcon && (
-                      <Cross2Icon
-                        className={cn(
-                          'ml-1',
-                          'transition-opacity',
-                          'duration-700',
-                          'ease-in-out',
-                          'animate-in slide-in-from-left',
-                          'fade-in'
-                        )}
-                        fontSize={10}
-                      />
-                    )}
+                    <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]' />
+                    <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 text-sm font-medium text-white backdrop-blur-3xl'>
+                      {term}{' '}
+                      {crossIcon && (
+                        <Cross2Icon
+                          className={cn(
+                            'ml-1',
+                            'transition-opacity',
+                            'duration-700',
+                            'ease-in-out',
+                            'animate-in slide-in-from-left',
+                            'fade-in'
+                          )}
+                          fontSize={10}
+                        />
+                      )}
+                    </span>
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent side='bottom'>Click to Remove</TooltipContent>

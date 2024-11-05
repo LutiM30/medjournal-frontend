@@ -22,6 +22,11 @@ import { useAtomValue } from 'jotai';
 import VanishInput from '@/components/ui/placeholders-and-vanish-input';
 import { ADMIN_ROLE } from '@/lib/constants';
 import { capitalize } from 'radash';
+import DialogueBoxButton from '@/components/DialogueBoxButton';
+import UserActionsApiCall, {
+  USER_ACTIONS,
+} from '@/lib/functions/UserActionsApiCall';
+import { upperize } from 'radash';
 
 const DataTable = ({
   data = [],
@@ -32,6 +37,7 @@ const DataTable = ({
   setSearch,
   search,
   setCurrentPage,
+  trigger,
 }) => {
   const [sorting, setSorting] = useState([]);
   const [rowSelection, setRowSelection] = useState({});
@@ -97,6 +103,34 @@ const DataTable = ({
     setCurrentPage,
   };
 
+  const actionUsers = async (uid, action) => {
+    const actionUsersAPICall = async (ids = []) => {
+      const idsArray = Array.isArray(ids) ? ids : [ids];
+      return await UserActionsApiCall(idsArray, action);
+    };
+
+    if (uid) {
+      try {
+        await actionUsersAPICall(uid);
+        trigger();
+      } catch (error) {
+        console.error(`ERROR WHILE ${upperize(action)} User: `, error);
+      }
+    } else {
+      const selectedRowsIDs = table
+        .getSelectedRowModel()
+        .rows?.map((row) => row.original?.uid);
+
+      table.resetRowSelection();
+      try {
+        await actionUsersAPICall(selectedRowsIDs);
+        trigger();
+      } catch (error) {
+        console.error(`ERROR WHILE ${upperize(action)} User: `, error);
+      }
+    }
+  };
+
   return (
     <>
       <div className='flex items-center justify-between py-4'>
@@ -156,7 +190,47 @@ const DataTable = ({
             <div className='text-sm text-gray-500 dark:text-gray-400'>
               Page {currentPage + 1}
             </div>
+            {Object?.keys(rowSelection)?.length ? (
+              <div className={'mx-1'}>
+                <DialogueBoxButton
+                  dialogueDescription=''
+                  dialogueTitle=''
+                  dialogueNo='No'
+                  dialogueYes='Yes, Delete'
+                  dialogueYesAction={(uid) =>
+                    actionUsers(uid || '', USER_ACTIONS.delete)
+                  }
+                  triggerTitle='Delete'
+                  triggerVariant='destructive'
+                />
 
+                <DialogueBoxButton
+                  dialogueDescription='Do you really want to disable the user account ?'
+                  dialogueTitle=''
+                  dialogueNo='No'
+                  dialogueYes='Yes, Disable'
+                  dialogueYesAction={(uid) =>
+                    actionUsers(uid || '', USER_ACTIONS.disable)
+                  }
+                  triggerTitle='Disable'
+                  triggerVariant='warning'
+                />
+
+                <DialogueBoxButton
+                  dialogueDescription='Do you really want to verify the user account ?'
+                  dialogueTitle=''
+                  dialogueNo='No'
+                  dialogueYes='Yes'
+                  dialogueYesAction={(uid) =>
+                    actionUsers(uid || '', USER_ACTIONS.verify)
+                  }
+                  triggerTitle='Verify'
+                  triggerVariant='positive'
+                />
+              </div>
+            ) : (
+              <></>
+            )}
             <div className='flex space-x-2'>
               <Button
                 variant='outline'
