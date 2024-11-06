@@ -65,6 +65,7 @@ export const formatAuthUser = async (user) => {
       displayName: user.displayName || '',
       role: tokenResult?.claims?.role || null,
       isAdmin: tokenResult?.claims?.admin || false,
+      verified: tokenResult?.claims?.verified,
       createdAt: user?.metadata?.creationTime
         ? dayjs(user.metadata.creationTime).toDate()
         : null,

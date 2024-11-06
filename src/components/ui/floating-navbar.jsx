@@ -34,12 +34,12 @@ export const FloatingNav = ({ className }) => {
     {
       name: 'Home',
       link: '/',
-      icon: <IconHome className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: <IconHome className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
     {
       name: 'About Us',
       link: '/about',
-      icon: <IconHome className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: <IconHome className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
     ...(USER_ROLES_ROUTES[user?.role] || []),
   ];
@@ -83,7 +83,7 @@ export const FloatingNav = ({ className }) => {
               )}
             >
               <span className='block sm:hidden'>{navItem.icon}</span>
-              <span className='hidden sm:block text-sm'>{navItem.name}</span>
+              <span className='hidden text-sm sm:block'>{navItem.name}</span>
             </Link>
           ))}
         </div>
