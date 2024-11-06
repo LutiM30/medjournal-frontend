@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { PATIENT_ROLE, DOCTOR_ROLE } from './constants';
+import { IconLogin2, IconLogout } from '@tabler/icons-react';
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -25,8 +26,8 @@ export const VALID_EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,10}$/i;
 export const VALID_PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&])[A-Za-z\d!@#$%&]{8,}$/;
 
-export const LOGIN_BTN_TEXT_COLOR = ['Sign In', 'via-blue-500'];
-export const LOGOUT_BTN_TEXT_COLOR = ['Sign Out', 'via-red-500'];
+export const LOGIN_BTN_TEXT_COLOR = [<IconLogin2 size={18} />, 'via-blue-500'];
+export const LOGOUT_BTN_TEXT_COLOR = [<IconLogout size={18} />, 'via-red-500'];
 
 export const isUser = (user) => user?.uid || user?.email;
 

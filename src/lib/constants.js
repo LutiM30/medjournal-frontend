@@ -1,5 +1,9 @@
 import {
+  IconHome,
+  IconNote,
   IconUser,
+  IconStethoscope,
+  IconEmergencyBed,
   IconUsersGroup,
   IconClipboardHeart,
 } from '@tabler/icons-react';
@@ -47,34 +51,38 @@ export const USER_ROLES_ROUTES = {
     {
       name: 'My Profile',
       link: '/pat/profile',
-      icon: <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: <IconUser className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
     {
       name: 'Notes',
       link: '/pat/notes',
-      icon: <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: <IconNote className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
     {
       name: 'Doctors List',
       link: '/pat/doctors',
-      icon: <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: (
+        <IconStethoscope className='w-4 h-4 text-neutral-500 dark:text-white' />
+      ),
     },
   ],
   [DOCTOR_ROLE]: [
     {
       name: 'My Profile',
       link: '/doc/profile',
-      icon: <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: <IconUser className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
     {
       name: 'Notes',
       link: '/doc/notes',
-      icon: <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: <IconNote className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
     {
       name: 'Patients List',
       link: '/doc/patients',
-      icon: <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: (
+        <IconEmergencyBed className='w-4 h-4 text-neutral-500 dark:text-white' />
+      ),
     },
   ],
   [ADMIN_ROLE]: [
@@ -82,14 +90,14 @@ export const USER_ROLES_ROUTES = {
       name: 'Users',
       link: '/admin/users',
       icon: (
-        <IconUsersGroup className='h-4 w-4 text-neutral-500 dark:text-white' />
+        <IconUsersGroup className='w-4 h-4 text-neutral-500 dark:text-white' />
       ),
     },
     {
       name: 'Appointments',
       link: '/admin/appointments',
       icon: (
-        <IconClipboardHeart className='h-4 w-4 text-neutral-500 dark:text-white' />
+        <IconClipboardHeart className='w-4 h-4 text-neutral-500 dark:text-white' />
       ),
     },
   ],
