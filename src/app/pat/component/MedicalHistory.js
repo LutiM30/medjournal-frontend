@@ -17,9 +17,9 @@ const MedicalHistory = ({ onChange }) => {
   };
 
   return (
-    <div className='mb-6 p-6 border border-blue-400 rounded-lg shadow-lg bg-blue-50'>
-      <h2 className='text-2xl font-semibold mb-4 text-blue-600 flex items-center'>
-        <FaFileMedical className='text-blue-600 mr-2' />
+    <div className='p-6 mb-6 border border-blue-400 rounded-lg shadow-lg bg-blue-50'>
+      <h2 className='flex items-center mb-4 text-2xl font-semibold text-blue-600'>
+        <FaFileMedical className='mr-2 text-blue-600' />
         Medical History
       </h2>
       <div className='space-y-4'>
@@ -32,7 +32,7 @@ const MedicalHistory = ({ onChange }) => {
               setMedicalConditions(e.target.value);
               handleChange();
             }}
-            className='border border-gray-300 p-2 w-full rounded'
+            className='w-full p-2 border border-gray-300 rounded'
           />
         </div>
         <div>
@@ -44,7 +44,7 @@ const MedicalHistory = ({ onChange }) => {
               setPastSurgeries(e.target.value);
               handleChange();
             }}
-            className='border border-gray-300 p-2 w-full rounded'
+            className='w-full p-2 border border-gray-300 rounded'
           />
         </div>
         <div>
@@ -56,7 +56,7 @@ const MedicalHistory = ({ onChange }) => {
               setAllergies(e.target.value);
               handleChange();
             }}
-            className='border border-gray-300 p-2 w-full rounded'
+            className='w-full p-2 border border-gray-300 rounded'
           />
         </div>
         <div>
@@ -68,7 +68,7 @@ const MedicalHistory = ({ onChange }) => {
               setCurrentMedications(e.target.value);
               handleChange();
             }}
-            className='border border-gray-300 p-2 w-full rounded'
+            className='w-full p-2 border border-gray-300 rounded'
           />
         </div>
       </div>

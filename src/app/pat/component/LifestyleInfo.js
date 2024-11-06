@@ -24,47 +24,41 @@ const LifestyleInfo = ({ onChange }) => {
   ]);
 
   return (
-    <div className='mb-6 p-6 border border-green-400 rounded-lg shadow-lg bg-green-50'>
-      <h2 className='text-2xl font-semibold mb-4 text-green-600 flex items-center'>
-        <FaCarrot className='text-green-600 mr-2' />
+    <div className='p-6 mb-6 transition-transform duration-300 border border-green-400 rounded-lg shadow-lg dark:bg-slate-900 bg-green-50 hover:shadow-xl'>
+      <h2 className='flex items-center mb-4 text-2xl font-semibold text-green-600'>
+        <FaCarrot className='mr-2 text-green-600' />
         Lifestyle Information
       </h2>
       <div className='space-y-4'>
-        <div>
-          <label className='font-medium'>Smoking Status:</label>
-          <input
-            type='text'
-            value={smokingStatus}
-            onChange={(e) => setSmokingStatus(e.target.value)}
-            className='border border-gray-300 p-2 w-full rounded'
-          />
+        <div className='flex items-center'>
+          <FaSmoking className='mr-2 text-green-600' />
+          <div>
+            <label className='font-medium'>Smoking Status:</label>
+            <p className='text-white-700'>Non-Smoker</p>
+          </div>
         </div>
-        <div>
-          <label className='font-medium'>Alcohol Consumption:</label>
-          <input
-            type='text'
-            value={alcoholConsumption}
-            onChange={(e) => setAlcoholConsumption(e.target.value)}
-            className='border border-gray-300 p-2 w-full rounded'
-          />
+        <div className='flex items-center'>
+          <FaBeer className='mr-2 text-green-600' />
+          <div>
+            <label className='font-medium'>Alcohol Consumption:</label>
+            <p className='text-white-700'>Occasional</p>
+          </div>
         </div>
-        <div>
-          <label className='font-medium'>Exercise Frequency:</label>
-          <input
-            type='text'
-            value={exerciseFrequency}
-            onChange={(e) => setExerciseFrequency(e.target.value)}
-            className='border border-gray-300 p-2 w-full rounded'
-          />
+        <div className='flex items-center'>
+          <FaDumbbell className='mr-2 text-green-600' />
+          <div>
+            <label className='font-medium'>Exercise Habits:</label>
+            <p className='text-white-700'>3 times a week</p>
+          </div>
         </div>
-        <div>
-          <label className='font-medium'>Diet Preference:</label>
-          <input
-            type='text'
-            value={dietPreference}
-            onChange={(e) => setDietPreference(e.target.value)}
-            className='border border-gray-300 p-2 w-full rounded'
-          />
+        <div className='flex items-center'>
+          <FaCarrot className='mr-2 text-green-600' />
+          <div>
+            <label className='font-medium'>
+              Diet Restrictions/Preferences:
+            </label>
+            <p className='text-white-700'>Vegetarian</p>
+          </div>
         </div>
       </div>
     </div>

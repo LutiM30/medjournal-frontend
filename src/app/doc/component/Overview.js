@@ -13,16 +13,16 @@ const Overview = () => {
   };
 
   return (
-    <div className='max-w-4xl mx-auto p-6 mb-6 shadow-lg rounded-lg bg-white dark:bg-slate-900 border-l-4 border-blue-500'>
+    <div className='max-w-4xl p-6 mx-auto mb-6 bg-white border-l-4 border-blue-500 rounded-lg shadow-lg dark:bg-slate-900'>
       {' '}
       {/* Colorful border */}
-      <h2 className='text-2xl font-semibold mb-4 text-blue-600'>
+      <h2 className='mb-4 text-2xl font-semibold text-blue-600'>
         Doctor Profile
       </h2>{' '}
       {/* Heading color */}
       <hr className='my-4' />
       {/* Experience, Role, and Affiliations */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+      <div className='grid grid-cols-1 gap-4 mb-4 md:grid-cols-2'>
         <div>
           <h3 className='font-semibold text-purple-600'>
             Years of Experience:
@@ -46,7 +46,7 @@ const Overview = () => {
       </div>
       <hr className='my-4' />
       {/* Specialty and Subspecialties */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+      <div className='grid grid-cols-1 gap-4 mb-4 md:grid-cols-2'>
         <div>
           <h3 className='font-semibold text-purple-600'>Primary Specialty:</h3>
           <p>{doctorProfile.primarySpecialty}</p>
@@ -58,7 +58,7 @@ const Overview = () => {
       </div>
       <hr className='my-4' />
       {/* Procedures, Age Groups, Patient Groups, and Technologies */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
         <div>
           <h3 className='font-semibold text-purple-600'>Procedures Offered:</h3>
           <p>{doctorProfile.procedures.join(', ')}</p>

@@ -18,9 +18,9 @@ const appointmentsData = [
 
 const UpcomingAppointments = () => {
     return (
-        <div className="max-w-4xl mx-auto p-6 mb-6 bg-white border-l-4 border-blue-500 rounded-lg shadow-lg">
+        <div className="max-w-4xl mx-auto p-6 mb-6 dark:bg-slate-900 bg-white border-l-4 border-blue-500 rounded-lg shadow-lg">
             <h2 className="text-2xl font-semibold mb-4 text-green-600">Upcoming Appointments for Dr. John Czaja</h2>
-            <div className="flex items-start p-4 bg-gray-100 rounded-lg shadow-md">
+            <div className="flex items-start p-4 dark:bg-slate-900 bg-gray-100 rounded-lg shadow-md">
                 <Image
                     src={doctorImage}
                     alt="Dr. John Czaja"
@@ -29,10 +29,10 @@ const UpcomingAppointments = () => {
                     className="rounded-full mr-4"
                 />
                 <div>
-                    <h3 className="font-semibold text-purple-600">Appointments:</h3>
+                    <h3 className="font-semibold text-white-600">Appointments:</h3>
                     <ul className="list-disc list-inside">
                         {appointmentsData.map((appointment) => (
-                            <li key={appointment.id} className="text-gray-800">
+                            <li key={appointment.id} className="text-white-800">
                                 {appointment.appointmentTime}
                             </li>
                         ))}

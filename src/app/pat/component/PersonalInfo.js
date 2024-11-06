@@ -47,9 +47,9 @@ const PersonalInfo = ({ onChange }) => {
   ]);
 
   return (
-    <div className='mb-6 p-6 border border-gray-300 rounded-lg shadow-lg flex flex-col bg-gradient-to-r from-blue-200 to-green-200'>
+    <div className='flex flex-col p-6 mb-6 border border-gray-300 rounded-lg shadow-lg bg-gradient-to-r from-blue-200 to-green-200'>
       <div className='flex items-start mb-4'>
-        <div className='w-32 h-32 relative rounded-full overflow-hidden border-4 border-gray-500 mr-6 shadow-md'>
+        <div className='relative w-32 h-32 mr-6 overflow-hidden border-4 border-gray-500 rounded-full shadow-md'>
           <Image
             src={patimage}
             alt='Patient Profile Picture'
@@ -58,8 +58,8 @@ const PersonalInfo = ({ onChange }) => {
           />
         </div>
         <div>
-          <h2 className='text-2xl font-semibold text-gray-800 flex items-center'>
-            <FaUser className='text-gray-600 mr-2' /> Personal Information
+          <h2 className='flex items-center text-2xl font-semibold text-gray-800'>
+            <FaUser className='mr-2 text-gray-600' /> Personal Information
           </h2>
           <div className='grid grid-cols-4 gap-4 mt-4'>
             <div className='flex flex-col'>
@@ -68,7 +68,7 @@ const PersonalInfo = ({ onChange }) => {
                 type='text'
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className='border-2 border-gray-400 rounded-lg p-2'
+                className='p-2 border-2 border-gray-400 rounded-lg'
                 placeholder='Enter First Name'
               />
             </div>
@@ -78,7 +78,7 @@ const PersonalInfo = ({ onChange }) => {
                 type='text'
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className='border-2 border-gray-400 rounded-lg p-2'
+                className='p-2 border-2 border-gray-400 rounded-lg'
                 placeholder='Enter Last Name'
               />
             </div>
@@ -88,7 +88,7 @@ const PersonalInfo = ({ onChange }) => {
                 type='date'
                 value={birthdate}
                 onChange={(e) => setBirthdate(e.target.value)}
-                className='border-2 border-gray-400 rounded-lg p-2'
+                className='p-2 border-2 border-gray-400 rounded-lg'
               />
             </div>
             <div className='flex flex-col'>
@@ -96,7 +96,7 @@ const PersonalInfo = ({ onChange }) => {
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
-                className='border-2 border-gray-400 rounded-lg p-2'
+                className='p-2 border-2 border-gray-400 rounded-lg'
               >
                 <option value='Female'>Female</option>
                 <option value='Male'>Male</option>
@@ -109,7 +109,7 @@ const PersonalInfo = ({ onChange }) => {
                 type='text'
                 value={bloodGroup}
                 onChange={(e) => setBloodGroup(e.target.value)}
-                className='border-2 border-gray-400 rounded-lg p-2'
+                className='p-2 border-2 border-gray-400 rounded-lg'
                 placeholder='Enter Blood Group'
               />
             </div>
@@ -119,7 +119,7 @@ const PersonalInfo = ({ onChange }) => {
                 type='number'
                 value={height}
                 onChange={(e) => setHeight(e.target.value)}
-                className='border-2 border-gray-400 rounded-lg p-2'
+                className='p-2 border-2 border-gray-400 rounded-lg'
                 placeholder='Enter Height'
               />
             </div>
@@ -129,7 +129,7 @@ const PersonalInfo = ({ onChange }) => {
                 type='number'
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
-                className='border-2 border-gray-400 rounded-lg p-2'
+                className='p-2 border-2 border-gray-400 rounded-lg'
                 placeholder='Enter Weight'
               />
             </div>
@@ -138,7 +138,7 @@ const PersonalInfo = ({ onChange }) => {
               <textarea
                 value={otherNotes}
                 onChange={(e) => setOtherNotes(e.target.value)}
-                className='border-2 border-gray-400 rounded-lg p-2'
+                className='p-2 border-2 border-gray-400 rounded-lg'
                 placeholder='Additional information (optional)'
                 rows='3'
               />
