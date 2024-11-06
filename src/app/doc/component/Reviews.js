@@ -32,7 +32,7 @@ const UpcomingAppointments = () => {
                     <h3 className="font-semibold text-purple-600">Appointments:</h3>
                     <ul className="list-disc list-inside dark:text-white">
                         {appointmentsData.map((appointment) => (
-                            <li key={appointment.id} className="text-gray-800">
+                            <li key={appointment.id} className="text-gray-800 dark:text-white">
                                 {appointment.appointmentTime}
                             </li>
                         ))}
