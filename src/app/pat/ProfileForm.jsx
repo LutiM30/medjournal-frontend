@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useAtomValue } from "jotai";
-import { userAtom } from "@/lib/atoms/userAtom";
-import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { FaUser, FaBriefcaseMedical, FaClipboardList } from "react-icons/fa";
+import React, { useEffect, useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { userAtom } from '@/lib/atoms/userAtom';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { FaUser, FaBriefcaseMedical, FaClipboardList } from 'react-icons/fa';
 
 const PatientProfile = () => {
   const user = useAtomValue(userAtom);
@@ -12,11 +12,12 @@ const PatientProfile = () => {
     medicalHistory: {},
     lifestyleInfo: {},
   });
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchPatientData = async () => {
       if (!user || !user.uid) return;
-      const patientDocRef = doc(db, "patients", user.uid);
+      const patientDocRef = doc(db, 'patients', user.uid);
       const docSnap = await getDoc(patientDocRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
@@ -59,122 +60,137 @@ const PatientProfile = () => {
     };
 
     if (!user || !user.uid) {
-      alert("User not authenticated.");
+      alert('User not authenticated.');
       return;
     }
-    const patientDocRef = doc(db, "patients", user.uid);
+    const patientDocRef = doc(db, 'patients', user.uid);
     await setDoc(patientDocRef, profileData, { merge: true });
-    alert("Profile updated successfully");
+    alert('Profile updated successfully');
+    setIsEditing(false);
   };
 
+  const handleEditToggle = () => setIsEditing((prev) => !prev);
+
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
-      <div className="flex flex-grow bg-white shadow-lg rounded-lg overflow-hidden m-4">
-        <main className="flex-grow p-4 overflow-y-auto">
-          <div className="mt-8 space-y-8">
-            {/* Personal Information Section */}
-            <section className="border p-4 rounded-lg bg-blue-50">
-              <h2 className="text-xl font-bold text-blue-600 flex items-center">
-                <FaUser className="mr-2" /> Personal Information
-              </h2>
-              <div className="space-y-2 text-gray-700">
-                <p>
-                  <strong>First Name:</strong>{" "}
-                  {patientData.personalInfo.firstName}
-                </p>
-                <p>
-                  <strong>Last Name:</strong>{" "}
-                  {patientData.personalInfo.lastName}
-                </p>
-                <p>
-                  <strong>Birthdate:</strong>{" "}
-                  {patientData.personalInfo.birthdate}
-                </p>
-                <p>
-                  <strong>Gender:</strong> {patientData.personalInfo.gender}
-                </p>
-                <p>
-                  <strong>Blood Group:</strong>{" "}
-                  {patientData.personalInfo.bloodGroup}
-                </p>
-                <p>
-                  <strong>Height:</strong> {patientData.personalInfo.height}
-                </p>
-                <p>
-                  <strong>Weight:</strong> {patientData.personalInfo.weight}
-                </p>
-              </div>
-            </section>
-
-            {/* Medical and Lifestyle Information Sections Side by Side */}
-            <div className="flex space-x-4">
-              {/* Medical History Section */}
-              <section className="w-1/2 border p-4 rounded-lg bg-green-50">
-                <h2 className="text-xl font-bold text-green-600 flex items-center">
-                  <FaBriefcaseMedical className="mr-2" /> Medical History
-                </h2>
-                <div className="space-y-2 text-gray-700">
-                  <p>
-                    <strong>Allergies:</strong>{" "}
-                    {patientData.medicalHistory.allergies}
-                  </p>
-                  <p>
-                    <strong>Current Medications:</strong>{" "}
-                    {patientData.medicalHistory.currentMedications}
-                  </p>
-                  <p>
-                    <strong>Medical Conditions:</strong>{" "}
-                    {patientData.medicalHistory.medicalConditions}
-                  </p>
-                  <p>
-                    <strong>Past Surgeries:</strong>{" "}
-                    {patientData.medicalHistory.pastSurgeries}
-                  </p>
-                  <p>
-                    <strong>Other Notes:</strong>{" "}
-                    {patientData.medicalHistory.otherNotes}
-                  </p>
-                </div>
-              </section>
-
-              {/* Lifestyle Information Section */}
-              <section className="w-1/2 border p-4 rounded-lg bg-yellow-50">
-                <h2 className="text-xl font-bold text-yellow-600 flex items-center">
-                  <FaClipboardList className="mr-2" /> Lifestyle Information
-                </h2>
-                <div className="space-y-2 text-gray-700">
-                  <p>
-                    <strong>Diet Preference:</strong>{" "}
-                    {patientData.lifestyleInfo.dietPreference}
-                  </p>
-                  <p>
-                    <strong>Exercise Frequency:</strong>{" "}
-                    {patientData.lifestyleInfo.exerciseFrequency}
-                  </p>
-                  <p>
-                    <strong>Smoking Status:</strong>{" "}
-                    {patientData.lifestyleInfo.smokingStatus}
-                  </p>
-                  <p>
-                    <strong>Alcohol Consumption:</strong>{" "}
-                    {patientData.lifestyleInfo.alcoholConsumption}
-                  </p>
-                </div>
-              </section>
-            </div>
-
-            {/* Submit Button */}
-            <div className="mt-6 flex justify-center">
-              <button
-                onClick={handleSubmit}
-                className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </main>
+    <div className='w-full max-w-screen-xl bg-gradient-to-b from-white to-gray-50 shadow-xl rounded-lg p-6 lg:p-12'>
+      <div className='flex justify-between items-center mb-8'>
+        <h1 className='text-4xl font-bold text-gray-800'>Patient Profile</h1>
+        <button
+          onClick={handleEditToggle}
+          className='flex items-center text-blue-600 text-lg lg:text-xl'
+        >
+          <FaEdit className='mr-2' />
+          {isEditing ? 'Cancel' : 'Edit'}
+        </button>
       </div>
+
+      {/* Grid layout for full-screen view */}
+      <div className='grid gap-8 lg:grid-cols-3'>
+        {/* Personal Information Section */}
+        <section className='border p-6 rounded-lg bg-blue-100 shadow-sm'>
+          <h2 className='text-2xl font-bold text-blue-700 flex items-center'>
+            <FaUser className='mr-2' /> Personal Information
+          </h2>
+          <div className='mt-4 space-y-3 text-gray-800'>
+            {Object.entries(patientData.personalInfo).map(([key, value]) => (
+              <p key={key}>
+                <strong>{key.replace(/([A-Z])/g, ' $1')}: </strong>{' '}
+                {isEditing ? (
+                  <input
+                    className='border rounded px-3 py-1 w-full'
+                    value={value || ''}
+                    onChange={(e) =>
+                      setPatientData((prev) => ({
+                        ...prev,
+                        personalInfo: {
+                          ...prev.personalInfo,
+                          [key]: e.target.value,
+                        },
+                      }))
+                    }
+                  />
+                ) : (
+                  value
+                )}
+              </p>
+            ))}
+          </div>
+        </section>
+
+        {/* Medical History Section */}
+        <section className='border p-6 rounded-lg bg-green-100 shadow-sm'>
+          <h2 className='text-2xl font-bold text-green-700 flex items-center'>
+            <FaBriefcaseMedical className='mr-2' /> Medical History
+          </h2>
+          <div className='mt-4 space-y-3 text-gray-800'>
+            {Object.entries(patientData.medicalHistory).map(([key, value]) => (
+              <p key={key}>
+                <strong>{key.replace(/([A-Z])/g, ' $1')}: </strong>{' '}
+                {isEditing ? (
+                  <input
+                    className='border rounded px-3 py-1 w-full'
+                    value={value || ''}
+                    onChange={(e) =>
+                      setPatientData((prev) => ({
+                        ...prev,
+                        medicalHistory: {
+                          ...prev.medicalHistory,
+                          [key]: e.target.value,
+                        },
+                      }))
+                    }
+                  />
+                ) : (
+                  value
+                )}
+              </p>
+            ))}
+          </div>
+        </section>
+
+        {/* Lifestyle Information Section */}
+        <section className='border p-6 rounded-lg bg-yellow-100 shadow-sm'>
+          <h2 className='text-2xl font-bold text-yellow-700 flex items-center'>
+            <FaClipboardList className='mr-2' /> Lifestyle Information
+          </h2>
+          <div className='mt-4 space-y-3 text-gray-800'>
+            {Object.entries(patientData.lifestyleInfo).map(([key, value]) => (
+              <p key={key}>
+                <strong>{key.replace(/([A-Z])/g, ' $1')}: </strong>{' '}
+                {isEditing ? (
+                  <input
+                    className='border rounded px-3 py-1 w-full'
+                    value={value || ''}
+                    onChange={(e) =>
+                      setPatientData((prev) => ({
+                        ...prev,
+                        lifestyleInfo: {
+                          ...prev.lifestyleInfo,
+                          [key]: e.target.value,
+                        },
+                      }))
+                    }
+                  />
+                ) : (
+                  value
+                )}
+              </p>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      {/* Submit Button */}
+      {isEditing && (
+        <div className='flex justify-center mt-8'>
+          <button
+            onClick={handleSubmit}
+            className='bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition duration-200 text-lg'
+          >
+            Save Changes
+          </button>
+        </div>
+      )}
     </div>
   );
 };
