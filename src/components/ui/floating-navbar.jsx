@@ -1,133 +1,52 @@
 'use client';
-import React, { useEffect, useState, useCallback } from 'react';
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useMotionValueEvent,
-} from 'framer-motion';
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { ModeToggle } from '@/components/ui/modeToggler';
 import AuthNavBarButton from '@/components/ui/AuthNavBarButton';
-import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
-import { IconHome, IconUser } from '@tabler/icons-react';
+import { IconHome, IconWorld } from '@tabler/icons-react';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
 import Logo from '../Logo';
 
+import useRouteProtection from '@/lib/hooks/useRouteProtection';
+import useNavigationVisibility from '@/lib/hooks/useNavigationVisibility';
+import { USER_ROLES_ROUTES } from '@/lib/constants';
+import { usePathname } from 'next/navigation';
+
+/**
+ * FloatingNav component with route protection
+ * @param {Object} props - Component props
+ * @param {string} props.className - Additional CSS classes
+ */
 export const FloatingNav = ({ className }) => {
-  const { scrollY } = useScroll();
-  const { signOut } = useFirebaseAuth();
   const user = useAtomValue(userAtom);
+  const pathName = usePathname();
 
-  const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  useEffect(() => setVisible(true), []);
-
-  const handleScroll = useCallback(() => {
-    const currentScrollY = scrollY.get();
-
-    if (currentScrollY < 10) {
-      setVisible(true);
-    } else if (currentScrollY < lastScrollY) {
-      setVisible(true);
-    } else {
-      setVisible(false);
-    }
-
-    setLastScrollY(currentScrollY);
-  }, [scrollY, lastScrollY]);
-
-  useMotionValueEvent(scrollY, 'change', handleScroll);
-
-  useEffect(() => {
-    const handleKeyPress = (event) => {
-      if (
-        event.key === 'n' &&
-        event.target.tagName !== 'INPUT' &&
-        event.target.tagName !== 'TEXTAREA'
-      ) {
-        setVisible(true);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, []);
+  // Use custom hooks
+  useRouteProtection({ pathName });
+  const { visible } = useNavigationVisibility();
 
   const navItems = [
     {
       name: 'Home',
       link: '/',
-      icon: <IconHome className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: <IconHome className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
     {
       name: 'About Us',
       link: '/about',
-      icon: <IconHome className='h-4 w-4 text-neutral-500 dark:text-white' />,
+      icon: <IconWorld className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
-    ...(user?.userRole === 'patients'
-      ? [
-          {
-            name: 'My Profile',
-            link: '/pat/profile',
-            icon: (
-              <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-            ),
-          },
-          {
-            name: 'Notes',
-            link: '/pat/notes',
-            icon: (
-              <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-            ),
-          },
-          {
-            name: 'Doctors List',
-            link: '/pat/doctors',
-            icon: (
-              <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-            ),
-          },
-        ]
-      : user?.userRole === 'doctors'
-        ? [
-            {
-              name: 'My Profile',
-              link: '/doc/profile',
-              icon: (
-                <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-              ),
-            },
-            {
-              name: 'Notes',
-              link: '/doc/notes',
-              icon: (
-                <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-              ),
-            },
-            {
-              name: 'Patients List',
-              link: '/doc/patients',
-              icon: (
-                <IconUser className='h-4 w-4 text-neutral-500 dark:text-white' />
-              ),
-            },
-          ]
-        : []),
+    ...(USER_ROLES_ROUTES[user?.role] || []),
   ];
+  const navWidthClass = user?.uid ? 'w-[70%]' : 'w-[70%]';
 
   return (
     <AnimatePresence mode='wait'>
       <motion.div
-        initial={{
-          opacity: 1,
-          y: -100,
-        }}
+        initial={{ opacity: 1, y: -100 }}
         animate={{
           y: visible ? 0 : -100,
           opacity: visible ? 0.8 : 0,
@@ -139,18 +58,30 @@ export const FloatingNav = ({ className }) => {
             ease: [0.2, 1.01, 0.5, 0.71],
           },
         }}
-        transition={{
-          duration: 0.2,
-        }}
+        transition={{ duration: 0.2 }}
         className={cn(
-          'flex fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-black bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] px-4 py-2 items-center justify-between w-[70%]',
+          `flex fixed top-5 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-primary-foreground bg-primary-foreground shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] px-4 py-2 items-center justify-between
+          ${navWidthClass}`,
           className
         )}
       >
         {/* Left Side - Logo */}
         <div className='flex-shrink-0'>
           <div className='text-xl font-bold'>
-            <Logo />
+            {/* <Logo /> */}
+            <>
+              <span className='block sm:hidden'>
+                <img
+                  src='/favicon.svg'
+                  // src="/favicon.svg dark:/favicon-dark.svg"
+                  alt='Logo'
+                  className='w-6 h-6 border-2 rounded-full'
+                />
+              </span>
+              <span className='hidden text-sm sm:block'>
+                <Logo />
+              </span>
+            </>
           </div>
         </div>
 
@@ -165,7 +96,7 @@ export const FloatingNav = ({ className }) => {
               )}
             >
               <span className='block sm:hidden'>{navItem.icon}</span>
-              <span className='hidden sm:block text-sm'>{navItem.name}</span>
+              <span className='hidden text-sm sm:block'>{navItem.name}</span>
             </Link>
           ))}
         </div>

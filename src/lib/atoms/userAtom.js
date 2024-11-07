@@ -1,6 +1,3 @@
 import { atom } from 'jotai';
 
-export const userAtom = atom({
-  uid: '',
-  email: '',
-});
+export const userAtom = atom(null);

@@ -4,14 +4,15 @@ import removeEmailFromData from '../removeEmailFromData';
 import { collections } from './collections';
 import { messages } from '@/lib/utils';
 import { setDoc, doc } from '@firebase/firestore';
+import { collection, getDocs } from "firebase/firestore";
 
 export const AddDoctor = async (data) => {
-  if (data.userRole !== DOCTOR_ROLE) {
+  if (data.role !== DOCTOR_ROLE) {
     throw messages.InvalidUserRole;
   } else {
     const toCollection = removeEmailFromData(data);
 
-    delete toCollection.userRole;
+    delete toCollection.role;
 
     try {
       return await setDoc(
@@ -19,7 +20,7 @@ export const AddDoctor = async (data) => {
         toCollection
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   }
