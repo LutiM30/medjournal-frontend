@@ -1,13 +1,15 @@
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-import { DOCTOR_ROLE, PATIENT_ROLE } from './constants';
+import { clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+import { PATIENT_ROLE, DOCTOR_ROLE } from "./constants";
 
 export function cn(...inputs) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
-
 export const projectConstants = {
   PROJECT_NAME: 'MedJournal',
+  TEAM_NAME: 'Group 3',
+  TEAM_MEMBERS: ['Mitul', 'Dhruvin', 'Aartiben', 'Riten'],
+  GITHUB_REPO_URL: 'https://github.com/LutiM30/medjournal-frontend',
 };
 
 export const CURRENT_YEAR = () => new Date()?.getFullYear();
