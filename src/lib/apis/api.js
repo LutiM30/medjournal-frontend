@@ -1,21 +1,14 @@
 import axios from 'axios';
 import queryString from 'query-string';
-import store from '@/lib/atoms/atomsStore';
-import { userAtom } from '@/lib/atoms/userAtom';
 import { signOut } from 'firebase/auth';
 import { AUTH_INVALID_ROUTES } from '../constants';
 import { toast } from 'sonner';
 import { isEmpty } from 'radash';
 import { FILE_MAX_LIMIT, MAX_FIVE_MB_SERVER } from '../utils';
+import { tokenManager } from '../functions/TokenManager';
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/users/`;
+const BASE_URL = '/api/users';
 
-/**
- * Extracts a display message from the error object or message string
- * @param {Object|string} error - The error object or string
- * @param {string} message - The fallback message
- * @returns {string} The display message
- */
 const getDisplayMessage = (error, message) => {
   if (error && typeof error === 'object' && !isEmpty(error)) {
     return typeof error[Object.keys(error)[0]] === 'string'
@@ -26,17 +19,16 @@ const getDisplayMessage = (error, message) => {
   if (message) return message;
 
   console.error('ERROR from LINE 29: ', error);
-
   return 'Something went wrong';
 };
 
-/**
- * Handles the error response from the API
- * @param {Object} res - The error response object
- * @param {boolean} ignoreError - Whether to ignore displaying the error
- * @returns {Object} An object containing error details
- */
 const handleErrorResponse = (res, ignoreError) => {
+  if (!res) {
+    console.error('Network or server error:', res);
+    toast.error('Network or server error!');
+    return;
+  }
+
   const { message, status, error } = res?.data;
 
   if (status === 401 || status === 403) {
@@ -64,55 +56,45 @@ const handleErrorResponse = (res, ignoreError) => {
   };
 };
 
-/**
- * Makes an API request
- * @param {Object} endpoint - The endpoint configuration object from ApiUrls
- * @param {Object} data - The data to send with the request (used in POST, PUT methods)
- * @param {string} [id=null] - The ID to append to the URL (usually used in PUT methods)
- * @param {Object} [params=null] - Query parameters to append to the URL
- * @returns {Promise<Object>} The API response
- */
 export const api = async (endpoint, data, id = null, params = null) => {
-  const user = store.get(userAtom);
-  const token = user?.token;
-
-  const { method, isMultipart, url, showToast, ignoreError, responseType } =
-    endpoint;
-
-  const headers = {
-    'Content-Type': isMultipart
-      ? `multipart/form-data boundary=${data?._boundary}`
-      : 'application/json',
-  };
-
-  const authToken = params?.authToken || null;
-  delete params?.authToken;
-
-  if (token || authToken) {
-    headers.authorization = `Bearer ${token || authToken}`;
-  }
-
-  const requestUrl = `${BASE_URL}/${url}${id ? `/${id}` : ''}${
-    params ? `?${queryString.stringify(params)}` : ''
-  }`;
-
-  const requestConfig = {
-    method,
-    url: requestUrl,
-    headers,
-    data: method !== 'GET' ? data : undefined,
-    params: method === 'GET' ? data : undefined,
-    responseType: responseType || undefined,
-  };
-
+  const { ignoreError } = endpoint;
   try {
+    const { method, isMultipart, url, showToast, responseType, tokenRequired } =
+      endpoint;
+
+    let headers = {
+      'Content-Type': isMultipart
+        ? `multipart/form-data boundary=${data?._boundary}`
+        : 'application/json',
+    };
+
+    if (tokenRequired) {
+      const token = await tokenManager.getValidToken();
+      if (token) {
+        headers.authorization = `Bearer ${token}`;
+      }
+    }
+
+    const requestUrl = `${BASE_URL}/${url}${id ? `/${id}` : ''}${
+      params ? `?${queryString.stringify(params)}` : ''
+    }`;
+
+    const requestConfig = {
+      method,
+      url: requestUrl,
+      headers,
+      data: method !== 'GET' ? data : undefined,
+      params: method === 'GET' ? data : undefined,
+      responseType: responseType || undefined,
+    };
+
     const response = await axios(requestConfig);
 
     if (response.data?.status === 200 && showToast) {
       toast.success(response.data.message);
     }
 
-    return response;
+    return response.data;
   } catch (error) {
     console.error('API call error:', error);
     return handleErrorResponse(error.response, ignoreError);

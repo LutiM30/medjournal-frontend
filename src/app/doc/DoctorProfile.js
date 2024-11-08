@@ -23,7 +23,7 @@ const DoctorProfilePage = () => {
             </div>
           </main>
         </div>
-        <Footer /> {/* Added Footer */}
+        <Footer /> 
       </div>
     </div>
   );
