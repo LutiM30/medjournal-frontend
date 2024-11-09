@@ -33,9 +33,8 @@ const DoctorsListPage = () => {
       };
 
       const response = await api(GET_USERS, {}, '', params);
-      console.log('API Response:', response.data);
 
-      const users = response.data.users.map((user) => {
+      const users = response.users.map((user) => {
         const userDoc = {
           uid: user.uid,
           displayName: user.displayName,

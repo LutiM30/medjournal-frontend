@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import patimage from './images/pat.jpg';
-import { FaUser } from 'react-icons/fa';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
+import { User } from 'lucide-react';
 
 const PersonalInfo = ({ onChange }) => {
   const user = useAtomValue(userAtom);
@@ -17,13 +17,6 @@ const PersonalInfo = ({ onChange }) => {
   const [lastName, setLastName] = useState('');
 
   useEffect(() => {
-    if (user) {
-      if (user.displayName) {
-        const [first, last] = user.displayName.split(' ');
-        setFirstName(first);
-        setLastName(last);
-      }
-    }
     onChange({
       firstName,
       lastName,
@@ -59,29 +52,23 @@ const PersonalInfo = ({ onChange }) => {
         </div>
         <div>
           <h2 className='flex items-center text-2xl font-semibold text-gray-800'>
-            <FaUser className='mr-2 text-gray-600' /> Personal Information
+            <User className='mr-2 text-gray-600' /> Personal Information
           </h2>
           <div className='grid grid-cols-4 gap-4 mt-4'>
-            <div className='flex flex-col'>
-              <label className='font-medium text-gray-700'>First Name:</label>
-              <input
-                type='text'
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                className='p-2 border-2 border-gray-400 rounded-lg'
-                placeholder='Enter First Name'
-              />
-            </div>
-            <div className='flex flex-col'>
-              <label className='font-medium text-gray-700'>Last Name:</label>
-              <input
-                type='text'
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                className='p-2 border-2 border-gray-400 rounded-lg'
-                placeholder='Enter Last Name'
-              />
-            </div>
+            {user?.displayName ? (
+              <div className='flex flex-col'>
+                <label className='font-medium text-gray-700'>Name:</label>
+                <input
+                  type='text'
+                  value={user?.displayName}
+                  className='p-2 border-2 border-gray-400 rounded-lg'
+                  placeholder='Enter First Name'
+                  disabled
+                />
+              </div>
+            ) : (
+              <></>
+            )}
             <div className='flex flex-col'>
               <label className='font-medium text-gray-700'>Birthdate:</label>
               <input

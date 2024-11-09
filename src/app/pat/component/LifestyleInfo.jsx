@@ -1,3 +1,7 @@
+import { Beer } from 'lucide-react';
+import { Dumbbell } from 'lucide-react';
+import { Carrot } from 'lucide-react';
+import { Cigarette } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { FaCarrot } from 'react-icons/fa';
 
@@ -31,28 +35,28 @@ const LifestyleInfo = ({ onChange }) => {
       </h2>
       <div className='space-y-4'>
         <div className='flex items-center'>
-          <FaSmoking className='mr-2 text-green-600' />
+          <Cigarette className='mr-2 text-green-600' />
           <div>
             <label className='font-medium'>Smoking Status:</label>
             <p className='text-white-700'>Non-Smoker</p>
           </div>
         </div>
         <div className='flex items-center'>
-          <FaBeer className='mr-2 text-green-600' />
+          <Beer className='mr-2 text-green-600' />
           <div>
             <label className='font-medium'>Alcohol Consumption:</label>
             <p className='text-white-700'>Occasional</p>
           </div>
         </div>
         <div className='flex items-center'>
-          <FaDumbbell className='mr-2 text-green-600' />
+          <Dumbbell className='mr-2 text-green-600' />
           <div>
             <label className='font-medium'>Exercise Habits:</label>
             <p className='text-white-700'>3 times a week</p>
           </div>
         </div>
         <div className='flex items-center'>
-          <FaCarrot className='mr-2 text-green-600' />
+          <Carrot className='mr-2 text-green-600' />
           <div>
             <label className='font-medium'>
               Diet Restrictions/Preferences:

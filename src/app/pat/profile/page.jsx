@@ -1,22 +1,18 @@
-"use client";
-import React from "react";
-import PatientProfile from "../PatientProfile";
-import ProfileForm from "../ProfileForm";
-import withRoleProtection from "@/lib/hooks/withRoleProtection";
-import { PATIENT_ROLE } from "@/lib/constants";
-import { userAtom } from "@/lib/atoms/userAtom";
-import { useAtomValue } from "jotai";
+'use client';
+import React from 'react';
+import PatientProfile from '../PatientProfile';
+import ProfileForm from '../ProfileForm';
+import withRoleProtection from '@/lib/hooks/withRoleProtection';
+import { PATIENT_ROLE } from '@/lib/constants';
+import { userAtom } from '@/lib/atoms/userAtom';
+import { useAtomValue } from 'jotai';
+import Container from '@/components/ui/Container';
 
 const Page = () => {
   const user = useAtomValue(userAtom);
 
-  console.log("====================================");
-  console.log(user);
-  console.log("====================================");
-
   return (
-    <div>
-      {/* This code snippet is a conditional rendering logic in a React component. Here's what it does: */}
+    <Container className='my-12'>
       {!user?.profile.isProfileComplete ? (
         <>
           {/* PatientProfile */}
@@ -28,7 +24,7 @@ const Page = () => {
           <ProfileForm />
         </>
       )}
-    </div>
+    </Container>
   );
 };
 
