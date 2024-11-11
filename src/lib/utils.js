@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { PATIENT_ROLE, DOCTOR_ROLE } from './constants';
+import { IconLogin2, IconLogout } from '@tabler/icons-react';
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -25,8 +26,8 @@ export const VALID_EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,10}$/i;
 export const VALID_PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&])[A-Za-z\d!@#$%&]{8,}$/;
 
-export const LOGIN_BTN_TEXT_COLOR = ['Sign In', 'via-blue-500'];
-export const LOGOUT_BTN_TEXT_COLOR = ['Sign Out', 'via-red-500'];
+export const LOGIN_BTN_TEXT_COLOR = [<IconLogin2 size={18} />, 'via-blue-500'];
+export const LOGOUT_BTN_TEXT_COLOR = [<IconLogout size={18} />, 'via-red-500'];
 
 export const isUser = (user) => user?.uid || user?.email;
 
@@ -34,6 +35,27 @@ export const USER_ROLES_OPTIONS = [
   { key: 1, label: 'Patient', value: PATIENT_ROLE },
   { key: 2, label: 'Doctor', value: DOCTOR_ROLE },
 ];
+
+/**
+ * Determines if a route is valid for the current user role
+ * @param {string} pathName - Current path
+ * @param {string} role - User role
+ * @param {boolean} isAdmin - User admin status
+ * @param {RouteConfig} routes - Route configuration
+ * @returns {boolean} Whether the route is valid
+ */
+export const isValidRouteForRole = (pathName, role, isAdmin, routes) => {
+  switch (role) {
+    case DOCTOR_ROLE:
+      return routes.DOCTOR_ROUTES?.includes(pathName);
+    case PATIENT_ROLE:
+      return routes.PATIENT_ROUTES?.includes(pathName);
+    case ADMIN_ROLE:
+      return isAdmin && routes.ADMIN_ROUTES?.includes(pathName);
+    default:
+      return false;
+  }
+};
 
 export const messages = {
   INVALID_ACCESS: "You don't have permission of this page.",
@@ -63,5 +85,4 @@ export const messages = {
 
 export const FILE_MAX_LIMIT = (MB) =>
   `Max file upload limit exceeded (${MB}MB)`;
-export const ASTRONAUT_IMAGE =
-  'https://i.imgur.com/VurcHkh.png';
+export const ASTRONAUT_IMAGE = 'https://i.imgur.com/VurcHkh.png';

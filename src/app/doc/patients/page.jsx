@@ -1,11 +1,14 @@
-import React from 'react'
+'use client';
+import React from 'react';
+import PatientList from '../PatientList';
+import AfterLoadingIsCompleted from '@/components/AfterLoadingIsCompleted';
 
-function page() {
+const Patients = () => {
   return (
-    <div>
-      Patient list
-    </div>
-  )
-}
+    <AfterLoadingIsCompleted>
+      <PatientList />
+    </AfterLoadingIsCompleted>
+  );
+};
 
-export default page
+export default Patients;

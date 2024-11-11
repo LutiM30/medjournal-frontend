@@ -4,6 +4,7 @@ import store from '@/lib/atoms/atomsStore';
 import React from 'react';
 
 const Loading = () => {
+  
   const isLoading = store.get(isLoadingAtom);
 
   return <MultiStepLoader loading={isLoading} />;

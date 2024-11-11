@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -38,18 +37,10 @@ import useFirebaseAuth, { formatAuthUser } from '@/lib/hooks/useFirebaseAuth';
 import useProfileRedirect from '@/lib/hooks/useProfileRedirect';
 import { generateFirebaseAuthErrorMessage } from '@/lib/functions/generateErrorMessage';
 
-import { api } from '@/lib/apis/api';
-import { CREATE_USER_ROLE } from '@/lib/apis/apiUrls';
-import { auth } from '@/lib/firebase';
-import { useSetAtom } from 'jotai';
-import { userAtom } from '@/lib/atoms/userAtom';
-
 const Signup = () => {
   const { signUp } = useFirebaseAuth();
   const router = useRouter();
   const redirectTo = useProfileRedirect();
-  const today = dayjs();
-  const setAuthUser = useSetAtom(userAtom);
   const {
     register,
     handleSubmit,
