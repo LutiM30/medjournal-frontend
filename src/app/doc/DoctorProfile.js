@@ -1,10 +1,11 @@
 import React from 'react';
+
 import Sidebar from './component/Sidebar';
 import Overview from './component/Overview';
 import Services from './component/Services';
 import Reviews from './component/Reviews';
 import Button from './component/Button';
-import { Footer } from '@/components/ui/footer';
+import { Footer } from '@/components/ui/footer'; // Use named import and correct casing
 
 const DoctorProfilePage = () => {
   return (
@@ -22,7 +23,7 @@ const DoctorProfilePage = () => {
             </div>
           </main>
         </div>
-        <Footer />
+        <Footer /> 
       </div>
     </div>
   );

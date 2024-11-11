@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useAtomValue } from 'jotai';
-import { userAtom } from '@/lib/atoms/userAtom';
-import { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import React, { useEffect, useState } from "react";
+import { useAtomValue } from "jotai";
+import { userAtom } from "@/lib/atoms/userAtom";
+import { db } from "@/lib/firebase";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import {
   FaUser,
   FaBriefcaseMedical,
   FaClipboardList,
   FaEdit,
-} from 'react-icons/fa';
-import { User } from 'lucide-react';
-import Container from '@/components/ui/Container';
+} from "react-icons/fa";
 
 const PatientProfile = () => {
   const user = useAtomValue(userAtom);
@@ -24,13 +22,14 @@ const PatientProfile = () => {
   useEffect(() => {
     const fetchPatientData = async () => {
       if (!user || !user.uid) return;
-      const patientDocRef = doc(db, 'patients', user.uid);
+      const patientDocRef = doc(db, "patients", user.uid);
       const docSnap = await getDoc(patientDocRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
         setPatientData({
           personalInfo: {
-            Name: user.displayName,
+            firstName: data.firstName,
+            lastName: data.lastName,
             birthdate: data.birthdate,
             gender: data.gender,
             bloodGroup: data.bloodGroup,
@@ -66,48 +65,45 @@ const PatientProfile = () => {
     };
 
     if (!user || !user.uid) {
-      alert('User not authenticated.');
+      alert("User not authenticated.");
       return;
     }
-    const patientDocRef = doc(db, 'patients', user.uid);
+    const patientDocRef = doc(db, "patients", user.uid);
     await setDoc(patientDocRef, profileData, { merge: true });
-    alert('Profile updated successfully');
+    alert("Profile updated successfully");
     setIsEditing(false);
   };
 
   const handleEditToggle = () => setIsEditing((prev) => !prev);
 
   return (
-    <Container className='w-full max-w-screen-xl  shadow-xl rounded-lg p-6 lg:p-12'>
-      <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-4xl font-bold text-primary-background dark:text-primary'>
-          Patient Profile
-        </h1>
+    <div className="w-full max-w-screen-xl bg-gradient-to-b from-white to-gray-50 shadow-xl rounded-lg p-6 lg:p-12">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-bold text-gray-800">Patient Profile</h1>
         <button
           onClick={handleEditToggle}
-          className='flex items-center text-blue-600 text-lg lg:text-xl'
+          className="flex items-center text-blue-600 text-lg lg:text-xl"
         >
-          <FaEdit className='mr-2' />
-          {isEditing ? 'Cancel' : 'Edit'}
+          <FaEdit className="mr-2" />
+          {isEditing ? "Cancel" : "Edit"}
         </button>
       </div>
 
       {/* Grid layout for full-screen view */}
-      <div className='grid gap-8 lg:grid-cols-3'>
+      <div className="grid gap-8 lg:grid-cols-3">
         {/* Personal Information Section */}
-        <section className='border p-6 rounded-lg bg-blue-100 shadow-sm'>
-          <h2 className='text-2xl font-bold text-blue-700 flex items-center'>
-            <User className='mr-2' /> Personal Information
+        <section className="border p-6 rounded-lg bg-blue-100 shadow-sm">
+          <h2 className="text-2xl font-bold text-blue-700 flex items-center">
+            <FaUser className="mr-2" /> Personal Information
           </h2>
-          <div className='mt-4 space-y-3 text-gray-800'>
+          <div className="mt-4 space-y-3 text-gray-800">
             {Object.entries(patientData.personalInfo).map(([key, value]) => (
               <p key={key}>
-                <strong>{key.replace(/([A-Z])/g, ' $1')}: </strong>{' '}
+                <strong>{key.replace(/([A-Z])/g, " $1")}: </strong>{" "}
                 {isEditing ? (
                   <input
-                    className='border rounded px-3 py-1 w-full'
-                    value={value || ''}
-                    disabled={key === 'Name'}
+                    className="border rounded px-3 py-1 w-full"
+                    value={value || ""}
                     onChange={(e) =>
                       setPatientData((prev) => ({
                         ...prev,
@@ -127,18 +123,18 @@ const PatientProfile = () => {
         </section>
 
         {/* Medical History Section */}
-        <section className='border p-6 rounded-lg bg-green-100 shadow-sm'>
-          <h2 className='text-2xl font-bold text-green-700 flex items-center'>
-            <FaBriefcaseMedical className='mr-2' /> Medical History
+        <section className="border p-6 rounded-lg bg-green-100 shadow-sm">
+          <h2 className="text-2xl font-bold text-green-700 flex items-center">
+            <FaBriefcaseMedical className="mr-2" /> Medical History
           </h2>
-          <div className='mt-4 space-y-3 text-gray-800'>
+          <div className="mt-4 space-y-3 text-gray-800">
             {Object.entries(patientData.medicalHistory).map(([key, value]) => (
               <p key={key}>
-                <strong>{key.replace(/([A-Z])/g, ' $1')}: </strong>{' '}
+                <strong>{key.replace(/([A-Z])/g, " $1")}: </strong>{" "}
                 {isEditing ? (
                   <input
-                    className='border rounded px-3 py-1 w-full'
-                    value={value || ''}
+                    className="border rounded px-3 py-1 w-full"
+                    value={value || ""}
                     onChange={(e) =>
                       setPatientData((prev) => ({
                         ...prev,
@@ -158,18 +154,18 @@ const PatientProfile = () => {
         </section>
 
         {/* Lifestyle Information Section */}
-        <section className='border p-6 rounded-lg bg-yellow-100 shadow-sm'>
-          <h2 className='text-2xl font-bold text-yellow-700 flex items-center'>
-            <FaClipboardList className='mr-2' /> Lifestyle Information
+        <section className="border p-6 rounded-lg bg-yellow-100 shadow-sm">
+          <h2 className="text-2xl font-bold text-yellow-700 flex items-center">
+            <FaClipboardList className="mr-2" /> Lifestyle Information
           </h2>
-          <div className='mt-4 space-y-3 text-gray-800'>
+          <div className="mt-4 space-y-3 text-gray-800">
             {Object.entries(patientData.lifestyleInfo).map(([key, value]) => (
               <p key={key}>
-                <strong>{key.replace(/([A-Z])/g, ' $1')}: </strong>{' '}
+                <strong>{key.replace(/([A-Z])/g, " $1")}: </strong>{" "}
                 {isEditing ? (
                   <input
-                    className='border rounded px-3 py-1 w-full'
-                    value={value || ''}
+                    className="border rounded px-3 py-1 w-full"
+                    value={value || ""}
                     onChange={(e) =>
                       setPatientData((prev) => ({
                         ...prev,
@@ -191,16 +187,16 @@ const PatientProfile = () => {
 
       {/* Submit Button */}
       {isEditing && (
-        <div className='flex justify-center mt-8'>
+        <div className="flex justify-center mt-8">
           <button
             onClick={handleSubmit}
-            className='bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition duration-200 text-lg'
+            className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition duration-200 text-lg"
           >
             Save Changes
           </button>
         </div>
       )}
-    </Container>
+    </div>
   );
 };
 

@@ -29,6 +29,13 @@ const PatientProfile = () => {
         return;
       }
 
+      // Log the data being saved in a readable format
+      console.log(
+        'Profile data to be saved:',
+        JSON.stringify(profileData, null, 2)
+      );
+
+      // Reference the "patients" collection instead of "users"
       const patientDoc = doc(db, 'patients', user.uid);
       await setDoc(patientDoc, profileData, { merge: true });
 
