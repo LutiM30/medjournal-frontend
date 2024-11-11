@@ -6,7 +6,7 @@ import Head from 'next/head';
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { Provider } from 'jotai';
-import Footer from '@/components/ui/footer';
+import { Footer } from '@/components/ui/footer';
 import { Toaster } from '@/components/ui/sonner';
 import { projectConstants } from '@/lib/utils';
 
