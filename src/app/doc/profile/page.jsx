@@ -1,15 +1,14 @@
 'use client';
 import React from 'react';
 import DoctorProfile from '../DoctorProfile';
-import withRoleProtection from '@/lib/hooks/withRoleProtection';
-import { DOCTOR_ROLE } from '@/lib/constants';
+import AfterLoadingIsCompleted from '@/components/AfterLoadingIsCompleted';
 
 const Home = () => {
   return (
-    <div>
+    <AfterLoadingIsCompleted className='mb-28'>
       <DoctorProfile />
-    </div>
+    </AfterLoadingIsCompleted>
   );
 };
 
-export default withRoleProtection(Home, DOCTOR_ROLE);
+export default Home;

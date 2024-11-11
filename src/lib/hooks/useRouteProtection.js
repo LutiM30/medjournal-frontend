@@ -5,7 +5,6 @@ import { useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
 
 import {
-  ADMIN_ROLE,
   ADMIN_ROUTES,
   AUTH_INVALID_ROUTES,
   AUTH_PUBLIC_ROUTES,
@@ -30,10 +29,9 @@ const useRouteProtection = ({ pathName }) => {
   const user = useAtomValue(userAtom);
 
   useEffect(() => {
-    // Skip validation for home page and loading state
-    if (isLoading || pathName === '/') {
-      return;
-    }
+    if (isLoading) return;
+
+    if (pathName === '/') return;
 
     const validateRoute = () => {
       let isValidRoute = false;

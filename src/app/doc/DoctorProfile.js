@@ -5,7 +5,8 @@ import Overview from './component/Overview';
 import Services from './component/Services';
 import Reviews from './component/Reviews';
 import Button from './component/Button';
-import { Footer } from '@/components/ui/footer'; // Use named import and correct casing
+import { useAtomValue } from 'jotai';
+import { userAtom } from '@/lib/atoms/userAtom';
 
 const DoctorProfilePage = () => {
   return (
@@ -23,7 +24,6 @@ const DoctorProfilePage = () => {
             </div>
           </main>
         </div>
-        <Footer /> 
       </div>
     </div>
   );

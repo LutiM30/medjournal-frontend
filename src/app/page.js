@@ -1,9 +1,8 @@
 'use client';
-// Homepage
 import { ImagesSliderHome } from '../components/ui/imageSlider';
 import { Features } from '@/components/Features';
 import { DoctorsListCard } from '@/components/doctors';
-import { Footer } from '@/components/ui/footer';
+import Footer from '@/components/ui/footer';
 export default function Home() {
   return (
     <div className='font-[family-name:var(--font-geist-sans)]'>

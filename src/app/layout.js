@@ -2,11 +2,10 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { FloatingNav } from '@/components/ui/floating-navbar';
 import { cn } from '@/lib/utils';
-import Head from 'next/head';
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { Provider } from 'jotai';
-import { Footer } from '@/components/ui/footer';
+import Footer from '@/components/ui/footer';
 import { Toaster } from '@/components/ui/sonner';
 import { projectConstants } from '@/lib/utils';
 
@@ -48,6 +47,7 @@ export default function RootLayout({ children }) {
           <Provider>
             <FloatingNav className={cn('')} />
             {children}
+            <Footer />
           </Provider>
         </ThemeProvider>
       </body>

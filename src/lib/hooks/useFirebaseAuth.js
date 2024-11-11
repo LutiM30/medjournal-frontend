@@ -26,22 +26,16 @@ import { CREATE_USER_ROLE } from '../apis/apiUrls';
 export const userLoggedIn = auth.currentUser ?? false;
 
 /**
- * @typedef {Object} Profile
- * @property {Date} createdAt - The date when the profile was created
- * @property {string} patients_id - The ID of associated patients
- * @property {string} doctors_id - The ID of associated doctors
- * @property {boolean} isProfileComplete - Whether the profile is complete
- */
-
-/**
  * @typedef {Object} AuthUser
  * @property {string} uid - User's unique identifier
  * @property {string} accessToken - User's access token
  * @property {string} displayName - User's display name
  * @property {string|null} role - User's role in the system
  * @property {boolean} isAdmin - Whether the user has admin privileges
+ * @property {boolean} verified - Whether the user has been verified by admin mostly needed for the doctor
+ * @property {URL} photoURL - User's profile picture
  * @property {Date} createdAt - Account creation date
- * @property {Profile} [profile] - User's profile information (if not admin)
+ * @property {Object} [profile] - User's profile information (if not admin) it will contain details from patient's collection or doctor's collection no need to call collection separately
  */
 
 /**
@@ -56,16 +50,15 @@ export const formatAuthUser = async (user) => {
 
   try {
     const tokenResult = await user.getIdTokenResult(true);
-    const token = await user.getIdToken(); // Get the actual token
 
     const authUserObj = {
       uid: user.uid || '',
-      token, // Add the token to the auth object
       accessToken: user.accessToken || '',
       displayName: user.displayName || '',
       role: tokenResult?.claims?.role || null,
       isAdmin: tokenResult?.claims?.admin || false,
       verified: tokenResult?.claims?.verified,
+      photoURL: tokenResult.claims.picture,
       createdAt: user?.metadata?.creationTime
         ? dayjs(user.metadata.creationTime).toDate()
         : null,
@@ -97,6 +90,7 @@ export const formatAuthUser = async (user) => {
 };
 
 const formatProfile = (profile) => ({
+  ...profile,
   createdAt: profile.createdAt || null,
   patients_id: profile.patients_id || '',
   doctors_id: profile.doctors_id || '',

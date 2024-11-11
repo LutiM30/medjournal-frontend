@@ -32,6 +32,8 @@ export const ADMIN_ROUTES = [
   '/admin/appointments',
 ];
 
+export const DEFAULT_NAME = 'John Doe';
+
 export const UNAUTH_INVALID_ROUTES = [
   ...DOCTOR_ROUTES,
   ...PATIENT_ROUTES,

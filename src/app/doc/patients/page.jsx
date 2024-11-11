@@ -1,15 +1,14 @@
 'use client';
 import React from 'react';
 import PatientList from '../PatientList';
-import withRoleProtection from '@/lib/hooks/withRoleProtection';
-import { DOCTOR_ROLE } from '@/lib/constants';
+import AfterLoadingIsCompleted from '@/components/AfterLoadingIsCompleted';
 
-const Home = () => {
+const Patients = () => {
   return (
-    <div>
+    <AfterLoadingIsCompleted>
       <PatientList />
-    </div>
+    </AfterLoadingIsCompleted>
   );
 };
 
-export default withRoleProtection(Home, DOCTOR_ROLE);
+export default Patients;
