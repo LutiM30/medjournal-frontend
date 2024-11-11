@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaCarrot } from 'react-icons/fa';
+import { FaBeer, FaCarrot, FaDumbbell, FaSmoking } from 'react-icons/fa';
 
 const LifestyleInfo = ({ onChange }) => {
   const [smokingStatus, setSmokingStatus] = useState('');
