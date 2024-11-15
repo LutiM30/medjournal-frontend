@@ -14,7 +14,7 @@ export const GET_USERS = {
 
 export const UPDATE_PHOTO_URL = {
   url: '/update-photo-url',
-  method: 'put',
+  method: 'post',
   isMultipart: false,
   showToast: false,
   tokenRequired: true,
