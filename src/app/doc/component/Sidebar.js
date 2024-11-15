@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai';
 import { useForm } from 'react-hook-form';
 import { userAtom } from '@/lib/atoms/userAtom';
 import { db, storage } from '@/lib/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from '@firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import ErrorMessage from '@/components/ui/Elements/ErrorMesage';
 import {
@@ -35,9 +35,6 @@ const Sidebar = () => {
     setValue,
     formState: { errors },
   } = useForm();
-
-  console.log({ user });
-
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (user?.uid) {
@@ -45,6 +42,9 @@ const Sidebar = () => {
         if (profileData) {
           setProfile(profileData);
           setIsProfileComplete(profileData.isProfileComplete);
+
+          !profileData?.isProfileComplete && setIsEditing(true);
+
           if (profileData.imageUrl) setImageUrl(user.photoURL);
 
           // Set form default values when profile data is fetched
@@ -89,8 +89,13 @@ const Sidebar = () => {
     }
     setIsUploading(false);
   };
-
   const onSubmit = async (data) => {
+    if (!user?.role) {
+      console.error('User role is not set or invalid.');
+      toast.error('User role is missing. Please contact support.');
+      return;
+    }
+
     const profileData = {
       ...data,
       isProfileComplete: true,
@@ -99,14 +104,18 @@ const Sidebar = () => {
 
     try {
       const docRef = doc(db, user.role, user.uid);
-      await setDoc(docRef, profileData, { merge: true });
-      await setPhotoURL();
 
+      await setDoc(docRef, profileData, { merge: true });
+      if (imageUrl) {
+        await setPhotoURL();
+      }
       setProfile(profileData);
       setIsProfileComplete(true);
       setIsEditing(false);
+      toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error saving profile data:', error);
+      toast.error('Failed to save profile. Please try again.');
     }
   };
 

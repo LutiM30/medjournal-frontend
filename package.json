@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+
   "dependencies": {
     "@firebase/firestore": "^4.7.1",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",

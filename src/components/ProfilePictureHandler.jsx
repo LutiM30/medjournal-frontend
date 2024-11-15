@@ -62,7 +62,7 @@ const ProfilePictureHandler = (props) => {
             />
             {isEditing && (
               <Notification>
-                <Pencil className='h-4 w-4' />
+                <Pencil className='w-4 h-4' />
               </Notification>
             )}
           </div>
