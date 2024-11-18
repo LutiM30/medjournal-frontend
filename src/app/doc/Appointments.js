@@ -1,13 +1,16 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { EyeIcon, FilterIcon, FilePlusIcon } from 'lucide-react';
+import { EyeIcon, FilterIcon, FilePlusIcon } from "lucide-react";
 
 function Appointments() {
-    const [currentNotes, setCurrentNotes] = useState("");
+    const [isEditing, setIsEditing] = useState(false);
+    const [originalNotes, setOriginalNotes] = useState("Doctor's notes from previous appointment...");
+    const [currentNotes, setCurrentNotes] = useState(originalNotes);
 
     const handleSaveNotes = () => {
-        // Logic to save notes
+        console.log("Notes saved:", currentNotes);
+        setOriginalNotes(currentNotes);
     };
 
     return (
@@ -29,16 +32,15 @@ function Appointments() {
                             rows={4}
                             placeholder="Add notes regarding the patient..."
                             value={currentNotes}
-                            onChange={(e) => setCurrentNotes(e.target.value)} />
+                            onChange={(e) => setCurrentNotes(e.target.value)}
+                        />
                         <div className="mt-4 flex space-x-2">
                             <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSaveNotes}>
                                 Save Notes
                             </button>
-                            <button className="bg-green-500 text-white px-4 py-2 rounded">
-                                Appointment Done
-                            </button>
+                            <button className="bg-green-500 text-white px-4 py-2 rounded">Appointment Done</button>
                             <button className="text-blue-500" title="View Patient History">
-                                <EyeIcon  className='h-5 w-5'></EyeIcon>
+                                <EyeIcon className="h-5 w-5" />
                             </button>
                         </div>
                     </AccordionContent>
@@ -63,13 +65,11 @@ function Appointments() {
                         <p className="text-gray-500 mb-2">
                             Upcoming: <strong>Jane Smith</strong> at 3:00 PM (Hypertension)
                         </p>
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2">
-                            View Past Records
-                        </button>
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2">View Past Records</button>
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
-
+            
             {/* Past Appointments */}
             <Accordion type="single" collapsible>
                 <AccordionItem value="past">
@@ -86,8 +86,41 @@ function Appointments() {
                         <textarea
                             className="w-full p-2 border border-gray-300 rounded-md dark:bg-slate-700"
                             rows={3}
-                            value="Doctor's notes from previous appointment..."
-                            disabled />
+                            value={currentNotes}
+                            onChange={(e) => setCurrentNotes(e.target.value)}
+                            disabled={!isEditing}
+                        />
+                        <div className="mt-4 flex space-x-2">
+                            {isEditing ? (
+                                <>
+                                    <button
+                                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                                        onClick={() => {
+                                            handleSaveNotes();
+                                            setIsEditing(false);
+                                        }}
+                                    >
+                                        Save
+                                    </button>
+                                    <button
+                                        className="bg-gray-300 text-gray-700 px-4 py-2 rounded dark:bg-slate-700 dark:text-white"
+                                        onClick={() => {
+                                            setIsEditing(false);
+                                            setCurrentNotes(originalNotes);
+                                        }}
+                                    >
+                                        Cancel
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                                    onClick={() => setIsEditing(true)}
+                                >
+                                    Edit
+                                </button>
+                            )}
+                        </div>
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
