@@ -13,9 +13,6 @@ import {
   FULL_WIDTH_BTN_HV_EFCT_CLASS,
   SIGNIN_TXT,
   SIGNUP_LINK,
-  ADMIN_ROLE,
-  DOCTOR_ROLE,
-  PATIENT_ROLE,
 } from '@/lib/constants';
 import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
 import { generateFirebaseAuthErrorMessage } from '@/lib/functions/generateErrorMessage';
@@ -24,8 +21,6 @@ import { ArrowTopRightIcon } from '@radix-ui/react-icons';
 
 import useProfileRedirect from '@/lib/hooks/useProfileRedirect';
 import { toast } from 'sonner';
-import { api } from '@/lib/apis/api';
-import { CREATE_USER_ROLE } from '@/lib/apis/apiUrls';
 
 const SignIn = () => {
   const { signIn } = useFirebaseAuth();
@@ -54,7 +49,7 @@ const SignIn = () => {
 
     try {
       const user = await signIn(sendDataToFirebase);
-      toast.success(`Welcome back ${user.user.displayName}`);
+      toast.success(`Welcome back ${user.user.displayName ?? ''}`);
       redirectTo();
     } catch (error) {
       handleSubmissionError(error);
