@@ -11,8 +11,8 @@ const ShimmerButton = React.forwardRef(({ className, ...props }, ref) => {
   }, []);
 
   const buttonClasses = cn(
-    'inline-flex text-sm h-12 animate-shimmer items-center justify-center',
-    'border rounded-full px-6 font-medium transition-colors',
+    'inline-flex text-sm md:text-xs sm:text-[0.7rem] h-12 md:h-10 sm:h-8 xs:h-7 animate-shimmer items-center justify-center',
+    'border rounded-full px-6 md:px-4 sm:px-4 xs:px-1.5 font-medium transition-colors',
     'focus:outline-none focus:ring-2 focus:ring-offset-2',
     'bg-[length:200%_100%]',
     'border-slate-800 text-slate-800',
