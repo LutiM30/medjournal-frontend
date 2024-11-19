@@ -25,7 +25,8 @@ const Sidebar = () => {
   const user = useAtomValue(userAtom);
   const [profile, setProfile] = useState(null);
   const [isProfileComplete, setIsProfileComplete] = useState(false);
-  const [isEditing, setIsEditing] = useState(false); // New state for editing mode
+  const [isEditing, setIsEditing] = useState(false); 
+  const [schedule, setSchedule] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
@@ -47,15 +48,25 @@ const Sidebar = () => {
 
           if (profileData.imageUrl) setImageUrl(user.photoURL);
 
-          // Set form default values when profile data is fetched
           setValue('specialty', profileData.specialty);
           setValue('address', profileData.address);
           setValue('phonenumber', profileData.phonenumber);
+          setSchedule(profileData.schedule || {});
         }
       }
     };
     fetchUserProfile();
   }, [user, isUploading]);
+
+  const handleScheduleChange = (day, field, value) => {
+    setSchedule(prev => ({
+      ...prev,
+      [day]: {
+        ...prev[day],
+        [field]: value
+      }
+    }));
+  };
 
   const uploadProfilePicture = async () => {
     if (!file) return;
@@ -98,6 +109,7 @@ const Sidebar = () => {
 
     const profileData = {
       ...data,
+      schedule,
       isProfileComplete: true,
       uid: user.uid,
     };
@@ -240,6 +252,34 @@ const Sidebar = () => {
               <ErrorMessage msg={errors.phonenumber.message} />
             )}
           </div>
+
+          {/* Schedule Input Section */}
+          <h3 className="font-semibold text-purple-600 mt-4">Availability Schedule</h3>
+          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
+            <div key={day} className="my-2 flex items-center space-x-2">
+              <input
+                type="checkbox"
+                onChange={(e) => handleScheduleChange(day, "enabled", e.target.checked)}
+                checked={schedule[day]?.enabled || false}
+              />
+              <span className="w-20">{day}</span>
+              <input
+                type="time"
+                className="p-1 border rounded"
+                onChange={(e) => handleScheduleChange(day, "start", e.target.value)}
+                value={schedule[day]?.start || ""}
+                disabled={!schedule[day]?.enabled}
+              />
+              <span>to</span>
+              <input
+                type="time"
+                className="p-1 border rounded"
+                onChange={(e) => handleScheduleChange(day, "end", e.target.value)}
+                value={schedule[day]?.end || ""}
+                disabled={!schedule[day]?.enabled}
+              />
+            </div>
+          ))}
 
           <Button
             type='submit'
