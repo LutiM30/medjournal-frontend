@@ -44,7 +44,6 @@ const DoctorsListPage = () => {
         return userDoc;
       });
 
-      console.log('Mapped Users:', users);
       setDoctors(users);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -81,11 +80,6 @@ const DoctorsListPage = () => {
 
   const handleBookingSubmit = (e) => {
     e.preventDefault();
-    // Handle appointment submission logic here (e.g., save to database)
-    console.log('Booking Details:', {
-      doctor: selectedDoctor,
-      ...appointmentDetails,
-    });
 
     // Set success message
     setSuccessMessage('Your appointment has been successfully booked!');

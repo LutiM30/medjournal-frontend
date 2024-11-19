@@ -27,11 +27,10 @@ import UserActionsApiCall, {
   USER_ACTIONS,
 } from '@/lib/functions/UserActionsApiCall';
 import { upperize } from 'radash';
+import PaginationControls from '@/components/PaginationControls';
 
 const DataTable = ({
   data = [],
-  handleNextPage,
-  handlePreviousPage,
   currentPage,
   hasNextPage = false,
   setSearch,
@@ -47,7 +46,6 @@ const DataTable = ({
     'Search Hello World',
     'Search Tyler Durden',
   ]);
-  const loading = useAtomValue(isLoadingAtom);
   const table = useReactTable({
     data,
     columns,
@@ -71,7 +69,6 @@ const DataTable = ({
     if (data && data?.length) {
       const placeholdersArr = [];
       data.forEach((obj) => {
-        const profile = obj?.profile;
         /**
          * The function `getSearchStr` takes an optional string input and returns a formatted search
          * string.
@@ -231,25 +228,11 @@ const DataTable = ({
             ) : (
               <></>
             )}
-            <div className='flex space-x-2'>
-              <Button
-                variant='outline'
-                onClick={handlePreviousPage}
-                disabled={currentPage === 0 || loading}
-                className='px-4'
-              >
-                Previous
-              </Button>
-
-              <Button
-                variant='outline'
-                onClick={handleNextPage}
-                disabled={!hasNextPage || loading}
-                className='px-4'
-              >
-                Next
-              </Button>
-            </div>
+            <PaginationControls
+              hasNextPage={hasNextPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         </>
       ) : (
