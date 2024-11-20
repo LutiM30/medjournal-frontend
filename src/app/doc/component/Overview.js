@@ -126,7 +126,7 @@ const Overview = () => {
               <h3 className='font-semibold text-purple-600'>
                 Hospital Affiliations:
               </h3>
-              <p>{doctorProfile.hospitalAffiliations.join(', ')}</p>
+              <p>{doctorProfile.hospitalAffiliations?.join(', ')}</p>
             </div>
             <div>
               <h3 className='font-semibold text-purple-600'>Clinic Name:</h3>
@@ -143,7 +143,7 @@ const Overview = () => {
             </div>
             <div>
               <h3 className='font-semibold text-purple-600'>Subspecialties:</h3>
-              <p>{doctorProfile.subspecialties.join(', ')}</p>
+              <p>{doctorProfile.subspecialties?.join(', ')}</p>
             </div>
           </div>
           <hr className='my-4' />
@@ -152,25 +152,25 @@ const Overview = () => {
               <h3 className='font-semibold text-purple-600'>
                 Procedures Offered:
               </h3>
-              <p>{doctorProfile.procedures.join(', ')}</p>
+              <p>{doctorProfile.procedures?.join(', ')}</p>
             </div>
             <div>
               <h3 className='font-semibold text-purple-600'>
                 Age Groups Treated:
               </h3>
-              <p>{doctorProfile.ageGroupsTreated.join(', ')}</p>
+              <p>{doctorProfile.ageGroupsTreated?.join(', ')}</p>
             </div>
             <div>
               <h3 className='font-semibold text-purple-600'>
                 Specialized Patient Groups:
               </h3>
-              <p>{doctorProfile.specificPatientGroups.join(', ')}</p>
+              <p>{doctorProfile.specificPatientGroups?.join(', ')}</p>
             </div>
             <div>
               <h3 className='font-semibold text-purple-600'>
                 Medical Technologies/Techniques:
               </h3>
-              <p>{doctorProfile.technologiesProficient.join(', ')}</p>
+              <p>{doctorProfile.technologiesProficient?.join(', ')}</p>
             </div>
           </div>
           <button

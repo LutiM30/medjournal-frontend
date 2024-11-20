@@ -23,7 +23,7 @@ export const AUTH_PUBLIC_ROUTES = ['/about', 'password-reset', '/404'];
 
 export const AUTH_INVALID_ROUTES = ['signin', 'signup'];
 
-export const DOCTOR_ROUTES = ['/doc/profile', '/doc/notes', '/doc/patients'];
+export const DOCTOR_ROUTES = ['/doc/profile', '/doc/appointments', '/doc/patients'];
 export const PATIENT_ROUTES = ['/pat/profile', '/pat/notes', '/pat/doctors'];
 export const ADMIN_ROUTES = [
   '/admin/users',
@@ -75,8 +75,8 @@ export const USER_ROLES_ROUTES = {
       icon: <IconUser className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
     {
-      name: 'Notes',
-      link: '/doc/notes',
+      name: 'Appointments',
+      link: '/doc/appointments',
       icon: <IconNote className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
     {

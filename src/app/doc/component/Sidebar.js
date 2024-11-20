@@ -2,9 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { useForm } from 'react-hook-form';
 import { userAtom } from '@/lib/atoms/userAtom';
-import getProfileData from '@/lib/functions/Firestore/getProfileData';
 import { db, storage } from '@/lib/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from '@firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import ErrorMessage from '@/components/ui/Elements/ErrorMesage';
 import {
@@ -26,7 +25,8 @@ const Sidebar = () => {
   const user = useAtomValue(userAtom);
   const [profile, setProfile] = useState(null);
   const [isProfileComplete, setIsProfileComplete] = useState(false);
-  const [isEditing, setIsEditing] = useState(false); // New state for editing mode
+  const [isEditing, setIsEditing] = useState(false); 
+  const [schedule, setSchedule] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
@@ -36,9 +36,6 @@ const Sidebar = () => {
     setValue,
     formState: { errors },
   } = useForm();
-
-  console.log({ user });
-
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (user?.uid) {
@@ -46,17 +43,30 @@ const Sidebar = () => {
         if (profileData) {
           setProfile(profileData);
           setIsProfileComplete(profileData.isProfileComplete);
+
+          !profileData?.isProfileComplete && setIsEditing(true);
+
           if (profileData.imageUrl) setImageUrl(user.photoURL);
 
-          // Set form default values when profile data is fetched
           setValue('specialty', profileData.specialty);
           setValue('address', profileData.address);
           setValue('phonenumber', profileData.phonenumber);
+          setSchedule(profileData.schedule || {});
         }
       }
     };
     fetchUserProfile();
   }, [user, isUploading]);
+
+  const handleScheduleChange = (day, field, value) => {
+    setSchedule(prev => ({
+      ...prev,
+      [day]: {
+        ...prev[day],
+        [field]: value
+      }
+    }));
+  };
 
   const uploadProfilePicture = async () => {
     if (!file) return;
@@ -90,29 +100,39 @@ const Sidebar = () => {
     }
     setIsUploading(false);
   };
-
   const onSubmit = async (data) => {
+    if (!user?.role) {
+      console.error('User role is not set or invalid.');
+      toast.error('User role is missing. Please contact support.');
+      return;
+    }
+
     const profileData = {
       ...data,
+      schedule,
       isProfileComplete: true,
       uid: user.uid,
     };
 
     try {
       const docRef = doc(db, user.role, user.uid);
-      await setDoc(docRef, profileData, { merge: true });
-      await setPhotoURL();
 
+      await setDoc(docRef, profileData, { merge: true });
+      if (imageUrl) {
+        await setPhotoURL();
+      }
       setProfile(profileData);
       setIsProfileComplete(true);
       setIsEditing(false);
+      toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error saving profile data:', error);
+      toast.error('Failed to save profile. Please try again.');
     }
   };
 
   return (
-    <div className='profile-card card p-6 ml-6 mb-6 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-slate-800 dark:to-slate-900 dark:shadow-lg rounded-lg text-center transform transition-transform duration-300 hover:scale-105 hover:shadow-xl border-l-4 border-blue-500 dark:bg-slate-900'>
+    <div className='p-6 mb-6 ml-6 text-center transition-transform duration-300 transform border-l-4 border-blue-500 rounded-lg profile-card card bg-gradient-to-r from-blue-50 to-blue-100 dark:from-slate-800 dark:to-slate-900 dark:shadow-lg hover:scale-105 hover:shadow-xl dark:bg-slate-900'>
       <ProfilePictureHandler
         file={file}
         setFile={setFile}
@@ -125,9 +145,9 @@ const Sidebar = () => {
       </h2>
       {isProfileComplete && !isEditing ? (
         <>
-          <p className='text-lg text-purple-600 mb-1'>
+          <p className='mb-1 text-lg text-purple-600'>
             Specialty:{' '}
-            <span className='text-blue-500 font-semibold DARK:text-white'>
+            <span className='font-semibold text-blue-500 DARK:text-white'>
               {profile.specialty || 'General'}
             </span>
           </p>
@@ -145,7 +165,7 @@ const Sidebar = () => {
 
           <div className='mb-4 text-left'>
             <h3 className='font-semibold text-purple-600'>City:</h3>
-            <p className='text-gray-700   dark:text-white'>
+            <p className='text-gray-700 dark:text-white'>
               {profile.city || 'Toronto'}
             </p>
           </div>
@@ -159,14 +179,14 @@ const Sidebar = () => {
 
           <div className='mb-4 text-left'>
             <h3 className='font-semibold text-purple-600'>Office Phone:</h3>
-            <p className='text-gray-700   dark:text-white'>
+            <p className='text-gray-700 dark:text-white'>
               {profile.phonenumber || '555-555-5555'}
             </p>
           </div>
 
           <Button
             onClick={() => setIsEditing(true)}
-            className='mt-4 px-4 py-2 bg-primary rounded'
+            className='px-4 py-2 mt-4 rounded bg-primary'
             disabled={isUploading}
           >
             {isUploading ? <Loader2 className='animate-spin' /> : ''}
@@ -233,9 +253,37 @@ const Sidebar = () => {
             )}
           </div>
 
+          {/* Schedule Input Section */}
+          <h3 className="font-semibold text-purple-600 mt-4">Availability Schedule</h3>
+          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
+            <div key={day} className="my-2 flex items-center space-x-2">
+              <input
+                type="checkbox"
+                onChange={(e) => handleScheduleChange(day, "enabled", e.target.checked)}
+                checked={schedule[day]?.enabled || false}
+              />
+              <span className="w-20">{day}</span>
+              <input
+                type="time"
+                className="p-1 border rounded"
+                onChange={(e) => handleScheduleChange(day, "start", e.target.value)}
+                value={schedule[day]?.start || ""}
+                disabled={!schedule[day]?.enabled}
+              />
+              <span>to</span>
+              <input
+                type="time"
+                className="p-1 border rounded"
+                onChange={(e) => handleScheduleChange(day, "end", e.target.value)}
+                value={schedule[day]?.end || ""}
+                disabled={!schedule[day]?.enabled}
+              />
+            </div>
+          ))}
+
           <Button
             type='submit'
-            className='mt-4 px-4 py-2 rounded'
+            className='px-4 py-2 mt-4 rounded'
             disabled={isUploading}
           >
             {isUploading ? <Loader2 className='animate-spin' /> : ''}
@@ -245,7 +293,7 @@ const Sidebar = () => {
           {isProfileComplete && (
             <Button
               variant='secondary'
-              className='mt-4 px-4 py-2  rounded ml-2 '
+              className='px-4 py-2 mt-4 ml-2 rounded '
               onClick={() => setIsEditing(false)}
               disabled={isUploading}
             >
