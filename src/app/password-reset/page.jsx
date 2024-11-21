@@ -10,7 +10,6 @@ import FormInput from '@/components/ui/Elements/FormInput';
 import {
   FULL_WIDTH_BTN_HV_EFCT_CLASS_TXT_LEFT,
   FULL_WIDTH_BTN_HV_EFCT_CLASS,
-  SIGNIN_TXT,
   SIGNUP_LINK,
   SIGNIN_LINK,
 } from '@/lib/constants';

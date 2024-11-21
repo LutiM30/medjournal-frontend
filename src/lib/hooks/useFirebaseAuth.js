@@ -1,8 +1,14 @@
 /**
- * The `useFirebaseAuth` function handles user authentication operations using Firebase, including
- * sign-in, sign-up, password reset, and sign-out functionalities.
- * @param profile - The `profile` parameter in the `formatProfile` function is an object that
- * represents the profile information of a user. It has the following properties:
+ * The `useFirebaseAuth` hook handles Firebase authentication operations,
+ * including user sign-in, sign-up, password reset, sign-out, and managing
+ * authentication state changes.
+ *
+ * @returns {{
+ *   signIn: ({ email: string, password: string }) => Promise<import('firebase/auth').UserCredential>,
+ *   signUp: ({ firstName: string, lastName: string, role: string, email: string, password: string }) => Promise<import('firebase/auth').UserCredential>,
+ *   signOut: () => Promise<void>,
+ *   sendPasswordReset: ({ email: string }) => Promise<void>
+ * }}
  */
 import {
   onAuthStateChanged as _onAuthStateChanged,
@@ -27,22 +33,23 @@ export const userLoggedIn = auth.currentUser ?? false;
 
 /**
  * @typedef {Object} AuthUser
- * @property {string} uid - User's unique identifier
- * @property {string} accessToken - User's access token
- * @property {string} displayName - User's display name
- * @property {string|null} role - User's role in the system
- * @property {boolean} isAdmin - Whether the user has admin privileges
- * @property {boolean} verified - Whether the user has been verified by admin mostly needed for the doctor
- * @property {URL} photoURL - User's profile picture
- * @property {Date} createdAt - Account creation date
- * @property {Object} [profile] - User's profile information (if not admin) it will contain details from patient's collection or doctor's collection no need to call collection separately
+ * @property {string} uid - User's unique identifier.
+ * @property {string} accessToken - User's access token.
+ * @property {string} displayName - User's display name.
+ * @property {string|null} role - User's role in the system.
+ * @property {boolean} isAdmin - Whether the user has admin privileges.
+ * @property {boolean} verified - Whether the user is verified (e.g., for doctors).
+ * @property {URL} photoURL - User's profile picture URL.
+ * @property {Date} createdAt - Account creation date.
+ * @property {Object} [profile] - Profile information (if not admin), containing additional details.
  */
 
 /**
- * Formats the Firebase user object into a standardized auth user object
- * @param {import('firebase/auth').User} user - The Firebase user object
- * @returns {Promise<AuthUser|null>} Formatted auth user object or null if no user
- * @throws {Error} If there's an error formatting the user
+ * Formats a Firebase user object into a standardized `AuthUser` object.
+ *
+ * @param {import('firebase/auth').User} user - Firebase user object.
+ * @returns {Promise<AuthUser|null>} A formatted `AuthUser` object or `null` if the user is invalid.
+ * @throws {Error} If there is an error during formatting.
  */
 
 export const formatAuthUser = async (user) => {
@@ -89,6 +96,21 @@ export const formatAuthUser = async (user) => {
   }
 };
 
+/**
+ * Formats a user profile object with additional fields and checks.
+ *
+ * @param {Object} profile - Raw profile data.
+ * @param {Date} [profile.createdAt] - Creation date of the profile.
+ * @param {string} [profile.patients_id] - Associated patient ID.
+ * @param {string} [profile.doctors_id] - Associated doctor ID.
+ * @param {boolean} [profile.isProfileComplete] - Indicates if the profile is complete.
+ * @returns {{
+ *   createdAt: Date | null,
+ *   patients_id: string,
+ *   doctors_id: string,
+ *   isProfileComplete: boolean
+ * }}
+ */
 const formatProfile = (profile) => ({
   ...profile,
   createdAt: profile.createdAt || null,
@@ -98,13 +120,15 @@ const formatProfile = (profile) => ({
 });
 
 export default function useFirebaseAuth() {
+  // const [trigger, setTrigger] = useState(false);
   const setAuthUser = useSetAtom(userAtom);
   const setLoading = useSetAtom(isLoadingAtom);
   const router = useRouter();
 
   /**
-   * Handles changes in authentication state
-   * @param {import('firebase/auth').User} authState - Current auth state
+   * Listens for changes in the Firebase authentication state and updates the application state.
+   *
+   * @param {import('firebase/auth').User|null} authState - The current authentication state.
    * @returns {Promise<void>}
    */
   const authStateChanged = async (authState) => {
@@ -137,10 +161,11 @@ export default function useFirebaseAuth() {
   };
 
   /**
-   * Signs in a user with email and password
-   * @param {{ email: string, password: string }} credentials - User credentials
-   * @returns {Promise<import('firebase/auth').UserCredential>} Firebase user credential
-   * @throws {Error} If sign in fails
+   * Signs in a user with email and password.
+   *
+   * @param {{ email: string, password: string }} credentials - The user's login credentials.
+   * @returns {Promise<import('firebase/auth').UserCredential>} Firebase user credential.
+   * @throws {Error} If sign-in fails.
    */
   const signIn = async ({ email, password }) => {
     try {
@@ -154,6 +179,13 @@ export default function useFirebaseAuth() {
     }
   };
 
+  /**
+   * Signs up a new user with additional role and profile details.
+   *
+   * @param {{ firstName: string, lastName: string, role: string, email: string, password: string }} newUser - The user's registration details.
+   * @returns {Promise<import('firebase/auth').UserCredential>} Firebase user credential.
+   * @throws {Error} If sign-up fails.
+   */
   const signUp = async ({ firstName, lastName, role, email, password }) => {
     try {
       setLoading(true); // Set loading state before sign up attempt
@@ -177,7 +209,36 @@ export default function useFirebaseAuth() {
     }
   };
 
-  const sendPasswordReset = async ({ email }) => {
+  const createUser = async ({ firstName, lastName, role, email, password }) => {
+    try {
+      setLoading(true); // Set loading state before sign up attempt
+      const response = await api(CREATE_USER_ROLE, {
+        firstName,
+        lastName,
+        role,
+        email,
+        password,
+      });
+
+      if (!response?.token) {
+        throw new Error('No token received from server');
+      }
+
+      return await signInWithCustomToken(auth, response.token);
+    } catch (error) {
+      console.error('Sign up error:', error);
+      toast.error(error.message || 'Failed to create account');
+      throw error;
+    }
+  };
+  /**
+   * Sends a password reset email to the provided email address.
+   *
+   * @param {{ email: string }} data - The email address of the user.
+   * @returns {Promise<void>} A promise that resolves when the email is sent successfully.
+   * @throws {Error} If the password reset fails.
+   */
+  const sendPasswordResetEmail = async ({ email }) => {
     try {
       await _sendPasswordResetEmail(auth, email);
       toast.success('Password reset email sent');
@@ -188,6 +249,12 @@ export default function useFirebaseAuth() {
     }
   };
 
+  /**
+   * Signs out the currently authenticated user and clears the application state.
+   *
+   * @returns {Promise<void>} A promise that resolves when the user is successfully signed out.
+   * @throws {Error} If sign-out fails.
+   */
   const signOut = async () => {
     try {
       setLoading(true); // Set loading state before sign out attempt
@@ -211,7 +278,8 @@ export default function useFirebaseAuth() {
   return {
     signIn,
     signUp,
+    createUser,
     signOut,
-    sendPasswordReset,
+    sendPasswordResetEmail,
   };
 }

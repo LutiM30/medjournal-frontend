@@ -7,6 +7,7 @@ import { userAtom } from '@/lib/atoms/userAtom';
 import { db } from '@/lib/firebase';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import DisplayPatientProfile from './DisplayPatientProfile';
+import { toast } from 'sonner';
 
 const PatientProfile = () => {
   const user = useAtomValue(userAtom);
@@ -79,24 +80,17 @@ const PatientProfile = () => {
         return;
       }
 
-      // Log the profile data for debugging
-      console.log(
-        'Profile data to be saved:',
-        JSON.stringify(profileData, null, 2)
-      );
-
+      // Reference the "patients" collection instead of "users"
       const patientDoc = doc(db, 'patients', user.uid);
       await setDoc(patientDoc, profileData, { merge: true });
 
-      console.log(
-        'Profile updated successfully in Firestore for patient:',
-        user.uid
-      );
-      alert('Profile updated successfully');
-      setIsProfileSubmitted(true); // Set profile submission flag to true
+      toast.success('Profile updated successfully');
+      setIsProfileSubmitted(true);
     } catch (error) {
-      console.error('Error saving profile:', error.message);
-      alert('There was an error updating your profile. Please try again.');
+      console.error('Error updating profile:', error.message);
+      toast.success(
+        'There was an error updating your profile. Please try again.'
+      );
     }
   };
 

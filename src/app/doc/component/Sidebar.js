@@ -35,6 +35,7 @@ const Sidebar = () => {
     setValue,
     formState: { errors },
   } = useForm();
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (user?.uid) {
@@ -55,7 +56,7 @@ const Sidebar = () => {
       }
     };
     fetchUserProfile();
-  }, [user, isUploading]);
+  }, [user, isUploading, isEditing]);
 
   const uploadProfilePicture = async () => {
     if (!file) return;
@@ -106,7 +107,7 @@ const Sidebar = () => {
       const docRef = doc(db, user.role, user.uid);
 
       await setDoc(docRef, profileData, { merge: true });
-      if (imageUrl) {
+      if (file) {
         await setPhotoURL();
       }
       setProfile(profileData);

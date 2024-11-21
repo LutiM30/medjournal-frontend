@@ -1,7 +1,9 @@
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { PATIENT_ROLE, DOCTOR_ROLE } from './constants';
+import { PATIENT_ROLE, DOCTOR_ROLE, UNIQUE_SYMBOLS } from './constants';
 import { IconLogin2, IconLogout } from '@tabler/icons-react';
+import { random, shuffle, capitalize, draw } from 'radash';
+import { generate } from 'random-words';
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -86,3 +88,49 @@ export const messages = {
 export const FILE_MAX_LIMIT = (MB) =>
   `Max file upload limit exceeded (${MB}MB)`;
 export const ASTRONAUT_IMAGE = 'https://i.imgur.com/VurcHkh.png';
+
+/**
+ * The function getRandomNumberSymbols generates a random string of numbers or symbols based on the
+ * specified length.
+ * @param length - The `length` parameter specifies the number of random elements you want to generate.
+ * @param [symbols=false] - The `symbols` parameter in the `getRandomNumberSymbols` function is a
+ * boolean flag that determines whether to include symbols in the generated random number. If `symbols`
+ * is set to `true`, the function will draw random symbols from the `UNIQUE_SYMBOLS` array.
+ * @returns The function `getRandomNumberSymbols` returns a string of random numbers or symbols based
+ * on the specified length and whether symbols are allowed.
+ */
+export const getRandomNumberSymbols = (length, symbols = false) => {
+  const eleArray = [];
+  for (let index = 0; index < length; index++) {
+    const randomEle = symbols ? draw(UNIQUE_SYMBOLS) : random(0, 9);
+    eleArray.push(randomEle);
+  }
+
+  const joinedEle = shuffle(eleArray)?.join('');
+
+  return !symbols ? Number(joinedEle) : joinedEle;
+};
+
+/**
+ * The getRandomString function generates a random string with a mix of uppercase letters, numbers, and
+ * symbols of varying lengths.
+ * @returns The `getRandomString` function returns a randomly generated string that consists of a
+ * random word, random numbers, and random symbols. The lengths of the word, numbers, and symbols are
+ * determined randomly within certain constraints, and the final string is created by shuffling and
+ * joining these components together.
+ */
+export const getRandomString = () => {
+  const stringLength = random(8, 16);
+  const wordLength = random(1, stringLength);
+  const numLength = random(1, stringLength - wordLength);
+  const charsLength = random(1, stringLength - numLength - wordLength);
+
+  const randomWord = capitalize(generate({ maxLength: wordLength }));
+
+  const randomNumber = getRandomNumberSymbols(numLength);
+  const randomSymbol = getRandomNumberSymbols(charsLength, true);
+
+  const shuffledArr = shuffle([randomWord, randomNumber, randomSymbol]);
+
+  return shuffledArr?.join('');
+};

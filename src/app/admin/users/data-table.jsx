@@ -27,11 +27,11 @@ import UserActionsApiCall, {
   USER_ACTIONS,
 } from '@/lib/functions/UserActionsApiCall';
 import { upperize } from 'radash';
+import PaginationControls from '@/components/PaginationControls';
+import NewUser from '@/components/NewUserContainer';
 
 const DataTable = ({
   data = [],
-  handleNextPage,
-  handlePreviousPage,
   currentPage,
   hasNextPage = false,
   setSearch,
@@ -47,7 +47,6 @@ const DataTable = ({
     'Search Hello World',
     'Search Tyler Durden',
   ]);
-  const loading = useAtomValue(isLoadingAtom);
   const table = useReactTable({
     data,
     columns,
@@ -71,7 +70,6 @@ const DataTable = ({
     if (data && data?.length) {
       const placeholdersArr = [];
       data.forEach((obj) => {
-        const profile = obj?.profile;
         /**
          * The function `getSearchStr` takes an optional string input and returns a formatted search
          * string.
@@ -190,6 +188,11 @@ const DataTable = ({
             <div className='text-sm text-gray-500 dark:text-gray-400'>
               Page {currentPage + 1}
             </div>
+
+            <div className='text-sm text-gray-500 dark:text-gray-400'>
+              <NewUser />
+            </div>
+
             {Object?.keys(rowSelection)?.length ? (
               <div className={'mx-1'}>
                 <DialogueBoxButton
@@ -231,25 +234,11 @@ const DataTable = ({
             ) : (
               <></>
             )}
-            <div className='flex space-x-2'>
-              <Button
-                variant='outline'
-                onClick={handlePreviousPage}
-                disabled={currentPage === 0 || loading}
-                className='px-4'
-              >
-                Previous
-              </Button>
-
-              <Button
-                variant='outline'
-                onClick={handleNextPage}
-                disabled={!hasNextPage || loading}
-                className='px-4'
-              >
-                Next
-              </Button>
-            </div>
+            <PaginationControls
+              hasNextPage={hasNextPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         </>
       ) : (

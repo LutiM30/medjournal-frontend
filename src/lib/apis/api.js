@@ -62,6 +62,8 @@ export const api = async (endpoint, data, id = null, params = null) => {
     const { method, isMultipart, url, showToast, responseType, tokenRequired } =
       endpoint;
 
+    const externalUrl = endpoint.externalUrl ?? false;
+
     let headers = {
       'Content-Type': isMultipart
         ? `multipart/form-data boundary=${data?._boundary}`
@@ -75,7 +77,7 @@ export const api = async (endpoint, data, id = null, params = null) => {
       }
     }
 
-    const requestUrl = `${BASE_URL}/${url}${id ? `/${id}` : ''}${
+    const requestUrl = `${externalUrl ? '' : BASE_URL}/${url}${id ? `/${id}` : ''}${
       params ? `?${queryString.stringify(params)}` : ''
     }`;
 
