@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { FaFileMedical } from 'react-icons/fa';
 
 const MedicalHistory = ({ onChange }) => {
-  const [medicalConditions, setMedicalConditions] = useState('');
-  const [pastSurgeries, setPastSurgeries] = useState('');
+  const [medicalconditions, setMedicalConditions] = useState('');
+  const [pastsurgeries, setPastSurgeries] = useState('');
   const [allergies, setAllergies] = useState('');
-  const [currentMedications, setCurrentMedications] = useState('');
+  const [currentmedications, setCurrentMedications] = useState('');
 
   const handleChange = () => {
     onChange({
-      medicalConditions,
-      pastSurgeries,
+      medicalconditions,
+      pastsurgeries,
       allergies,
-      currentMedications,
+      currentmedications,
     });
   };
 
@@ -27,7 +27,7 @@ const MedicalHistory = ({ onChange }) => {
           <label className='font-medium'>Current Medical Conditions:</label>
           <input
             type='text'
-            value={medicalConditions}
+            value={medicalconditions}
             onChange={(e) => {
               setMedicalConditions(e.target.value);
               handleChange();
@@ -39,7 +39,7 @@ const MedicalHistory = ({ onChange }) => {
           <label className='font-medium'>Past Surgeries and Dates:</label>
           <input
             type='text'
-            value={pastSurgeries}
+            value={pastsurgeries}
             onChange={(e) => {
               setPastSurgeries(e.target.value);
               handleChange();
@@ -63,7 +63,7 @@ const MedicalHistory = ({ onChange }) => {
           <label className='font-medium'>Current Medications:</label>
           <input
             type='text'
-            value={currentMedications}
+            value={currentmedications}
             onChange={(e) => {
               setCurrentMedications(e.target.value);
               handleChange();
