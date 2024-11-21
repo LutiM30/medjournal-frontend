@@ -3,7 +3,6 @@ import { useAtom, useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
 import { isLoadingAtom } from '@/lib/atoms/atoms';
 import getUsersData from '@/lib/functions/getUsersData';
-import { debounce } from 'radash';
 
 /**
  * Custom hook `useGetAllUsers` manages the state and logic for fetching and paginating a list of users.
