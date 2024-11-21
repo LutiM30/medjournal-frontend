@@ -1,5 +1,4 @@
 import {
-  IconHome,
   IconNote,
   IconUser,
   IconStethoscope,
@@ -7,8 +6,14 @@ import {
   IconUsersGroup,
   IconClipboardHeart,
 } from '@tabler/icons-react';
+import { draw } from 'radash';
+import { random } from 'radash';
+
+// Admin will create new password randomly
+// That password will be random word
 
 export const SAMPLE_NAME = 'John Doe';
+export const DEFAULT_PASSWORD_NEW_USER = 'NewUser@MJ1';
 
 export const FULL_WIDTH_BTN_HV_EFCT_CLASS_TXT_LEFT =
   'group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-slate-800 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]';
@@ -124,3 +129,41 @@ export const GET_USER_NAME_ROLE = (userObj) => ({
 });
 
 export const DATE_SHOWING_FORMAT = 'ddd MMM DD, YYYY hh:mm:ss A';
+
+export const UNIQUE_SYMBOLS = [
+  '~',
+  '`',
+  '!',
+  '@',
+  '#',
+  '$',
+  '%',
+  '^',
+  '&',
+  '*',
+  '(',
+  ')',
+  '_',
+  '-',
+  '+',
+  '=',
+  '{',
+  '[',
+  '}',
+  ']',
+  '|',
+  '\\',
+  ':',
+  ';',
+  '"',
+  "'",
+  '<',
+  '>',
+  '.',
+  '?',
+  '/',
+  ',',
+];
+
+
+

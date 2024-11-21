@@ -28,6 +28,7 @@ import UserActionsApiCall, {
 } from '@/lib/functions/UserActionsApiCall';
 import { upperize } from 'radash';
 import PaginationControls from '@/components/PaginationControls';
+import NewUser from '@/components/NewUserContainer';
 
 const DataTable = ({
   data = [],
@@ -187,6 +188,11 @@ const DataTable = ({
             <div className='text-sm text-gray-500 dark:text-gray-400'>
               Page {currentPage + 1}
             </div>
+
+            <div className='text-sm text-gray-500 dark:text-gray-400'>
+              <NewUser />
+            </div>
+
             {Object?.keys(rowSelection)?.length ? (
               <div className={'mx-1'}>
                 <DialogueBoxButton

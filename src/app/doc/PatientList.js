@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 import { isLoadingAtom } from '@/lib/atoms/atoms';
 import VanishInput from '@/components/ui/placeholders-and-vanish-input';
 import PaginationControls from '@/components/PaginationControls';
-import PatientProfileViewer from '@/components/PatientProfileViewer';
+import ProfileViewer from '@/components/ProfileViewer';
 
 const PatientList = (props) => {
   const {
@@ -71,10 +71,11 @@ const PatientList = (props) => {
                     className='border-t border-gray-200 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-slate-900'
                   >
                     <td className='p-4'>{patient.displayName}</td>
-                    <td className='p-4'>{patient.profile.birthdate}</td>
-                    <td className='p-4'>{patient.profile.gender}</td>
+                    <td className='p-4'>{patient.profile?.birthdate}</td>
+                    <td className='p-4'>{patient.profile?.gender}</td>
                     <td className='p-4 text-center'>
-                      <PatientProfileViewer patient={patient} />
+                      {/* POPUP that shows information about user */}
+                      <ProfileViewer patient={patient} />
                     </td>
                   </tr>
                 ))}

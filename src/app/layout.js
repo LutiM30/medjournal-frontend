@@ -34,9 +34,7 @@ export default function RootLayout({ children }) {
       {/* <head>
         <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
       </head> */}
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans} ${geistMono} antialiased`}>
         <ThemeProvider
           attribute='class'
           defaultTheme={'system' || localStorage.getItem('theme')}

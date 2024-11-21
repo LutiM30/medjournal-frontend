@@ -120,6 +120,7 @@ const formatProfile = (profile) => ({
 });
 
 export default function useFirebaseAuth() {
+  // const [trigger, setTrigger] = useState(false);
   const setAuthUser = useSetAtom(userAtom);
   const setLoading = useSetAtom(isLoadingAtom);
   const router = useRouter();
@@ -208,6 +209,28 @@ export default function useFirebaseAuth() {
     }
   };
 
+  const createUser = async ({ firstName, lastName, role, email, password }) => {
+    try {
+      setLoading(true); // Set loading state before sign up attempt
+      const response = await api(CREATE_USER_ROLE, {
+        firstName,
+        lastName,
+        role,
+        email,
+        password,
+      });
+
+      if (!response?.token) {
+        throw new Error('No token received from server');
+      }
+
+      return await signInWithCustomToken(auth, response.token);
+    } catch (error) {
+      console.error('Sign up error:', error);
+      toast.error(error.message || 'Failed to create account');
+      throw error;
+    }
+  };
   /**
    * Sends a password reset email to the provided email address.
    *
@@ -215,7 +238,7 @@ export default function useFirebaseAuth() {
    * @returns {Promise<void>} A promise that resolves when the email is sent successfully.
    * @throws {Error} If the password reset fails.
    */
-  const sendPasswordReset = async ({ email }) => {
+  const sendPasswordResetEmail = async ({ email }) => {
     try {
       await _sendPasswordResetEmail(auth, email);
       toast.success('Password reset email sent');
@@ -255,7 +278,8 @@ export default function useFirebaseAuth() {
   return {
     signIn,
     signUp,
+    createUser,
     signOut,
-    sendPasswordReset,
+    sendPasswordResetEmail,
   };
 }

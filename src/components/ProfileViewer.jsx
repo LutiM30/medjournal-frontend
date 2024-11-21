@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import ProfileAvatar from './ProfileAvatar';
 import {
   Tooltip,
@@ -19,10 +18,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from './ui/tooltip';
-import { Label } from './ui/Elements/label';
 import { toast } from 'sonner';
 
-export default function PatientProfileViewer({
+export default function ProfileViewer({
   patient = {
     id: '12345',
     displayName: 'John Doe',
@@ -46,39 +44,42 @@ export default function PatientProfileViewer({
     {
       title: 'Personal Information',
       items: [
-        { label: 'Birthdate', value: patient.profile.birthdate },
-        { label: 'Gender', value: patient.profile.gender },
+        { label: 'Birthdate', value: patient.profile?.birthdate },
+        { label: 'Gender', value: patient.profile?.gender },
       ],
     },
     {
       title: 'Physical Characteristics',
       items: [
-        { label: 'Blood Group', value: patient.profile.bloodGroup },
-        { label: 'Height', value: `${patient.profile.height} ft` },
-        { label: 'Weight', value: `${patient.profile.weight} kg` },
+        { label: 'Blood Group', value: patient.profile?.bloodGroup },
+        { label: 'Height', value: `${patient.profile?.height} ft` },
+        { label: 'Weight', value: `${patient.profile?.weight} kg` },
       ],
     },
     {
       title: 'Medical Information',
       items: [
-        { label: 'Allergies', value: patient.profile.allergies },
+        { label: 'Allergies', value: patient.profile?.allergies },
         {
           label: 'Current Medications',
-          value: patient.profile.currentMedications,
+          value: patient.profile?.currentMedications,
         },
         {
           label: 'Medical Conditions',
-          value: patient.profile.medicalConditions,
+          value: patient.profile?.medicalConditions,
         },
-        { label: 'Past Surgeries', value: patient.profile.pastSurgeries },
+        { label: 'Past Surgeries', value: patient.profile?.pastSurgeries },
       ],
     },
     {
       title: 'Additional Notes',
-      items: [{ label: 'Other Notes', value: patient.profile.otherNotes }],
+      items: [{ label: 'Other Notes', value: patient.profile?.otherNotes }],
     },
   ];
-  const id = patient?.profile[`${patient?.role}_id`] || patient.uid;
+
+  const id = patient?.profile
+    ? patient?.profile[`${patient?.role}_id`]
+    : patient.uid;
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
