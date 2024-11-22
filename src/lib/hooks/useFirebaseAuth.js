@@ -18,7 +18,7 @@ import {
   sendPasswordResetEmail as _sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auth } from '../firebase';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { userAtom } from '../atoms/userAtom';
 import { isLoadingAtom } from '../atoms/atoms';
 import { useSetAtom } from 'jotai';
@@ -120,7 +120,10 @@ const formatProfile = (profile) => ({
 });
 
 export default function useFirebaseAuth() {
-  // const [trigger, setTrigger] = useState(false);
+  const [switcher, setSwitch] = useState(false);
+
+  const trigger = () => setSwitch(!switcher);
+
   const setAuthUser = useSetAtom(userAtom);
   const setLoading = useSetAtom(isLoadingAtom);
   const router = useRouter();
@@ -146,7 +149,7 @@ export default function useFirebaseAuth() {
       const formattedUser = await formatAuthUser(authState);
 
       if (formattedUser) {
-        setAuthUser(formattedUser);
+        setAuthUser({ ...formattedUser, trigger });
       } else {
         // If no formatted user is returned, clear the auth state
         setAuthUser(null);
@@ -270,10 +273,14 @@ export default function useFirebaseAuth() {
     }
   };
 
+  /**
+   * The function toggles a switch state and subscribes to authentication state changes.
+   */
+
   useEffect(() => {
     const unsubscribe = _onAuthStateChanged(auth, authStateChanged);
     return () => unsubscribe();
-  }, []);
+  }, [switcher]);
 
   return {
     signIn,
@@ -281,5 +288,6 @@ export default function useFirebaseAuth() {
     createUser,
     signOut,
     sendPasswordResetEmail,
+    trigger,
   };
 }

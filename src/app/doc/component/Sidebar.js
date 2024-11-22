@@ -20,12 +20,13 @@ import { capitalize } from 'radash';
 import ProfilePictureHandler from '@/components/ProfilePictureHandler';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
+import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
 
 const Sidebar = () => {
   const user = useAtomValue(userAtom);
   const [profile, setProfile] = useState(null);
   const [isProfileComplete, setIsProfileComplete] = useState(false);
-  const [isEditing, setIsEditing] = useState(false); 
+  const [isEditing, setIsEditing] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -60,12 +61,12 @@ const Sidebar = () => {
   }, [user, isUploading, isEditing]);
 
   const handleScheduleChange = (day, field, value) => {
-    setSchedule(prev => ({
+    setSchedule((prev) => ({
       ...prev,
       [day]: {
         ...prev[day],
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
@@ -124,6 +125,7 @@ const Sidebar = () => {
       }
       setProfile(profileData);
       setIsProfileComplete(true);
+      user?.trigger();
       setIsEditing(false);
       toast.success('Profile updated successfully!');
     } catch (error) {
@@ -255,28 +257,44 @@ const Sidebar = () => {
           </div>
 
           {/* Schedule Input Section */}
-          <h3 className="font-semibold text-purple-600 mt-4">Availability Schedule</h3>
-          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
-            <div key={day} className="my-2 flex items-center space-x-2">
+          <h3 className='font-semibold text-purple-600 mt-4'>
+            Availability Schedule
+          </h3>
+          {[
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday',
+          ].map((day) => (
+            <div key={day} className='my-2 flex items-center space-x-2'>
               <input
-                type="checkbox"
-                onChange={(e) => handleScheduleChange(day, "enabled", e.target.checked)}
+                type='checkbox'
+                onChange={(e) =>
+                  handleScheduleChange(day, 'enabled', e.target.checked)
+                }
                 checked={schedule[day]?.enabled || false}
               />
-              <span className="w-20">{day}</span>
+              <span className='w-20'>{day}</span>
               <input
-                type="time"
-                className="p-1 border rounded"
-                onChange={(e) => handleScheduleChange(day, "start", e.target.value)}
-                value={schedule[day]?.start || ""}
+                type='time'
+                className='p-1 border rounded'
+                onChange={(e) =>
+                  handleScheduleChange(day, 'start', e.target.value)
+                }
+                value={schedule[day]?.start || ''}
                 disabled={!schedule[day]?.enabled}
               />
               <span>to</span>
               <input
-                type="time"
-                className="p-1 border rounded"
-                onChange={(e) => handleScheduleChange(day, "end", e.target.value)}
-                value={schedule[day]?.end || ""}
+                type='time'
+                className='p-1 border rounded'
+                onChange={(e) =>
+                  handleScheduleChange(day, 'end', e.target.value)
+                }
+                value={schedule[day]?.end || ''}
                 disabled={!schedule[day]?.enabled}
               />
             </div>
