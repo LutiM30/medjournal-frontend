@@ -187,7 +187,7 @@ const UpcomingAppointments = () => {
           <ProfilePictureHandler
             file={file}
             setFile={setFile}
-            imageUrl={imageUrl}
+            imageUrl={user.photoURL}
             //user.imageUrl
             isEditing={false}
             setImageUrl={setImageUrl}

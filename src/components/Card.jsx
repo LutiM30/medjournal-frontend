@@ -32,7 +32,7 @@ const authors = [
         backgroundImage: "/images/aboutus-bg-riten.jpg"
     },
 ];
-export function CardDemo() {
+export function Card() {
     return (
         (
             <>
