@@ -10,6 +10,7 @@ export const GET_USERS = {
   method: 'get',
   isMultipart: false,
   showToast: false,
+  tokenRequired: true,
 };
 
 export const UPDATE_PHOTO_URL = {

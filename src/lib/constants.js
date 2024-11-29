@@ -1,5 +1,4 @@
 import {
-  IconHome,
   IconNote,
   IconUser,
   IconStethoscope,
@@ -9,6 +8,7 @@ import {
 } from '@tabler/icons-react';
 
 export const SAMPLE_NAME = 'John Doe';
+export const DEFAULT_PASSWORD_NEW_USER = 'NewUser@MJ1';
 
 export const FULL_WIDTH_BTN_HV_EFCT_CLASS_TXT_LEFT =
   'group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-slate-800 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]';
@@ -23,7 +23,11 @@ export const AUTH_PUBLIC_ROUTES = ['/about', 'password-reset', '/404'];
 
 export const AUTH_INVALID_ROUTES = ['signin', 'signup'];
 
-export const DOCTOR_ROUTES = ['/doc/profile', '/doc/appointments', '/doc/patients'];
+export const DOCTOR_ROUTES = [
+  '/doc/profile',
+  '/doc/appointments',
+  '/doc/patients',
+];
 export const PATIENT_ROUTES = ['/pat/profile', '/pat/notes', '/pat/doctors'];
 export const ADMIN_ROUTES = [
   '/admin/users',
@@ -124,3 +128,38 @@ export const GET_USER_NAME_ROLE = (userObj) => ({
 });
 
 export const DATE_SHOWING_FORMAT = 'ddd MMM DD, YYYY hh:mm:ss A';
+
+export const UNIQUE_SYMBOLS = [
+  '~',
+  '`',
+  '!',
+  '@',
+  '#',
+  '$',
+  '%',
+  '^',
+  '&',
+  '*',
+  '(',
+  ')',
+  '_',
+  '-',
+  '+',
+  '=',
+  '{',
+  '[',
+  '}',
+  ']',
+  '|',
+  '\\',
+  ':',
+  ';',
+  '"',
+  "'",
+  '<',
+  '>',
+  '.',
+  '?',
+  '/',
+  ',',
+];
