@@ -53,6 +53,8 @@ const Sidebar = () => {
           setValue('specialty', profileData.specialty);
           setValue('address', profileData.address);
           setValue('phonenumber', profileData.phonenumber);
+          setValue('city', profileData.city);
+          setValue('province', profileData.province);
           setSchedule(profileData.schedule || {});
         }
       }
@@ -187,9 +189,32 @@ const Sidebar = () => {
             </p>
           </div>
 
+          <div className='mb-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md'>
+            <h3 className='font-semibold text-purple-600 text-lg mb-3 border-b border-gray-300 pb-2'>
+              Availability Schedule
+            </h3>
+            <ul className='divide-y divide-gray-300 dark:divide-gray-700'>
+              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) =>
+                schedule[day]?.enabled ? (
+                  <li
+                    key={day}
+                    className='py-3 flex justify-between items-center text-gray-700 dark:text-gray-300'
+                  >
+                    <span className='font-medium'>{day}</span>
+                    <span className='font-light text-sm'>
+                      {schedule[day].start} - {schedule[day].end}
+                    </span>
+                  </li>
+                ) : null
+              )}
+            </ul>
+          </div>
+
+
+
           <Button
             onClick={() => setIsEditing(true)}
-            className='px-4 py-2 mt-4 rounded bg-primary'
+            className='px-4 py-2 mt-4 text-white bg-blue-500 rounded hover:bg-blue-600'
             disabled={isUploading}
           >
             {isUploading ? <Loader2 className='animate-spin' /> : ''}
