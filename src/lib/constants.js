@@ -61,7 +61,7 @@ export const USER_ROLES_ROUTES = {
       icon: <IconUser className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
     {
-      name: 'Notes',
+      name: 'Appointments',
       link: '/pat/notes',
       icon: <IconNote className='w-4 h-4 text-neutral-500 dark:text-white' />,
     },
