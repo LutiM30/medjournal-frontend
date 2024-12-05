@@ -35,9 +35,7 @@ const DoctorsList = (props) => {
   return (
     <div className='max-w-6xl mx-auto mt-14 p-6 bg-white dark:bg-slate-900 rounded-lg shadow-md'>
       {/* Page Title */}
-      <h1 className='text-3xl font-semibold text-blue-700 mb-6'>
-        Doctors List
-      </h1>
+      <h1 className='text-3xl font-semibold text-blue-700 mb-6'></h1>
 
       {/* Search Bar */}
       <div className='flex items-center mb-6'>

@@ -1,7 +1,8 @@
 'use client';
 
+import { collection, addDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { useAtom } from 'jotai'; // Import useAtom from jotai
+import { useAtom } from 'jotai';
 import {
     Dialog,
     DialogContent,
@@ -12,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import ProfileAvatar from '@/components/ProfileAvatar'; // Assuming you have a common Avatar component
+import ProfileAvatar from '@/components/ProfileAvatar';
 import {
     Tooltip,
     TooltipContent,
@@ -32,7 +33,6 @@ export default function ProfileViewer({
         profile: {
             specialization: 'Cardiology',
             experience: '10 years',
-            qualification: 'MD, MBBS',
             hospital: 'XYZ Hospital',
             phone: '123-456-7890',
             email: 'johndoe@hospital.com',
@@ -54,45 +54,74 @@ export default function ProfileViewer({
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
     const [isBookDialogOpen, setIsBookDialogOpen] = useState(false);
     const [notes, setNotes] = useState('');
+    const [selectedSlot, setAppointmentSlot] = useState(''); // Added state for selected slot
 
-    // Use the useAtom hook to get patient name from userAtom
-    const [user] = useAtom(userAtom);  // userAtom should store the patient info
-    const patientName = user?.displayName; // 
+    const [user] = useAtom(userAtom);
+    const patientName = user?.displayName;
+
+    const handleBookAppointment = async () => {
+        if (!selectedSlot) {
+            toast.error('Please select a time slot.');
+            return;
+        }
+
+        const appointmentData = {
+            date: new Date().toISOString(), // Replace with dynamic date
+            time: selectedSlot, // Use selectedSlot state
+            doctorId: doctor.id,
+            doctorName: doctor.displayName,
+            patientId: user?.uid,
+            patientName: patientName,
+            notes: notes || '',
+        };
+
+        console.log('Booking Appointment:', appointmentData);
+
+        try {
+            const appointmentsCollectionRef = collection(db, 'appointments');
+            await addDoc(appointmentsCollectionRef, appointmentData);
+            toast.success('Appointment booked successfully!');
+            setIsBookDialogOpen(false);
+        } catch (error) {
+            toast.error('Failed to book appointment.');
+            console.error('Error booking appointment:', error);
+        }
+    };
 
     const profileSections = [
         {
             title: 'Professional Information',
             items: [
-                { label: 'Specialization', value: doctor.profile?.specialization },
-                { label: 'Experience', value: doctor.profile?.experience },
-                { label: 'Qualification', value: doctor.profile?.qualification },
-                { label: 'Clinic Name', value: doctor.profile?.hospital },
+                { label: 'Specialization', value: doctor.profile.specialization },
+                { label: 'Experience', value: doctor.profile.experience },
+                { label: 'Hospital', value: doctor.profile.hospital },
             ],
         },
         {
             title: 'Contact Information',
             items: [
-                { label: 'Phone', value: doctor.profile?.phone },
-                { label: 'Email', value: doctor.profile?.email },
+                { label: 'Phone', value: doctor.profile.phonenumber },
+                { label: 'Email', value: doctor.profile.email },
             ],
         },
-
         {
             title: 'Schedule and Location',
             items: [
                 {
                     label: 'Schedule',
-                    value: doctor.profile?.schedule ? (
+                    value: doctor.profile.schedule ? (
                         <ul>
-                            {Object.entries(doctor.profile.schedule).map(([day, { enabled, start, end }]) => (
+                            {Object.entries(doctor.profile.schedule).map(([day, { enabled, start, end }]) =>
                                 enabled ? (
                                     <li key={day}>
                                         {day}: {start} - {end}
                                     </li>
                                 ) : null
-                            ))}
+                            )}
                         </ul>
-                    ) : 'N/A',
+                    ) : (
+                        'N/A'
+                    ),
                 },
                 { label: 'Address', value: doctor.profile?.address },
                 { label: 'City', value: doctor.profile?.city },
@@ -193,7 +222,7 @@ export default function ProfileViewer({
                                     {section.items.map((item, itemIndex) => (
                                         <div key={itemIndex} className="flex justify-between py-1">
                                             <span className="font-medium">{item.label}:</span>
-                                            <span className="text-muted-foreground">{item.value}</span>
+                                            <span>{item.value}</span>
                                         </div>
                                     ))}
                                 </CardContent>
