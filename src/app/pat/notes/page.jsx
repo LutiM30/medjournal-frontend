@@ -2,25 +2,59 @@
 
 import React, { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase'; // Firebase import for adding data
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth'; // Firebase Auth to get current user
 
 const AppointmentPage = () => {
   const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch all appointments from Firestore
+  const auth = getAuth(); // Get Firebase Auth instance
+  const user = auth.currentUser; // Get current logged-in user
+
   useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      setError('No user logged in');
+      return;
+    }
+
     const fetchAppointments = async () => {
-      const appointmentsRef = collection(db, 'appointments');
-      const snapshot = await getDocs(appointmentsRef);
-      const fetchedAppointments = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAppointments(fetchedAppointments);
+      try {
+        const appointmentsRef = collection(db, 'appointments');
+
+        // Create a query to filter appointments by the current user's ID (patientId)
+        const q = query(appointmentsRef, where('patientId', '==', user.uid));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+          setAppointments([]); // No appointments found
+        } else {
+          const fetchedAppointments = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setAppointments(fetchedAppointments);
+        }
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching appointments:', err);
+        setError('Failed to load appointments');
+        setLoading(false);
+      }
     };
 
     fetchAppointments();
-  }, []);
+  }, [user]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className='text-red-500'>{error}</div>;
+  }
 
   return (
     <div className='p-6 bg-gradient-to-br from-purple-50 to-teal-100 min-h-screen pt-16'>
@@ -46,13 +80,13 @@ const AppointmentPage = () => {
                 >
                   <td className='p-4'>{appointment.doctorName}</td>
                   <td className='p-4'>{appointment.date}</td>
-                  <td className='p-4'>{appointment.time || 'N/A'}</td>
+                  <td className='p-4'>{appointment.timeSlot || 'N/A'}</td>
                   <td className='p-4'>{appointment.notes || 'N/A'}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan='5' className='p-4 text-center text-gray-500'>
+                <td colSpan='4' className='p-4 text-center text-gray-500'>
                   No appointments found.
                 </td>
               </tr>
