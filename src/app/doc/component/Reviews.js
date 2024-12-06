@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfilePictureHandler from '@/components/ProfilePictureHandler';
 import { useAtomValue } from 'jotai';
-import { useForm } from 'react-hook-form';
 import { userAtom } from '@/lib/atoms/userAtom';
 
 import { db } from '@/lib/firebase';
-import { storage } from '@/lib/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+
+import {
+  collection,
+  onSnapshot,
+  query,
+  where,
+  getDocs,
+} from 'firebase/firestore';
 import { BsFillPencilFill } from 'react-icons/bs';
-import Image from 'next/image';
-import doctorImage from './images/doc1.jpg';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
@@ -83,26 +85,27 @@ const UpcomingAppointments = () => {
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [appointments, setAppointments] = useState([
-    {
-      id: 1,
-      patientName: 'John Doe',
-      comment: 'Routine checkup',
-      appointmentTime: 'Monday, October 9, 2024 - 10:00 AM - 10:30 AM',
-    },
-    {
-      id: 2,
-      patientName: 'Jane Smith',
-      comment: 'Follow-up consultation',
-      appointmentTime: 'Wednesday, October 11, 2024 - 2:00 PM - 2:30 PM',
-    },
-    {
-      id: 3,
-      patientName: 'Emily Clark',
-      comment: 'Annual physical exam',
-      appointmentTime: 'Friday, October 13, 2024 - 9:00 AM - 9:30 AM',
-    },
-  ]);
+  // const [appointments, setAppointments] = useState([
+  //   {
+  //     id: 1,
+  //     patientName: 'John Doe',
+  //     comment: 'Routine checkup',
+  //     appointmentTime: 'Monday, October 9, 2024 - 10:00 AM - 10:30 AM',
+  //   },
+  //   {
+  //     id: 2,
+  //     patientName: 'Jane Smith',
+  //     comment: 'Follow-up consultation',
+  //     appointmentTime: 'Wednesday, October 11, 2024 - 2:00 PM - 2:30 PM',
+  //   },
+  //   {
+  //     id: 3,
+  //     patientName: 'Emily Clark',
+  //     comment: 'Annual physical exam',
+  //     appointmentTime: 'Friday, October 13, 2024 - 9:00 AM - 9:30 AM',
+  //   },
+  // ]);
+  const [appointments, setAppointments] = useState([]);
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
   const [selectedTime, setSelectedTime] = useState('');
   const [file, setFile] = useState(null);
@@ -110,24 +113,52 @@ const UpcomingAppointments = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isEditing] = useState(true);
 
+  useEffect(() => {
+    const fetchAppointments = () => {
+      const q = query(collection(db, 'appointments'));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const fetchedAppointments = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAppointments(fetchedAppointments);
+      });
+      return unsubscribe; // Cleanup listener
+    };
+
+    fetchAppointments();
+  }, []);
+
   const handleEditClick = (appointment) => {
     setSelectedAppointment(appointment);
     setIsPopupOpen(true);
   };
 
+  // const handleCancelClick = async (appointmentId) => {
+  //   try {
+  //     const confirmation = window.confirm(
+  //       'Are you sure you want to cancel this appointment?'
+  //     );
+  //     if (confirmation) {
+  //       const updatedAppointments = appointments.filter(
+  //         (appointment) => appointment.id !== appointmentId
+  //       );
+  //       setAppointments(updatedAppointments);
+  //       setIsPopupOpen(false);
+  //       setSelectedAppointment(null);
+
+  //       toast.success('Appointment canceled successfully!');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error canceling appointment:', error);
+  //     toast.error('Failed to cancel appointment');
+  //   }
+  // };
+
   const handleCancelClick = async (appointmentId) => {
     try {
-      const confirmation = window.confirm(
-        'Are you sure you want to cancel this appointment?'
-      );
-      if (confirmation) {
-        const updatedAppointments = appointments.filter(
-          (appointment) => appointment.id !== appointmentId
-        );
-        setAppointments(updatedAppointments);
-        setIsPopupOpen(false);
-        setSelectedAppointment(null);
-
+      if (window.confirm('Are you sure you want to cancel this appointment?')) {
+        await deleteDoc(doc(db, 'appointments', appointmentId));
         toast.success('Appointment canceled successfully!');
       }
     } catch (error) {
@@ -135,37 +166,65 @@ const UpcomingAppointments = () => {
       toast.error('Failed to cancel appointment');
     }
   };
+  // const handleUpdateAppointment = () => {
+  //   if (!selectedTime) {
+  //     toast.error('Please select a time for the appointment.');
+  //     return;
+  //   }
 
-  const handleUpdateAppointment = () => {
-    if (!selectedTime) {
-      toast.error('Please select a time for the appointment.');
-      return;
-    }
+  //   if (!selectedDate) {
+  //     toast.error('Please select a date for the appointment.');
+  //     return;
+  //   }
 
-    if (!selectedDate) {
-      toast.error('Please select a date for the appointment.');
+  //   const formattedDate = formatDate(selectedDate);
+  //   const endTime = calculateEndTime(selectedTime, MEETING_DURATION);
+
+  //   const updatedAppointments = appointments.map((appointment) => {
+  //     if (appointment.id === selectedAppointment.id) {
+  //       return {
+  //         ...appointment,
+  //         appointmentTime: `${formattedDate} - ${selectedTime} - ${endTime}`,
+  //       };
+  //     }
+  //     return appointment;
+  //   });
+
+  //   setAppointments(updatedAppointments);
+  //   setIsPopupOpen(false);
+  //   setSelectedAppointment(null);
+  //   setSelectedTime('');
+  //   setSelectedDate(getCurrentDate());
+  //   toast.success('Appointment updated successfully!');
+  // };
+
+  const handleUpdateAppointment = async () => {
+    if (!selectedTime || !selectedDate) {
+      toast.error('Please select both a date and a time for the appointment.');
       return;
     }
 
     const formattedDate = formatDate(selectedDate);
     const endTime = calculateEndTime(selectedTime, MEETING_DURATION);
 
-    const updatedAppointments = appointments.map((appointment) => {
-      if (appointment.id === selectedAppointment.id) {
-        return {
-          ...appointment,
-          appointmentTime: `${formattedDate} - ${selectedTime} - ${endTime}`,
-        };
-      }
-      return appointment;
-    });
+    try {
+      setIsUploading(true);
+      const appointmentRef = doc(db, 'appointments', selectedAppointment.id);
+      await updateDoc(appointmentRef, {
+        appointmentTime: `${formattedDate} - ${selectedTime} - ${endTime}`,
+      });
 
-    setAppointments(updatedAppointments);
-    setIsPopupOpen(false);
-    setSelectedAppointment(null);
-    setSelectedTime('');
-    setSelectedDate(getCurrentDate());
-    toast.success('Appointment updated successfully!');
+      setIsPopupOpen(false);
+      setSelectedAppointment(null);
+      setSelectedTime('');
+      setSelectedDate(getCurrentDate());
+      toast.success('Appointment updated successfully!');
+    } catch (error) {
+      console.error('Error updating appointment:', error);
+      toast.error('Failed to update appointment');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleClosePopup = () => {
@@ -187,7 +246,8 @@ const UpcomingAppointments = () => {
           <ProfilePictureHandler
             file={file}
             setFile={setFile}
-            imageUrl={user.photoURL}
+            // if user is null then set imageUrl to ''
+            imageUrl={user?.photoURL || ''}
             //user.imageUrl
             isEditing={false}
             setImageUrl={setImageUrl}
@@ -202,7 +262,7 @@ const UpcomingAppointments = () => {
                 key={appointment.id}
                 className='relative flex items-center justify-between text-white-800 mb-4'
               >
-                <span className='mr-3'>{appointment.appointmentTime}</span>|
+                <span className='mr-3'>{appointment.timeSlot}</span>|
                 <span className='ml-3'>{appointment.patientName}</span>
                 <BsFillPencilFill
                   className='text-l text-blue-600 cursor-pointer hover:text-blue-800 dark:text-white dark:hover:text-gray-300 ml-10'
