@@ -4,10 +4,10 @@ import MedicalHistory from './component/MedicalHistory';
 import LifestyleInfo from './component/LifestyleInfo';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
-import { db } from '@/lib/firebase';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import DisplayPatientProfile from './DisplayPatientProfile';
 import { toast } from 'sonner';
+import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const PatientProfile = () => {
   const user = useAtomValue(userAtom);
@@ -76,23 +76,22 @@ const PatientProfile = () => {
 
     try {
       if (!user || !user.uid) {
-        alert('User not authenticated.');
+        toast.error('User not authenticated.');
         return;
       }
 
-      // Reference the "patients" collection instead of "users"
       const patientDoc = doc(db, 'patients', user.uid);
       await setDoc(patientDoc, profileData, { merge: true });
 
       toast.success('Profile updated successfully');
       setIsProfileSubmitted(true);
     } catch (error) {
-      console.error('Error updating profile:', error.message);
-      toast.success(
-        'There was an error updating your profile. Please try again.'
-      );
+      console.error('Firestore update error:', error);
+      toast.error('Error updating profile. Please try again.');
     }
   };
+
+  console.log({ user, db });
 
   return (
     <div className='relative flex flex-col h-screen pt-16 bg-center bg-cover'>
