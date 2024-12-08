@@ -1,27 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FaBeer, FaCarrot, FaDumbbell, FaSmoking } from 'react-icons/fa';
 
 const LifestyleInfo = ({ onChange }) => {
-  const [smokingStatus, setSmokingStatus] = useState('');
-  const [alcoholConsumption, setAlcoholConsumption] = useState('');
-  const [exerciseFrequency, setExerciseFrequency] = useState('');
-  const [dietPreference, setDietPreference] = useState(''); // New state for diet preference
+  const [smokingstatus, setSmokingStatus] = useState('');
+  const [alcoholconsumption, setAlcoholConsumption] = useState('');
+  const [exercisefrequency, setExerciseFrequency] = useState('');
+  const [dietpreference, setDietPreference] = useState('');
 
-  // Effect to handle changes in input fields
-  useEffect(() => {
+  const handleChange = () => {
     onChange({
-      smokingStatus,
-      alcoholConsumption,
-      exerciseFrequency,
-      dietPreference,
+      smokingstatus,
+      alcoholconsumption,
+      exercisefrequency,
+      dietpreference,
     });
-  }, [
-    smokingStatus,
-    alcoholConsumption,
-    exerciseFrequency,
-    dietPreference,
-    onChange,
-  ]);
+  };
 
   return (
     <div className='p-6 mb-6 transition-transform duration-300 border border-green-400 rounded-lg shadow-lg dark:bg-slate-900 bg-green-50 hover:shadow-xl'>
@@ -30,35 +23,53 @@ const LifestyleInfo = ({ onChange }) => {
         Lifestyle Information
       </h2>
       <div className='space-y-4'>
-        <div className='flex items-center'>
-          <FaSmoking className='mr-2 text-green-600' />
-          <div>
-            <label className='font-medium'>Smoking Status:</label>
-            <p className='text-white-700'>Non-Smoker</p>
-          </div>
+        <div>
+          <label className='font-medium'>Smoking Status:</label>
+          <input
+            type='text'
+            value={smokingstatus}
+            onChange={(e) => {
+              setSmokingStatus(e.target.value);
+              handleChange();
+            }}
+            className='w-full p-2 border border-gray-300 rounded'
+          />
         </div>
-        <div className='flex items-center'>
-          <FaBeer className='mr-2 text-green-600' />
-          <div>
-            <label className='font-medium'>Alcohol Consumption:</label>
-            <p className='text-white-700'>Occasional</p>
-          </div>
+        <div>
+          <label className='font-medium'>Alcohol Consumption:</label>
+          <input
+            type='text'
+            value={alcoholconsumption}
+            onChange={(e) => {
+              setAlcoholConsumption(e.target.value);
+              handleChange();
+            }}
+            className='w-full p-2 border border-gray-300 rounded'
+          />
         </div>
-        <div className='flex items-center'>
-          <FaDumbbell className='mr-2 text-green-600' />
-          <div>
-            <label className='font-medium'>Exercise Habits:</label>
-            <p className='text-white-700'>3 times a week</p>
-          </div>
+        <div>
+          <label className='font-medium'>Exercise Frequency:</label>
+          <input
+            type='text'
+            value={exercisefrequency}
+            onChange={(e) => {
+              setExerciseFrequency(e.target.value);
+              handleChange();
+            }}
+            className='w-full p-2 border border-gray-300 rounded'
+          />
         </div>
-        <div className='flex items-center'>
-          <FaCarrot className='mr-2 text-green-600' />
-          <div>
-            <label className='font-medium'>
-              Diet Restrictions/Preferences:
-            </label>
-            <p className='text-white-700'>Vegetarian</p>
-          </div>
+        <div>
+          <label className='font-medium'>Diet Restrictions/Preferences:</label>
+          <input
+            type='text'
+            value={dietpreference}
+            onChange={(e) => {
+              setDietPreference(e.target.value);
+              handleChange();
+            }}
+            className='w-full p-2 border border-gray-300 rounded'
+          />
         </div>
       </div>
     </div>
