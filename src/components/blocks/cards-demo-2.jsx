@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-export default function CardDemo() {
+export default function Card() {
   return (
     (<div className="max-w-xs w-full group/card">
       <div

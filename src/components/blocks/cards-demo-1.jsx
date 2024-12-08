@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 
-export default function CardDemo() {
+export default function Card() {
   return (
     (<div className="max-w-xs w-full">
       <div
