@@ -52,8 +52,49 @@ export default function ProfileViewer({
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
     const [isBookDialogOpen, setIsBookDialogOpen] = useState(false);
     const [notes, setNotes] = useState('');
-    const [selectedSlot, setAppointmentSlot] = useState('');
+    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedSlot, setSelectedSlot] = useState("");
+    const [availableSlots, setAvailableSlots] = useState([]);
 
+    const generateTimeSlots = (start, end) => {
+        const slots = [];
+        let current = new Date(`1970-01-01T${start}:00`);
+        const endTime = new Date(`1970-01-01T${end}:00`);
+
+        while (current < endTime) {
+            const next = new Date(current.getTime() + 30 * 60000);
+            slots.push(`${current.toTimeString().slice(0, 5)} - ${next.toTimeString().slice(0, 5)}`);
+            current = next;
+        }
+        return slots;
+    };
+
+    const handleDateSelection = (date) => {
+        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",];
+        const selectedDate = new Date(date);
+
+        if (isNaN(selectedDate.getTime())) {
+            toast.error("Invalid date selected. Please try again.");
+            return;
+        }
+
+        const dayOfWeek = days[selectedDate.getDay()]; // Calculate the day of the week (Sunday-Saturday)
+        const schedule = doctor.profile.schedule[dayOfWeek];
+
+        if (schedule?.enabled) {
+            const slots = generateTimeSlots(schedule.start, schedule.end); // Generate slots for that day
+            setAvailableSlots(slots); // Set available slots
+            setSelectedDate(date); // Save the selected date
+            setSelectedSlot(""); // Reset selected slot
+            toast.success(`Slots available for ${dayOfWeek}`);
+        } else {
+            toast.error(`No availability for ${dayOfWeek}. Please select another date.`);
+            setAvailableSlots([]); // Clear slots if unavailable
+        }
+    };
+
+
+    
     const [user] = useAtom(userAtom);
     const patientName = user?.displayName;
 
@@ -61,16 +102,16 @@ export default function ProfileViewer({
         {
             title: 'Professional Information',
             items: [
-                { label: 'Specialization', value: doctor.profile.primarySpecialty },
-                { label: 'Experience', value: doctor.profile.yearsOfExperience },
-                { label: 'Hospital', value: doctor.profile.hospitalAffiliations },
-                { label: 'Clinic', value: doctor.profile.clinicName },
+                { label: 'Specialization', value: doctor.profile?.primarySpecialty },
+                { label: 'Experience', value: doctor.profile?.yearsOfExperience },
+                { label: 'Hospital', value: doctor.profile?.hospitalAffiliations },
+                { label: 'Clinic', value: doctor.profile?.clinicName },
             ],
         },
         {
             title: 'Contact Information',
             items: [
-                { label: 'Phone', value: doctor.profile.phonenumber },
+                { label: 'Phone', value: doctor.profile?.phonenumber },
                 { label: 'Email', value: doctor.email },
             ],
         },
@@ -109,8 +150,8 @@ export default function ProfileViewer({
     ];
 
     const handleBookAppointment = async () => {
-        if (!selectedSlot) {
-            toast.error('Please select a time slot.');
+        if (!selectedDate || !selectedSlot) {
+            toast.error("Please select a day and a time slot.");
             return;
         }
 
@@ -124,7 +165,7 @@ export default function ProfileViewer({
         }
 
         const appointmentData = {
-            date: "2024-02-15", // Replace this with your selected date variable
+            date: selectedDate, // Replace this with your selected date variable
             timeSlot: selectedSlot,
             notes: notes.trim(),
             doctorId: doctorId,
@@ -148,17 +189,12 @@ export default function ProfileViewer({
                 const schedule = doctorData.schedule || {};
 
                 // Check if the selected slot is still available
-                const [day, start, end] = selectedSlot.split('-');
-                if (!schedule[day]?.enabled || schedule[day].start !== start || schedule[day].end !== end) {
-                    throw new Error('Time slot is no longer available');
+                if (
+                    !schedule[selectedDate]?.enabled ||
+                    !generateTimeSlots(schedule[selectedDate].start, schedule[selectedDate].end).includes(selectedSlot)
+                ) {
+                    throw new Error("Selected time slot is no longer available.");
                 }
-
-                // Update the schedule to disable the selected slot
-                const updatedSchedule = {
-                    ...schedule,
-                    [day]: { ...schedule[day], enabled: false } // Marking the slot as unavailable
-                };
-                transaction.update(doctorRef, { schedule: updatedSchedule });
 
                 // Add the appointment
                 const appointmentsCollectionRef = collection(db, 'appointments');
@@ -169,8 +205,9 @@ export default function ProfileViewer({
 
             // Reset form and state
             setIsBookDialogOpen(false);
-            setAppointmentSlot('');
-            setNotes('');
+            setSelectedDate("");
+            setSelectedSlot("");
+            setNotes("");
         } catch (error) {
             toast.error(error.message || 'Failed to book appointment. Please try again later.');
             console.error('Error booking appointment:', error);
@@ -253,21 +290,31 @@ export default function ProfileViewer({
                             <span>{patientName}</span>
                         </div>
                         <div>
-                            <label className="font-medium block mb-2">Select Appointment Slot:</label>
-                            <select
-                                value={selectedSlot}
-                                onChange={(e) => setAppointmentSlot(e.target.value)}
+                            <label className="font-medium block mb-2">Select Date:</label>
+                            <input
+                                type="date"
+                                value={selectedDate}
+                                onChange={(e) => handleDateSelection(e.target.value)}
                                 className="border p-2 w-full"
-                            >
-                                {Object.entries(doctor.profile.schedule || {}).map(([day, { enabled, start, end }]) => (
-                                    enabled ? (
-                                        <option key={day} value={`${day}-${start}-${end}`}>
-                                            {day}: {start} - {end}
-                                        </option>
-                                    ) : null
-                                ))}
-                            </select>
+                            />
                         </div>
+                        {availableSlots.length > 0 && (
+                            <div>
+                                <label className="font-medium block mb-2">Select Time Slot:</label>
+                                <select
+                                    value={selectedSlot}
+                                    onChange={(e) => setSelectedSlot(e.target.value)}
+                                    className="border p-2 w-full"
+                                >
+                                    <option value="">Select a Time Slot</option>
+                                    {availableSlots.map((slot, index) => (
+                                        <option key={index} value={slot}>
+                                            {slot}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
                         <div>
                             <label className="font-medium block mb-2">Notes:</label>
                             <textarea
