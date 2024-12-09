@@ -99,13 +99,6 @@ export const USER_ROLES_ROUTES = {
         <IconUsersGroup className='w-4 h-4 text-neutral-500 dark:text-white' />
       ),
     },
-    {
-      name: 'Appointments',
-      link: '/admin/appointments',
-      icon: (
-        <IconClipboardHeart className='w-4 h-4 text-neutral-500 dark:text-white' />
-      ),
-    },
   ],
 };
 
