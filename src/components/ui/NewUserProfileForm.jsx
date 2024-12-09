@@ -24,7 +24,7 @@ import { FULL_WIDTH_BTN_HV_EFCT_CLASS } from '@/lib/constants';
 import { generateFirebaseAuthErrorMessage } from '@/lib/functions/generateErrorMessage';
 import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
 
-const NewUserForm = ({ randomPwd }) => {
+const NewUserProfileForm = ({ randomPwd }) => {
   const { createUser } = useFirebaseAuth();
 
   const {
@@ -153,4 +153,4 @@ const NewUserForm = ({ randomPwd }) => {
   );
 };
 
-export default NewUserForm;
+export default NewUserProfileForm;

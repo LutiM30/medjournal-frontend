@@ -71,15 +71,6 @@ const columns = [
         <Badge variant='destructive'>No</Badge>
       ),
   },
-  {
-    accessorKey: 'actions',
-    header: '',
-    cell: ({ row }) => (
-      <Button variant='ghost' size='icon'>
-        <Ellipsis />
-      </Button>
-    ),
-  },
 ];
 
 export default columns;

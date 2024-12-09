@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { PATIENT_ROLE, DOCTOR_ROLE, UNIQUE_SYMBOLS } from './constants';
 import { IconLogin2, IconLogout } from '@tabler/icons-react';
-import { random, shuffle, capitalize, draw } from 'radash';
+import { random, shuffle, draw } from 'radash';
 import { generate } from 'random-words';
 
 export function cn(...inputs) {
@@ -111,6 +111,15 @@ export const getRandomNumberSymbols = (length, symbols = false) => {
   return !symbols ? Number(joinedEle) : joinedEle;
 };
 
+export const randomlyCapitalize = (word) => {
+  return word
+    .split('')
+    .map((char) =>
+      Math.random() > 0.5 ? char.toUpperCase() : char.toLowerCase()
+    )
+    .join('');
+};
+
 /**
  * The getRandomString function generates a random string with a mix of uppercase letters, numbers, and
  * symbols of varying lengths.
@@ -125,7 +134,7 @@ export const getRandomString = () => {
   const numLength = random(1, stringLength - wordLength);
   const charsLength = random(1, stringLength - numLength - wordLength);
 
-  const randomWord = capitalize(generate({ maxLength: wordLength }));
+  const randomWord = randomlyCapitalize(generate({ maxLength: wordLength }));
 
   const randomNumber = getRandomNumberSymbols(numLength);
   const randomSymbol = getRandomNumberSymbols(charsLength, true);
