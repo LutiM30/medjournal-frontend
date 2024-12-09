@@ -60,8 +60,6 @@ export const isValidRouteForRole = (pathName, role, isAdmin, routes) => {
 };
 
 export const messages = {
-  INVALID_ACCESS: "You don't have permission of this page.",
-
   email: 'Email is required',
   invalidEmail: 'Please enter correct email address',
 
