@@ -3,8 +3,11 @@ import { ImagesSlider } from "@/components/imageSlider";
 import { projectConstants } from "@/lib/utils";
 import { motion } from "framer-motion";
 import React from "react";
-
+import { useAtomValue } from 'jotai';
+import { userAtom } from '@/lib/atoms/userAtom';
+import { toast } from 'sonner';
 export function ImagesSliderHome() {
+    const user = useAtomValue(userAtom);
     const images = [
         'https://firebasestorage.googleapis.com/v0/b/capstone-bd303.appspot.com/o/Homepage%2FMedJournal_home.jpg?alt=media&token=540cbd17-4998-4832-9489-948a8294e13c',
         'https://firebasestorage.googleapis.com/v0/b/capstone-bd303.appspot.com/o/Homepage%2Farm-1284248_1920.jpg?alt=media&token=225cdaff-6c9b-411a-8ac1-015692a0e4f4',
@@ -12,12 +15,18 @@ export function ImagesSliderHome() {
         'https://firebasestorage.googleapis.com/v0/b/capstone-bd303.appspot.com/o/Homepage%2Fpill-4897529_1920.jpg?alt=media&token=7ac6ffe9-7a95-40ad-a8d9-ae7995c6a1ff',
 
     ];
-    // const images = [
-    //     "https://images.unsplash.com/photo-1485433592409-9018e83a1f0d?q=80&w=1814&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    //     "https://images.unsplash.com/photo-1483982258113-b72862e6cff6?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    //     "https://images.unsplash.com/photo-1482189349482-3defd547e0e9?q=80&w=2848&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    // ];
-
+    const handleButtonClick = () => {
+        if (user?.role === 'doctors') {
+            window.location.href = '/doc/appointments';
+        } else if (user?.role === 'patients') {
+            window.location.href = '/pat/doctors';
+        } else {
+            toast.error('First Login to the system');
+            setTimeout(() => {
+                window.location.href = '/signin';
+            }, 2000);
+        }
+    };
     return (
         (<ImagesSlider className="h-[43.5rem]" images={images}>
             <motion.div
@@ -39,13 +48,13 @@ export function ImagesSliderHome() {
                 </motion.p>
 
                 <button
+                    onClick={handleButtonClick}
                     className="px-4 py-2 backdrop-blur-sm border bg-emerald-300/10 border-emerald-500/20 text-white mx-auto text-center rounded-full relative mt-4"
                 >
-
-                    <span>Book now →</span>
+                    <span>{user?.role !== 'doctors' ? 'Book now →' : 'View all appointments'}</span>
 
                     <div
-                        className="absolute inset-x-0  h-px -bottom-px bg-gradient-to-r w-3/4 mx-auto from-transparent via-indigo-500 to-transparent" />
+                        className="absolute inset-x-0 h-px -bottom-px bg-gradient-to-r w-3/4 mx-auto from-transparent via-indigo-500 to-transparent" />
                 </button>
             </motion.div>
         </ImagesSlider>)

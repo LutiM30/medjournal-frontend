@@ -6,6 +6,7 @@ import { isLoadingAtom } from '@/lib/atoms/atoms';
 import VanishInput from '@/components/ui/placeholders-and-vanish-input';
 import PaginationControls from '@/components/PaginationControls';
 import ProfileViewer from '../../../components/DoctorProfileViewer';
+import ProfilePictureHandler from '@/components/ProfilePictureHandler';
 
 const DoctorsList = (props) => {
   const {
@@ -22,7 +23,7 @@ const DoctorsList = (props) => {
 
   const VanishInputProps = {
     placeholders,
-    onChange: () => {},
+    onChange: () => { },
     onSubmit: (e) => {
       setSearch([...search, e.target[0].value]);
       setCurrentPage(0);
@@ -57,6 +58,7 @@ const DoctorsList = (props) => {
             <table className='w-full table-auto text-left text-gray-700 dark:text-gray-300'>
               <thead className='bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200'>
                 <tr>
+                  {/* <th className='p-4'>Profile Picture</th> */}
                   <th className='p-4'>Name</th>
                   <th className='p-4'>Specialization</th>
                   <th className='p-4'>Experience</th>
@@ -69,6 +71,15 @@ const DoctorsList = (props) => {
                     key={doctor.id}
                     className='border-t border-gray-200 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-slate-900'
                   >
+                    {/* <td className='p-4'>
+                      <ProfilePictureHandler
+                        // file={file}
+                        // setFile={setFile}
+                        imageUrl={doctor?.photoURL || ''}
+                        isEditing={false}
+                      />
+                      {doctor.imageUrl}
+                    </td> */}
                     <td className='p-4'>{doctor.displayName}</td>
                     <td className='p-4'>{doctor.profile?.specialty}</td>
                     <td className='p-4'>
