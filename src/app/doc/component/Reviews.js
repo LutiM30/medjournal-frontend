@@ -291,13 +291,13 @@ const UpcomingAppointments = () => {
               {appointments.map((appointment) => (
                 <li
                   key={appointment.id}
-                  className='relative flex items-center justify-between text-white-800 mb-4'
+                  className='relative flex items-center justify-between mb-4 text-white-800'
                 >
                   <span className='mr-3'>{appointment.date}</span>|
                   <span className='ml-3 mr-3'>{appointment.timeSlot}</span>|
                   <span className='ml-3'>{appointment.patientName}</span>
                   <BsFillPencilFill
-                    className='text-l text-blue-600 cursor-pointer hover:text-blue-800 dark:text-white dark:hover:text-gray-300 ml-10'
+                    className='ml-10 text-blue-600 cursor-pointer text-l hover:text-blue-800 dark:text-white dark:hover:text-gray-300'
                     onClick={() => handleEditClick(appointment)}
                   />
                 </li>
