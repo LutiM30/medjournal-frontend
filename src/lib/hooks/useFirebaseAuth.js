@@ -211,6 +211,7 @@ export default function useFirebaseAuth() {
       throw error;
     }
   };
+  const RESPONSE_OK_TEXT = (name) => `Welcome to MedJournal, ${name}`;
 
   const createUser = async ({ firstName, lastName, role, email, password }) => {
     try {
@@ -223,13 +224,17 @@ export default function useFirebaseAuth() {
         password,
       });
 
+      if (response.message === RESPONSE_OK_TEXT(`${firstName} ${lastName}`)) {
+        toast.success('User created successfully');
+      } else {
+        toast.error('There was some problem when creating user.');
+      }
+
       if (!response?.token) {
         throw new Error('No token received from server');
       }
-
-      return await signInWithCustomToken(auth, response.token);
     } catch (error) {
-      console.error('Sign up error:', error);
+      console.error('Create User error:', error);
       toast.error(error.message || 'Failed to create account');
       throw error;
     }

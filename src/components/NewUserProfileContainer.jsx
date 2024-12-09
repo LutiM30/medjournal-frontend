@@ -18,8 +18,9 @@ import {
   TooltipTrigger,
 } from './ui/tooltip';
 import { toast } from 'sonner';
+import NewUserProfileForm from './ui/NewUserProfileForm';
 
-const NewUser = (props) => {
+const NewUserProfileContainer = (props) => {
   const [randomPwd, setRandomPwd] = useState(getRandomString());
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   return (
@@ -62,10 +63,10 @@ const NewUser = (props) => {
             and user can change password by requesting reset password link
           </SheetDescription>
         </SheetHeader>
-        <NewUserForm randomPwd={randomPwd} />
+        <NewUserProfileForm randomPwd={randomPwd} />
       </SheetContent>
     </Sheet>
   );
 };
 
-export default NewUser;
+export default NewUserProfileContainer;

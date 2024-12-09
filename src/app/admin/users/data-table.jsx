@@ -191,6 +191,7 @@ const DataTable = ({
 
             <div className='text-sm text-gray-500 dark:text-gray-400'>
               <NewUser />
+              {/* <NewUserProfile /> */}
             </div>
 
             {Object?.keys(rowSelection)?.length ? (

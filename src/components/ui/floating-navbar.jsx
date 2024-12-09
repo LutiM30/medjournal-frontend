@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn, projectConstants } from '@/lib/utils';
 import Link from 'next/link';
@@ -45,6 +45,15 @@ export const FloatingNav = ({ className }) => {
   ];
   const navWidthClass = user?.uid ? 'w-[85%]' : 'w-[60%]';
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
   return (
     <AnimatePresence mode='wait'>
       <motion.div
@@ -70,26 +79,21 @@ export const FloatingNav = ({ className }) => {
         {/* Left Side - Logo */}
         <div className='flex-shrink-0'>
           <div className='text-xl font-bold'>
-            {/* <Logo /> */}
-            <>
-              <span className='block md:hidden'>
-                <a href='/'>
-                  <img
-                    src={resolvedTheme === 'dark' ? '/favicon-dark.svg' : '/favicon.svg'}
-                    alt='Logo'
-                    className='w-9 h-9 border-2 rounded-full'
-                    title={projectConstants.PROJECT_NAME}
-                  />
-                </a>
-
-              </span>
-              <span className='hidden text-sm md:block'>
-                <Logo />
-              </span>
-            </>
+            <span className='block md:hidden'>
+              <a href='/'>
+                <img
+                  src={resolvedTheme === 'dark' ? '/favicon-dark.svg' : '/favicon.svg'}
+                  alt='Logo'
+                  className='w-9 h-9 border-2 rounded-full'
+                  title={projectConstants.PROJECT_NAME}
+                />
+              </a>
+            </span>
+            <span className='hidden text-sm md:block'>
+              <Logo />
+            </span>
           </div>
         </div>
-
         {/* Middle - Navigation Links */}
         <div className='flex items-center justify-center space-x-4'>
           {navItems.map((navItem, idx) => (

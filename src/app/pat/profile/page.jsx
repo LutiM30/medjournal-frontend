@@ -1,18 +1,18 @@
-"use client";
-import React from "react";
-import PatientProfile from "../PatientProfile";
-import ProfileForm from "../ProfileForm";
-import withRoleProtection from "@/lib/hooks/withRoleProtection";
-import { PATIENT_ROLE } from "@/lib/constants";
-import { userAtom } from "@/lib/atoms/userAtom";
-import { useAtomValue } from "jotai";
+'use client';
+import React from 'react';
+import PatientProfile from '../PatientProfile';
+import ProfileForm from '../DisplayPatientProfile';
+import withRoleProtection from '@/lib/hooks/withRoleProtection';
+import { PATIENT_ROLE } from '@/lib/constants';
+import { userAtom } from '@/lib/atoms/userAtom';
+import { useAtomValue } from 'jotai';
 
 const Page = () => {
   const user = useAtomValue(userAtom);
 
-  console.log("====================================");
+  console.log('====================================');
   console.log(user);
-  console.log("====================================");
+  console.log('====================================');
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ProfilePictureHandler from '@/components/ProfilePictureHandler';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/lib/atoms/userAtom';
@@ -19,27 +19,6 @@ import { BsFillPencilFill } from 'react-icons/bs';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
-const TIME_SLOTS = [
-  '09:00 AM',
-  '09:30 AM',
-  '10:00 AM',
-  '10:30 AM',
-  '11:00 AM',
-  '11:30 AM',
-  '12:00 PM',
-  '12:30 PM',
-  '01:00 PM',
-  '01:30 PM',
-  '02:00 PM',
-  '02:30 PM',
-  '03:00 PM',
-  '03:30 PM',
-  '04:00 PM',
-  '04:30 PM',
-  '05:00 PM',
-  '05:30 PM',
-];
-
 const MEETING_DURATION = 30; // minutes
 
 const getCurrentDate = () => {
@@ -56,6 +35,16 @@ const formatDate = (dateString) => {
     day: 'numeric',
   };
   return date.toLocaleDateString('en-US', options);
+};
+const convertTo24Hour = (time) => {
+  const [hours, minutes] = time.split(':').map(Number);
+  return { hours, minutes };
+};
+const formatTimeForDisplay = (hours, minutes) => {
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const displayHours = hours % 12 || 12;
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  return `${displayHours}:${formattedMinutes} ${period}`;
 };
 
 const calculateEndTime = (startTime, duration) => {
@@ -124,7 +113,12 @@ const UpcomingAppointments = () => {
             const fetchedAppointments = snapshot.docs
               .map((doc) => ({ id: doc.id, ...doc.data() }))
               .sort((a, b) => new Date(a.date) - new Date(b.date));
-            setAppointments(fetchedAppointments);
+
+            //for all appointments
+            // setAppointments(fetchedAppointments);
+            //for 3 upcoming appointments
+            const upcomingAppointments = fetchedAppointments.slice(0, 3);
+            setAppointments(upcomingAppointments);
           },
           (error) => {
             console.error('Error fetching appointments:', error);
@@ -142,35 +136,79 @@ const UpcomingAppointments = () => {
     fetchDoctorData();
   }, [user]);
 
-  const isTimeSlotAvailable = (selectedDate, selectedTime) => {
-    if (!doctorSchedule) return false;
+  // Generate available dates based on doctor's schedule
+  const availableDates = useMemo(() => {
+    if (!doctorSchedule) return [];
+
+    const dates = [];
+    const today = new Date();
+
+    // Generate dates for next 30 days
+    for (let i = 0; i < 30; i++) {
+      const currentDate = new Date(today);
+      currentDate.setDate(today.getDate() + i);
+
+      const dayName = currentDate
+        .toLocaleDateString('en-US', { weekday: 'long' })
+        .toLowerCase();
+      const daySchedule =
+        doctorSchedule[dayName.charAt(0).toUpperCase() + dayName.slice(1)];
+      if (daySchedule && daySchedule.enabled) {
+        dates.push(currentDate.toISOString().split('T')[0]);
+      }
+    }
+    return dates;
+  }, [doctorSchedule]);
+
+  // Generate available time slots based on doctor's schedule and selected date
+  // Generate available time slots based on doctor's schedule and selected date
+  const availableTimeSlots = useMemo(() => {
+    if (!doctorSchedule || !selectedDate) return [];
 
     const day = new Date(selectedDate)
-      .toLocaleDateString('en-US', {
-        weekday: 'long',
-      })
+      .toLocaleDateString('en-US', { weekday: 'long' })
       .toLowerCase();
-    const scheduleForDay = doctorSchedule[day];
+    const capitalizedDay = day.charAt(0).toUpperCase() + day.slice(1);
+    const daySchedule = doctorSchedule[capitalizedDay];
 
-    if (!scheduleForDay || !scheduleForDay.enabled) return false;
+    if (!daySchedule || !daySchedule.enabled) return [];
 
-    const convertTo24Hour = (time) => {
-      const [t, period] = time.split(' ');
-      let [hours, minutes] = t.split(':').map(Number);
-      if (period === 'PM' && hours !== 12) hours += 12;
-      if (period === 'AM' && hours === 12) hours = 0;
-      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    };
+    const startTime = convertTo24Hour(daySchedule.start);
+    const endTime = convertTo24Hour(daySchedule.end);
 
-    const selectedTimeIn24 = convertTo24Hour(selectedTime);
-    const scheduleStart = scheduleForDay.start;
-    const scheduleEnd = scheduleForDay.end;
+    const timeSlots = [];
+    const currentTime = new Date();
+    currentTime.setHours(startTime.hours, startTime.minutes, 0, 0);
 
-    return selectedTimeIn24 >= scheduleStart && selectedTimeIn24 <= scheduleEnd;
-  };
+    const maxTime = new Date();
+    maxTime.setHours(endTime.hours, endTime.minutes, 0, 0);
+
+    while (currentTime < maxTime) {
+      const hours = currentTime.getHours();
+      const minutes = currentTime.getMinutes();
+      const timeSlot = formatTimeForDisplay(hours, minutes);
+
+      // Check if this time slot is already booked
+      const isBooked = appointments.some(
+        (appointment) =>
+          appointment.date === selectedDate &&
+          appointment.timeSlot.startsWith(timeSlot)
+      );
+
+      if (!isBooked) {
+        timeSlots.push(timeSlot);
+      }
+
+      currentTime.setMinutes(currentTime.getMinutes() + 30);
+    }
+
+    return timeSlots;
+  }, [doctorSchedule, selectedDate, appointments]);
 
   const handleEditClick = (appointment) => {
     setSelectedAppointment(appointment);
+    setSelectedDate(appointment.date);
+    setSelectedTime('');
     setIsPopupOpen(true);
   };
 
@@ -183,10 +221,12 @@ const UpcomingAppointments = () => {
 
   const handleCancelClick = async (appointmentId) => {
     try {
-      setIsUploading(true);
-      await deleteDoc(doc(db, 'appointments', appointmentId));
-      toast.success('Appointment cancelled successfully');
-      handleClosePopup();
+      if (window.confirm('Are you sure you want to cancel this appointment?')) {
+        setIsUploading(true);
+        await deleteDoc(doc(db, 'appointments', appointmentId));
+        toast.success('Appointment cancelled successfully!');
+        handleClosePopup();
+      }
     } catch (error) {
       console.error('Error cancelling appointment:', error);
       toast.error('Failed to cancel appointment');
@@ -196,17 +236,15 @@ const UpcomingAppointments = () => {
   };
 
   const handleUpdateAppointment = async () => {
-    if (!selectedTime || !selectedDate) {
-      toast.error('Please select both a date and a time for the appointment.');
+    if (!selectedDate) {
+      toast.error('Please select a date for the appointment.');
       return;
     }
 
-    if (!isTimeSlotAvailable(selectedDate, selectedTime)) {
-      toast.error('Selected time is outside of your available hours.');
+    if (!selectedTime) {
+      toast.error('Please select a time for the appointment.');
       return;
     }
-
-    const formattedDate = formatDate(selectedDate);
     const endTime = calculateEndTime(selectedTime, MEETING_DURATION);
 
     try {
@@ -227,7 +265,6 @@ const UpcomingAppointments = () => {
     }
   };
 
-  // Rest of the component remains the same as in the original code
   return (
     <div className='max-w-4xl p-6 mx-auto mb-6 bg-white border-l-4 border-blue-500 rounded-lg shadow-lg dark:bg-slate-900'>
       <h2 className='mb-4 text-2xl font-semibold text-green-600'>
@@ -270,8 +307,6 @@ const UpcomingAppointments = () => {
         </div>
       </div>
 
-      {/* Popup modal code remains the same as in the original code, 
-          but now uses handleClosePopup and handleCancelClick */}
       {isPopupOpen && (
         <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
           <div className='w-full max-w-sm p-6 bg-white rounded-lg shadow-lg dark:bg-slate-800'>
@@ -287,13 +322,21 @@ const UpcomingAppointments = () => {
                 <label className='block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300'>
                   Select Date
                 </label>
-                <input
-                  type='date'
+                <select
                   value={selectedDate}
-                  min={getCurrentDate()}
-                  onChange={(e) => setSelectedDate(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedDate(e.target.value);
+                    setSelectedTime(''); // Reset time when date changes
+                  }}
                   className='w-full p-2 border rounded-md'
-                />
+                >
+                  <option value=''>Select a date</option>
+                  {availableDates.map((date) => (
+                    <option key={date} value={date}>
+                      {formatDate(date)}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className='block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300'>
@@ -303,9 +346,10 @@ const UpcomingAppointments = () => {
                   value={selectedTime}
                   onChange={(e) => setSelectedTime(e.target.value)}
                   className='w-full p-2 border rounded-md'
+                  disabled={!selectedDate}
                 >
                   <option value=''>Select a time</option>
-                  {TIME_SLOTS.map((time) => (
+                  {availableTimeSlots.map((time) => (
                     <option key={time} value={time}>
                       {time} - {calculateEndTime(time, MEETING_DURATION)}
                     </option>
@@ -315,7 +359,7 @@ const UpcomingAppointments = () => {
               <button
                 className='w-full px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600'
                 onClick={handleUpdateAppointment}
-                disabled={isUploading}
+                disabled={isUploading || !selectedTime}
               >
                 {isUploading ? (
                   <Loader2 className='animate-spin' />
