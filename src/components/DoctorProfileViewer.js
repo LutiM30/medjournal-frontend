@@ -188,13 +188,14 @@ export default function ProfileViewer({
                 const doctorData = doctorSnapshot.data();
                 const schedule = doctorData.schedule || {};
 
-                // Check if the selected slot is still available
-                if (
-                    !schedule[selectedDate]?.enabled ||
-                    !generateTimeSlots(schedule[selectedDate].start, schedule[selectedDate].end).includes(selectedSlot)
-                ) {
-                    throw new Error("Selected time slot is no longer available.");
-                }
+                // // Check if the selected slot is still available
+                // const dayOfWeek = new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long' }); // Get the day name
+                // if (
+                //     !schedule[dayOfWeek]?.enabled ||
+                //     !generateTimeSlots(schedule[dayOfWeek].start, schedule[dayOfWeek].end).includes(selectedSlot)
+                // ) {
+                //     throw new Error("Selected time slot is no longer available.");
+                // }
 
                 // Add the appointment
                 const appointmentsCollectionRef = collection(db, 'appointments');

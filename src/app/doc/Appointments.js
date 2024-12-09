@@ -38,7 +38,29 @@ function Appointments({ doctorId }) {
         setOriginalNotes(currentNotes);
     };
 
-    const currentAppointments = appointments.filter((appt) => new Date(appt.date) == new Date());
+    const currentAppointments = appointments.filter((appt) => {
+        const currentDate = new Date();
+        const appointmentDate = new Date(appt.date);
+
+        // Check if the appointment date is today
+        if (appointmentDate.toDateString() !== currentDate.toDateString()) {
+            return false;
+        }
+
+        // Extract start and end times from the timeSlot (e.g., "08:00 - 08:30")
+        const [startTime, endTime] = appt.timeSlot.split(" - ");
+
+        // Combine appointment date with start and end times
+        const startDateTime = new Date(
+            `${appointmentDate.toISOString().split("T")[0]}T${startTime}`
+        );
+        const endDateTime = new Date(
+            `${appointmentDate.toISOString().split("T")[0]}T${endTime}`
+        );
+
+        // Check if the current time is within the slot
+        return currentDate >= startDateTime && currentDate < endDateTime;
+    });
     const pastAppointments = appointments.filter((appt) => new Date(appt.date) < new Date());
     const upcomingAppointments = appointments.filter((appt) => new Date(appt.date) > new Date());
 
@@ -111,14 +133,11 @@ function Appointments({ doctorId }) {
                                                 <div key={appt.id} className="mb-4">
                                                     <p className="text-gray-500">
                                                         Upcoming: <strong>{appt.patientName}</strong> on{" "}
-                                                        <strong>{new Date(appt.date).toLocaleDateString()}</strong> at{" "}
+                                                        <strong>{appt.date}</strong> at{" "}
                                                         <strong>{appt.timeSlot.split("-")[1]}</strong>
                                                         <br />
                                                         Condition: {appt.notes}
                                                     </p>
-                                                    <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2">
-                                                        View Patient Details
-                                                    </button>
                                                 </div>
                                             ))}
                                         </div>
