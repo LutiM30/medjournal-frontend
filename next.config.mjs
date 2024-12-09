@@ -29,7 +29,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `${process?.env.NEXT_PUBLIC_ENV === 'local' ? process.env.API_URL_LOCAL : process.env.API_URL_PROD}/:path*`,
+         destination: `${process.env.API_URL_PROD}/:path*`,
       },
     ];
   },
