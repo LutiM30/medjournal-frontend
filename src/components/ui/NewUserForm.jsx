@@ -99,7 +99,7 @@ const NewUserForm = ({ randomPwd }) => {
       };
 
       await createUser({ ...userData });
-
+      navigator.clipboard.writeText(userData.password);
       reset();
     } catch (error) {
       handleSubmissionError(error);
@@ -113,7 +113,7 @@ const NewUserForm = ({ randomPwd }) => {
   return (
     <>
       <form className='max-w-md my-8' onSubmit={handleSubmit(onSubmit)}>
-        <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4'>
+        <div className='flex flex-col mb-4 space-y-2 md:flex-row md:space-y-0 md:space-x-2'>
           {creatingNewUserFormInputs.slice(0, 2).map((input, key) => (
             <FormInput key={key} {...input} register={register} />
           ))}
