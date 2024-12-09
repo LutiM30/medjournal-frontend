@@ -19,7 +19,7 @@ import { isLoadingAtom } from '@/lib/atoms/atoms';
 import { useAtom } from 'jotai';
 
 export const CarouselContext = createContext({
-  onCardClose: () => {},
+  onCardClose: () => { },
   currentIndex: 0,
 });
 

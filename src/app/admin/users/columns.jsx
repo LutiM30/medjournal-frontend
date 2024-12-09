@@ -32,8 +32,9 @@ const columns = [
     cell: ({ row }) => (
       <div>
         {row?.original?.role && row?.original?.role !== ADMIN_ROLE
-          ? row.original?.profile[`${row?.original?.role}_id`] ||
-            row.original.uid
+          ? row.original?.profile
+            ? row.original?.profile[`${row?.original?.role}_id`]
+            : row.original.uid
           : row.original.uid}
       </div>
     ),
@@ -69,15 +70,6 @@ const columns = [
       ) : (
         <Badge variant='destructive'>No</Badge>
       ),
-  },
-  {
-    accessorKey: 'actions',
-    header: '',
-    cell: ({ row }) => (
-      <Button variant='ghost' size='icon'>
-        <Ellipsis />
-      </Button>
-    ),
   },
 ];
 

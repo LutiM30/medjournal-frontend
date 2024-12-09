@@ -20,6 +20,7 @@ import {
 import useFirebaseAuth from '@/lib/hooks/useFirebaseAuth';
 import { AUTH_INVALID_ROUTES } from '@/lib/constants';
 import { IconUserPlus, IconUserShare } from '@tabler/icons-react';
+import { toast } from 'sonner';
 
 const AuthNavBarButton = () => {
   const router = useRouter();
@@ -51,9 +52,10 @@ const AuthNavBarButton = () => {
     if (isUser(user) && !path) {
       await signOut();
       setAuthButtonText(LOGIN_BTN_TEXT_COLOR);
+      toast.success('You have been logged out');
       router.push('/signin');
     } else {
-      router.push(path);
+      router.push(path || '/');
     }
   };
 
