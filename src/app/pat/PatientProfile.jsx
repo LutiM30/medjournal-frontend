@@ -91,8 +91,6 @@ const PatientProfile = () => {
     }
   };
 
-  console.log({ user, db });
-
   return (
     <div className='relative flex flex-col h-screen pt-16 bg-center bg-cover'>
       <div className='flex flex-grow bg-white dark:bg-slate-900 bg-opacity-80'>

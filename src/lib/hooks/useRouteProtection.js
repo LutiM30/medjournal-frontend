@@ -36,7 +36,6 @@ const useRouteProtection = ({ pathName }) => {
     const validateRoute = () => {
       let isValidRoute = false;
 
-      // First check if user is authenticated
       if (user?.uid) {
         // Check if it's a public route for authenticated users
         if (AUTH_PUBLIC_ROUTES?.includes(pathName)) {
@@ -60,7 +59,6 @@ const useRouteProtection = ({ pathName }) => {
           case PATIENT_ROLE:
             isValidRoute = PATIENT_ROUTES?.includes(pathName);
             break;
-          // Remove admin case here since we handled it above
         }
 
         return isValidRoute;
@@ -73,8 +71,7 @@ const useRouteProtection = ({ pathName }) => {
     const isValidRoute = validateRoute();
 
     if (!isValidRoute) {
-      toast.error(messages.INVALID_ACCESS);
-      router.push('/404');
+      router.push(user?.uid ? '/404' : '/signin');
     }
   }, [user, pathName, isLoading, router]);
 };

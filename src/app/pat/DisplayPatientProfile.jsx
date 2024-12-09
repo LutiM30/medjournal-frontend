@@ -160,18 +160,18 @@ const DisplayPatientProfile = () => {
         <main className='flex-grow p-4'>
           <div className='mt-8'>
             {/* Personal Information Section */}
-            <section className='mb-8 border p-6 rounded-lg bg-blue-100 shadow-sm'>
-              <h2 className='text-2xl font-bold text-blue-700 flex items-center justify-between'>
+            <section className='p-6 mb-8 bg-blue-100 border rounded-lg shadow-sm'>
+              <h2 className='flex items-center justify-between text-2xl font-bold text-blue-700'>
                 <span className='flex items-center'>
                   <img
                     src={profileImage} // Display profile image
                     alt='Profile'
-                    className='w-12 h-12 rounded-full mr-2'
+                    className='w-12 h-12 mr-2 rounded-full'
                   />
                   Personal Information
                 </span>
               </h2>
-              <div className='mt-4 grid grid-cols-2 gap-4 text-gray-800'>
+              <div className='grid grid-cols-2 gap-4 mt-4 text-gray-800'>
                 {Object.entries(formData.personalInfo).map(([key, value]) => (
                   <div key={key}>
                     {editMode ? (
@@ -185,7 +185,7 @@ const DisplayPatientProfile = () => {
                           onChange={(e) =>
                             handleChange('personalInfo', key, e.target.value)
                           }
-                          className='mt-1 block w-full border rounded-md p-2'
+                          className='block w-full p-2 mt-1 border rounded-md'
                         />
                       </div>
                     ) : (
@@ -200,15 +200,15 @@ const DisplayPatientProfile = () => {
             </section>
 
             {/* Medical History and Lifestyle Information Section */}
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               {/* Medical History Section */}
-              <section className='border p-6 rounded-lg bg-green-100 shadow-sm'>
-                <h2 className='text-2xl font-bold text-green-700 flex items-center justify-between'>
+              <section className='p-6 bg-green-100 border rounded-lg shadow-sm'>
+                <h2 className='flex items-center justify-between text-2xl font-bold text-green-700'>
                   <span className='flex items-center'>
                     <FaBriefcaseMedical className='mr-2' /> Medical History
                   </span>
                 </h2>
-                <div className='mt-4 grid grid-cols-1 gap-4 text-gray-800'>
+                <div className='grid grid-cols-1 gap-4 mt-4 text-gray-800'>
                   {Object.entries(formData.medicalHistory).map(
                     ([key, value]) => (
                       <div key={key}>
@@ -227,7 +227,7 @@ const DisplayPatientProfile = () => {
                                   e.target.value
                                 )
                               }
-                              className='mt-1 block w-full border rounded-md p-2'
+                              className='block w-full p-2 mt-1 border rounded-md'
                             />
                           </div>
                         ) : (
@@ -243,13 +243,13 @@ const DisplayPatientProfile = () => {
               </section>
 
               {/* Lifestyle Information Section */}
-              <section className='border p-6 rounded-lg bg-yellow-100 shadow-sm'>
-                <h2 className='text-2xl font-bold text-yellow-700 flex items-center justify-between'>
+              <section className='p-6 bg-yellow-100 border rounded-lg shadow-sm'>
+                <h2 className='flex items-center justify-between text-2xl font-bold text-yellow-700'>
                   <span className='flex items-center'>
                     <FaClipboardList className='mr-2' /> Lifestyle Information
                   </span>
                 </h2>
-                <div className='mt-4 grid grid-cols-1 gap-4 text-gray-800'>
+                <div className='grid grid-cols-1 gap-4 mt-4 text-gray-800'>
                   {Object.entries(formData.lifestyleInfo).map(
                     ([key, value]) => (
                       <div key={key}>
@@ -268,7 +268,7 @@ const DisplayPatientProfile = () => {
                                   e.target.value
                                 )
                               }
-                              className='mt-1 block w-full border rounded-md p-2'
+                              className='block w-full p-2 mt-1 border rounded-md'
                             />
                           </div>
                         ) : (
@@ -289,14 +289,14 @@ const DisplayPatientProfile = () => {
           {editMode ? (
             <button
               onClick={handleSave}
-              className='mt-6 px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md'
+              className='px-4 py-2 mt-6 text-white bg-blue-500 rounded-md hover:bg-blue-700'
             >
               Save Changes
             </button>
           ) : (
             <button
               onClick={handleEdit}
-              className='mt-6 px-4 py-2 text-white bg-gray-500 hover:bg-gray-700 rounded-md'
+              className='px-4 py-2 mt-6 text-white bg-gray-500 rounded-md hover:bg-gray-700'
             >
               Edit Profile
             </button>
