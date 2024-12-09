@@ -1,7 +1,7 @@
 'use client';
-
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, getDoc, runTransaction } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { useAtom } from 'jotai'; // Import useAtom from jotai
+import { useAtom } from 'jotai';
 import {
     Dialog,
     DialogContent,
@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import ProfileAvatar from '@/components/ProfileAvatar'; // Assuming you have a common Avatar component
+import ProfileAvatar from '@/components/ProfileAvatar';
 import {
     Tooltip,
     TooltipContent,
@@ -21,7 +21,6 @@ import {
 } from './ui/tooltip';
 import { toast } from 'sonner';
 import { db } from '@/lib/firebase'; // Firebase import for adding data
-import { set, ref } from 'firebase/database';
 import { userAtom } from '@/lib/atoms/userAtom'; // Import the userAtom
 
 export default function ProfileViewer({
@@ -32,8 +31,7 @@ export default function ProfileViewer({
         profile: {
             specialization: 'Cardiology',
             experience: '10 years',
-            qualification: 'MD, MBBS',
-            hospital: 'XYZ Hospital',
+            hospital: ['XYZ Hospital', 'ABC '],
             phone: '123-456-7890',
             email: 'johndoe@hospital.com',
             schedule: {
@@ -54,45 +52,46 @@ export default function ProfileViewer({
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
     const [isBookDialogOpen, setIsBookDialogOpen] = useState(false);
     const [notes, setNotes] = useState('');
+    const [selectedSlot, setAppointmentSlot] = useState('');
 
-    // Use the useAtom hook to get patient name from userAtom
-    const [user] = useAtom(userAtom);  // userAtom should store the patient info
-    const patientName = user?.displayName; // 
+    const [user] = useAtom(userAtom);
+    const patientName = user?.displayName;
 
     const profileSections = [
         {
             title: 'Professional Information',
             items: [
-                { label: 'Specialization', value: doctor.profile?.specialization },
-                { label: 'Experience', value: doctor.profile?.experience },
-                { label: 'Qualification', value: doctor.profile?.qualification },
-                { label: 'Clinic Name', value: doctor.profile?.hospital },
+                { label: 'Specialization', value: doctor.profile.primarySpecialty },
+                { label: 'Experience', value: doctor.profile.yearsOfExperience },
+                { label: 'Hospital', value: doctor.profile.hospitalAffiliations },
+                { label: 'Clinic', value: doctor.profile.clinicName },
             ],
         },
         {
             title: 'Contact Information',
             items: [
-                { label: 'Phone', value: doctor.profile?.phone },
-                { label: 'Email', value: doctor.profile?.email },
+                { label: 'Phone', value: doctor.profile.phonenumber },
+                { label: 'Email', value: doctor.email },
             ],
         },
-
         {
             title: 'Schedule and Location',
             items: [
                 {
                     label: 'Schedule',
-                    value: doctor.profile?.schedule ? (
+                    value: doctor.profile.schedule ? (
                         <ul>
-                            {Object.entries(doctor.profile.schedule).map(([day, { enabled, start, end }]) => (
+                            {Object.entries(doctor.profile.schedule).map(([day, { enabled, start, end }]) =>
                                 enabled ? (
                                     <li key={day}>
                                         {day}: {start} - {end}
                                     </li>
                                 ) : null
-                            ))}
+                            )}
                         </ul>
-                    ) : 'N/A',
+                    ) : (
+                        'N/A'
+                    ),
                 },
                 { label: 'Address', value: doctor.profile?.address },
                 { label: 'City', value: doctor.profile?.city },
@@ -110,31 +109,73 @@ export default function ProfileViewer({
     ];
 
     const handleBookAppointment = async () => {
+        if (!selectedSlot) {
+            toast.error('Please select a time slot.');
+            return;
+        }
+
+        const doctorId = doctor?.uid;
+        const patientId = user?.uid;
+
+        if (!doctorId || !patientId) {
+            toast.error('Doctor or Patient information is missing.');
+            console.error('Doctor or Patient data is invalid:', { doctor, user });
+            return;
+        }
+
         const appointmentData = {
-            date: "2024-02-15", // Replace with dynamic date selection if needed
-            time: "10:00 AM",   // Replace with dynamic time selection if needed
-            doctorId: doctor.id, // Assuming doctor.id is the doctor's Firestore UID
-            doctorName: doctor.displayName,
-            patientId: user?.uid, // Assuming user atom contains the patient's Firestore UID
-            patientName: patientName, // Retrieved from userAtom
+            date: "2024-02-15", // Replace this with your selected date variable
+            timeSlot: selectedSlot,
+            notes: notes.trim(),
+            doctorId: doctorId,
+            doctorName: doctor?.displayName || 'Unknown Doctor',
+            patientId: patientId,
+            patientName: patientName || user?.displayName || 'Unknown Patient',
         };
 
-        console.log("Booking Appointment:", appointmentData);
+        console.log('Attempting to book appointment with data:', appointmentData);
 
         try {
-            // Reference the 'appointments' collection in Firestore
-            const appointmentsCollectionRef = collection(db, 'appointments');
-            // Add a new document with the appointment data
-            await addDoc(appointmentsCollectionRef, appointmentData);
+            const doctorRef = doc(db, 'doctors', doctorId);
+
+            await runTransaction(db, async (transaction) => {
+                const doctorSnapshot = await transaction.get(doctorRef);
+                if (!doctorSnapshot.exists()) {
+                    throw new Error('Doctor does not exist');
+                }
+
+                const doctorData = doctorSnapshot.data();
+                const schedule = doctorData.schedule || {};
+
+                // Check if the selected slot is still available
+                const [day, start, end] = selectedSlot.split('-');
+                if (!schedule[day]?.enabled || schedule[day].start !== start || schedule[day].end !== end) {
+                    throw new Error('Time slot is no longer available');
+                }
+
+                // Update the schedule to disable the selected slot
+                const updatedSchedule = {
+                    ...schedule,
+                    [day]: { ...schedule[day], enabled: false } // Marking the slot as unavailable
+                };
+                transaction.update(doctorRef, { schedule: updatedSchedule });
+
+                // Add the appointment
+                const appointmentsCollectionRef = collection(db, 'appointments');
+                transaction.set(doc(appointmentsCollectionRef), appointmentData);
+            });
+
             toast.success('Appointment booked successfully!');
-            setIsBookDialogOpen(false); // Close the dialog after booking
+
+            // Reset form and state
+            setIsBookDialogOpen(false);
+            setAppointmentSlot('');
+            setNotes('');
         } catch (error) {
-            toast.error('Failed to book appointment.');
-            console.error("Error booking appointment:", error);
+            toast.error(error.message || 'Failed to book appointment. Please try again later.');
+            console.error('Error booking appointment:', error);
         }
     };
-
-    const id = doctor?.profile ? doctor?.profile[`${doctor?.role}_id`] : doctor.id;
 
     return (
         <div>
@@ -161,26 +202,11 @@ export default function ProfileViewer({
                         )}
                         <div
                             onClick={() => {
-                                navigator.clipboard.writeText(id);
-                                toast?.success(`${id} is copied to clipboard`);
+                                navigator.clipboard.writeText(doctor.id);
+                                toast?.success(`${doctor.id} is copied to clipboard`);
                             }}
                         >
                             <h2 className="text-xl font-semibold">{doctor.displayName}</h2>
-                            {isViewDialogOpen ? (
-                                <TooltipProvider>
-                                    <Tooltip defaultOpen={false}>
-                                        <TooltipTrigger>
-                                            <p className="text-sm text-muted-foreground">
-                                                <strong>Doctor ID: </strong>
-                                                {id}
-                                            </p>
-                                        </TooltipTrigger>
-                                        <TooltipContent side="right">Click to copy</TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                            ) : (
-                                <></>
-                            )}
                         </div>
                     </div>
                     <ScrollArea className="max-h-[60vh]">
@@ -193,7 +219,7 @@ export default function ProfileViewer({
                                     {section.items.map((item, itemIndex) => (
                                         <div key={itemIndex} className="flex justify-between py-1">
                                             <span className="font-medium">{item.label}:</span>
-                                            <span className="text-muted-foreground">{item.value}</span>
+                                            <span>{item.value}</span>
                                         </div>
                                     ))}
                                 </CardContent>
@@ -226,16 +252,38 @@ export default function ProfileViewer({
                             <span className="font-medium">Patient Name:</span>
                             <span>{patientName}</span>
                         </div>
-                        <textarea
-                            value={notes}
-                            onChange={(e) => setNotes(e.target.value)}
-                            placeholder="Add any notes for the appointment"
-                            className="w-full h-20 p-2 border rounded-md"
-                        />
-                        <Button className="bg-blue-600 text-white" onClick={handleBookAppointment}>
-                            Confirm Appointment
-                        </Button>
+                        <div>
+                            <label className="font-medium block mb-2">Select Appointment Slot:</label>
+                            <select
+                                value={selectedSlot}
+                                onChange={(e) => setAppointmentSlot(e.target.value)}
+                                className="border p-2 w-full"
+                            >
+                                {Object.entries(doctor.profile.schedule || {}).map(([day, { enabled, start, end }]) => (
+                                    enabled ? (
+                                        <option key={day} value={`${day}-${start}-${end}`}>
+                                            {day}: {start} - {end}
+                                        </option>
+                                    ) : null
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="font-medium block mb-2">Notes:</label>
+                            <textarea
+                                value={notes}
+                                onChange={(e) => setNotes(e.target.value)}
+                                className="border p-2 w-full"
+                                placeholder="Add notes for the doctor"
+                            />
+                        </div>
                     </div>
+                    <Button
+                        className="mt-4 bg-blue-900 dark:bg-blue-500 hover:bg-blue-800 dark:hover:bg-blue-600 text-primary-foreground"
+                        onClick={handleBookAppointment}
+                    >
+                        Book Appointment
+                    </Button>
                 </DialogContent>
             </Dialog>
         </div>

@@ -1,146 +1,98 @@
-"use client"; // Marking the component as a Client Component
+'use client'; // Marking the component as a Client Component
 
-import React, { useEffect, useState } from "react";
-import { FaSearch, FaCalendarAlt, FaPlus } from "react-icons/fa";
+import React, { useEffect, useState } from 'react';
+import { db } from '@/lib/firebase'; // Firebase import for adding data
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth'; // Firebase Auth to get current user
 
 const AppointmentPage = () => {
-  const [pastAppointments, setPastAppointments] = useState([]);
-  const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Simulating data fetching
+  const auth = getAuth(); // Get Firebase Auth instance
+  const user = auth.currentUser; // Get current logged-in user
+
   useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      setError('No user logged in');
+      return;
+    }
+
     const fetchAppointments = async () => {
-      const fetchedPastAppointments = await fetchPastAppointments();
-      const fetchedUpcomingAppointments = await fetchUpcomingAppointments();
-      setPastAppointments(fetchedPastAppointments);
-      setUpcomingAppointments(fetchedUpcomingAppointments);
+      try {
+        const appointmentsRef = collection(db, 'appointments');
+
+        // Create a query to filter appointments by the current user's ID (patientId)
+        const q = query(appointmentsRef, where('patientId', '==', user.uid));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+          setAppointments([]); // No appointments found
+        } else {
+          const fetchedAppointments = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setAppointments(fetchedAppointments);
+        }
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching appointments:', err);
+        setError('Failed to load appointments');
+        setLoading(false);
+      }
     };
 
     fetchAppointments();
-  }, []);
+  }, [user]);
 
-  // Example fetch function
-  const fetchPastAppointments = async () => {
-    return [
-      {
-        id: 1,
-        doctorName: "Dr. John Doe",
-        date: "2024-09-01",
-        medicalNote: "Follow-up on blood test.",
-      },
-      {
-        id: 2,
-        doctorName: "Dr. Jane Smith",
-        date: "2024-09-10",
-        medicalNote: "Discussed treatment options.",
-      },
-    ];
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  const fetchUpcomingAppointments = async () => {
-    return [
-      {
-        id: 3,
-        doctorName: "Dr. Emily Clark",
-        date: "2024-10-01",
-        status: "Scheduled",
-      },
-      {
-        id: 4,
-        doctorName: "Dr. James Brown",
-        date: "2024-10-15",
-        status: "Scheduled",
-      },
-    ];
-  };
+  if (error) {
+    return <div className='text-red-500'>{error}</div>;
+  }
 
   return (
-    <div className="p-6 bg-gradient-to-br from-purple-50 to-teal-100 min-h-screen pt-16">
-      <h1 className="text-5xl font-bold text-gray-800 mb-8 text-center">
-      </h1>
+    <div className='p-6 bg-gradient-to-br from-purple-50 to-teal-100 min-h-screen pt-16'>
+      <h1 className='text-5xl font-bold text-gray-800 mb-8 text-center'></h1>
 
-      {/* Search and Filter Section */}
-      <div className="flex justify-between mb-8">
-        <div className="flex items-center space-x-4">
-          <input
-            type="text"
-            placeholder="Search Appointments"
-            className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-teal-500 shadow-lg transition duration-300"
-          />
-          <button className="p-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition duration-300 flex items-center shadow-lg">
-            <FaSearch />
-          </button>
-        </div>
-        <div className="flex items-center">
-          <select className="p-3 border border-gray-300 rounded-lg shadow-lg focus:outline-none">
-            <option value="">Filter by Doctor</option>
-            <option value="doctor1">Dr. John Doe</option>
-            <option value="doctor2">Dr. Jane Smith</option>
-          </select>
-          <button className="ml-4 p-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition duration-300 flex items-center shadow-lg">
-            <FaPlus className="mr-2" />
-            Create New Appointment
-          </button>
-        </div>
-      </div>
-
-      {/* Past Appointments Section */}
-      <h2 className="text-4xl font-semibold text-gray-700 mb-6">
-        Past Appointments
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {Array.isArray(pastAppointments) && pastAppointments.length > 0 ? (
-          pastAppointments.map((appointment) => (
-            <div
-              key={appointment.id}
-              className="p-4 bg-white border border-gray-300 rounded-lg shadow-xl transition-shadow duration-300 hover:shadow-2xl transform hover:-translate-y-1"
-            >
-              <h3 className="text-2xl font-semibold text-teal-600 mb-2">
-                {appointment.doctorName}
-              </h3>
-              <p className="text-gray-600 mb-1">
-                <FaCalendarAlt className="inline mr-2 text-teal-400" />
-                {appointment.date}
-              </p>
-              <p className="text-gray-600">
-                <span className="font-medium text-teal-600">Notes:</span>{" "}
-                {appointment.medicalNote}
-              </p>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-600">No past appointments found.</p>
-        )}
-      </div>
-
-      {/* Upcoming Appointments Section */}
-      <h2 className="text-4xl font-semibold text-gray-700 mb-6 mt-10">
-        Upcoming Appointments
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {Array.isArray(upcomingAppointments) &&
-          upcomingAppointments.length > 0 ? (
-          upcomingAppointments.map((appointment) => (
-            <div
-              key={appointment.id}
-              className="p-4 bg-white border border-gray-300 rounded-lg shadow-xl transition-shadow duration-300 hover:shadow-2xl transform hover:-translate-y-1"
-            >
-              <h3 className="text-2xl font-semibold text-teal-600 mb-2">
-                {appointment.doctorName}
-              </h3>
-              <p className="text-gray-600 mb-1">
-                <FaCalendarAlt className="inline mr-2 text-teal-400" />
-                {appointment.date}
-              </p>
-              <p className="text-gray-600">
-                <span className="font-medium text-teal-600">Status:</span>{" "}
-                {appointment.status}
-              </p>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-600">No upcoming appointments found.</p>
-        )}
+      {/* Table Section */}
+      <div className='overflow-x-auto'>
+        <table className='min-w-full table-auto bg-white rounded-lg shadow-lg'>
+          <thead className='bg-teal-600 text-white'>
+            <tr>
+              <th className='p-4 text-left'>Doctor Name</th>
+              <th className='p-4 text-left'>Date</th>
+              <th className='p-4 text-left'>Time</th>
+              <th className='p-4 text-left'>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {appointments.length > 0 ? (
+              appointments.map((appointment) => (
+                <tr
+                  key={appointment.id}
+                  className='border-b last:border-none hover:bg-gray-100 transition'
+                >
+                  <td className='p-4'>{appointment.doctorName}</td>
+                  <td className='p-4'>{appointment.date}</td>
+                  <td className='p-4'>{appointment.timeSlot || 'N/A'}</td>
+                  <td className='p-4'>{appointment.notes || 'N/A'}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan='4' className='p-4 text-center text-gray-500'>
+                  No appointments found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

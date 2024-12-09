@@ -31,10 +31,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang='en' suppressHydrationWarning>
-      {/* <head>
-        <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
-      </head> */}
-      <body className={`${geistSans} ${geistMono} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <ThemeProvider
           attribute='class'
           defaultTheme={'system' || localStorage.getItem('theme')}

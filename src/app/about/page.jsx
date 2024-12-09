@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 
 import { Boxes } from '@/components/ui/background-boxes';
 
-import Footer from '@/components/ui/footer';
 import { WhyWeBuild } from '@/components/WhyWeBuild';
 
 const About = () => {
@@ -50,7 +49,6 @@ const About = () => {
           <WhyWeBuild />
         </div>
       </div>
-      <Footer />
     </>
   );
 };

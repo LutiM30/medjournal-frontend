@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { GoCopilot } from "react-icons/go";
 
-export default function CardDemo() {
+export default function Card() {
   return (
     (<Card>
       <CardSkeletonContainer>

@@ -14,7 +14,7 @@ import {
     SkeletonOne, SkeletonTwo, SkeletonThree, SkeletonFour,
     SkeletonFive
 } from "./FeaturesSkeleton";
-import { CardDemo } from "./CardDemo";
+import { Card } from "./Card";
 
 
 export function OurTeam() {
@@ -25,7 +25,7 @@ export function OurTeam() {
                     Meet the Team
                 </h1>
             </div>
-            <CardDemo />
+            <Card />
 
         </>)
     );
