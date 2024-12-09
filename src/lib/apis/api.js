@@ -7,7 +7,7 @@ import { isEmpty } from 'radash';
 import { FILE_MAX_LIMIT, MAX_FIVE_MB_SERVER } from '../utils';
 import { tokenManager } from '../functions/TokenManager';
 
-const BASE_URL = '/api/users';
+const BASE_URL = 'https://medicaljournal-api.vercel.app/users';
 
 const getDisplayMessage = (error, message) => {
   if (error && typeof error === 'object' && !isEmpty(error)) {
