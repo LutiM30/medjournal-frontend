@@ -8,7 +8,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { doc, updateDoc } from 'firebase/firestore';
 
 const PersonalInfo = ({ onChange }) => {
-  const user = useAtomValue(userAtom);
+const user = useAtomValue(userAtom);
 
   const [birthdate, setBirthdate] = useState('');
   const [gender, setGender] = useState('Female');
