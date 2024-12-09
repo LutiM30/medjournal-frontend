@@ -47,7 +47,8 @@ const Sidebar = () => {
           setIsProfileComplete(profileData.isProfileComplete);
 
           !profileData?.isProfileComplete && setIsEditing(true);
-
+          //for setting imageUrl while page is loading for the first time
+          setImageUrl(user.photoURL || '');
           if (profileData.imageUrl) setImageUrl(user.photoURL);
 
           setValue('specialty', profileData.specialty);
@@ -194,7 +195,15 @@ const Sidebar = () => {
               Availability Schedule
             </h3>
             <ul className='divide-y divide-gray-300 dark:divide-gray-700'>
-              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) =>
+              {[
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday',
+              ].map((day) =>
                 schedule[day]?.enabled ? (
                   <li
                     key={day}
@@ -209,8 +218,6 @@ const Sidebar = () => {
               )}
             </ul>
           </div>
-
-
 
           <Button
             onClick={() => setIsEditing(true)}

@@ -10,18 +10,14 @@ import { userAtom } from '@/lib/atoms/userAtom';
 
 const DoctorProfilePage = () => {
   return (
-    <div className='relative'>
-      <div className='flex flex-col h-screen pt-20'>
+    <div>
+      <div className='flex flex-col pt-20'>
         <div className='flex flex-grow'>
           <Sidebar />
           <main className='flex-grow p-4'>
             <Overview />
             <Services />
             <Reviews />
-            <div className='text-center flex justify-center space-x-4'>
-              <Button>Send Message</Button>
-              <Button variant='primary'>Make Appointment</Button>
-            </div>
           </main>
         </div>
       </div>
