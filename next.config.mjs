@@ -5,7 +5,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: '',
       },
       {
         protocol: 'https',
@@ -26,10 +26,17 @@ const nextConfig = {
     ],
   },
   async rewrites() {
+    console.log(
+      `${process?.env.NEXT_PUBLIC_ENV === 'local' ? process.env.API_URL_LOCAL : process.env.API_URL_PROD}/:path*`,
+      process?.env.NEXT_PUBLIC_ENV === 'local',
+      process?.env.NEXT_PUBLIC_ENV
+    );
+
     return [
       {
         source: '/api/:path*',
-        destination: `${process?.env.NEXT_PUBLIC_ENV === 'local' ? process.env.API_URL_LOCAL : process.env.API_URL_PROD}/:path*`,
+        // destination: `${process?.env.NEXT_PUBLIC_ENV === 'local' ? process.env.API_URL_LOCAL : process.env.API_URL_PROD}/:path*`,
+        destination: `${process.env.API_URL_PROD}/:path*`,
       },
     ];
   },
